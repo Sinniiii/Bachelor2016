@@ -1,0 +1,49 @@
+﻿<ResourceDictionary 
+    x:Class="ProductBrowser.Resources.NorwegianLanguage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    mc:Ignorable="d"
+    xmlns:s="clr-namespace:System;assembly=mscorlib">
+
+    <s:String x:Key="keyRootFolder">Hovedmappe</s:String>
+    <s:String x:Key="keyLanguage">Språk</s:String>
+    <s:String x:Key="keyFontSize">Skriftstørrelse</s:String>
+    <s:String x:Key="keySlideShowTimer">Slideshow Timer</s:String>
+    <s:String x:Key="keyVideoSize">Video Størrelse</s:String>
+    <s:String x:Key="keyLostTagTimeout">Tidsforsinkelse ved mistet kort</s:String>
+    <s:String x:Key="keyOrientationOffset">Orientering fra tag</s:String>
+    <s:String x:Key="keyBoxColorFrameThickness">Rammetykkelse på boksene</s:String>
+    <s:String x:Key="keyCardColorFrameThickness">Rammetykkelse på kortene</s:String>
+    <s:String x:Key="keyCloseButtonSize">Størrelse på lukkeknapper</s:String>
+    <s:String x:Key="keyAllowDoubleTap">Tillat dobbelklikk</s:String>
+    <s:String x:Key="keySettings">Innstillinger</s:String>
+    <s:String x:Key="keyChange">Endre</s:String>
+    <s:String x:Key="keyImagesIn">Bilder i: </s:String>
+    <s:String x:Key="keyCurrentBackgrounds">Bakgrunner i Applikasjonen</s:String>
+    <s:String x:Key="keySave">Lagre</s:String>
+    <s:String x:Key="keyExit">Avslutt</s:String>
+    <s:String x:Key="keyPlaceSmartCard">Plassér SmartCard her</s:String>
+    <s:String x:Key="keyGoTo">Gå Til...</s:String>
+    <s:String x:Key="keyCurrentLevel">Nåværende Nivå: </s:String>
+    <s:String x:Key="keyAddDeleteData">Legg Til / Slett Data på Nåværende Nivå</s:String>
+    <s:String x:Key="keyFileType">Filtype: </s:String>
+    <s:String x:Key="keyCategory">Kategori: </s:String>
+    <s:String x:Key="keyChangeFolder">Bytt Mappe</s:String>
+    <s:String x:Key="keyAvailable">Tilgjengelig: </s:String>
+    <s:String x:Key="keyShowFolders">Vis Mapper</s:String>
+    <s:String x:Key="keyAllCategories">Alle Kategorier</s:String>
+    <s:String x:Key="keyContains">Inneholder: </s:String>
+    <s:String x:Key="keyEnableDeleting">Aktiver Sletting</s:String>
+    <s:String x:Key="keyFilesInDatabase">Filer i Database</s:String>
+    <s:String x:Key="keyNewFiles">Nye Filer</s:String>
+    <s:String x:Key="keyAddNewOffering">Legg Til Produkt</s:String>
+    <s:String x:Key="keyOfferingName">Produkt Navn: </s:String>
+    <s:String x:Key="keyNew">Ny</s:String>
+    <s:String x:Key="keyAddNewCategory">Legg Til Kategori</s:String>
+    <s:String x:Key="keyCategoryName">Kategori Navn: </s:String>
+    <s:String x:Key="keyAvailableCategories">Tilgjengelige Kategorier: </s:String>
+    <s:String x:Key="keyCancel">Avbryt</s:String>
+
+</ResourceDictionary>

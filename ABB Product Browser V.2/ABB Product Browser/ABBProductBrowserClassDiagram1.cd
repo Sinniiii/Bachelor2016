@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="LoadingControl.Control.Block">
+    <Position X="8.25" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Block.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LoadingControl.Control.LoadingAnimation">
+    <Position X="10.25" Y="6.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>LoadingAnimation.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProductBrowser.FileList">
+    <Position X="10.25" Y="3" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAggAAAYgAEAAAAgAAAAIAAAAAAAAAABABAAAAAA=</HashCode>
+      <FileName>FileList.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProductBrowser.MediaServer" BaseTypeListCollapsed="true">
+    <Position X="8.25" Y="4.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAgIAIAACAIAAAAAAAAAI=</HashCode>
+      <FileName>MediaServer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="ProductBrowser.GlobalUtilities">
+    <Position X="8" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAEAAAABAAAAAA=</HashCode>
+      <FileName>MainWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProductBrowser.MainWindow">
+    <Position X="12.25" Y="3" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AECAChABCAMASBGACQBAAIgABCAgCAAACABGAAAAACA=</HashCode>
+      <FileName>MainWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProductBrowser.BlobConverter">
+    <Position X="9.75" Y="8.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIIAAAAQAEAAAAAAAAAAAAAAAAABAAAAAAAAAAA=</HashCode>
+      <FileName>BlobConverter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

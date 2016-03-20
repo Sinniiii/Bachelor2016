@@ -1,0 +1,241 @@
+﻿<s:SurfaceWindow x:Class="ProductBrowser.ReprogramTags"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:s="http://schemas.microsoft.com/surface/2008"
+    xmlns:control="clr-namespace:LoadingControl.Control"
+    DataContext="{Binding RelativeSource={RelativeSource Self}}"
+    Title="ProductBrowser"
+    >
+    <Grid Name="grid" Width="1920" Height="1080"  Background="#85000000">
+        <Grid.Resources>
+            <ImageBrush x:Key="ButtonImage"></ImageBrush>
+            <Style TargetType="s:SurfaceButton" x:Key="ButtonStyled">
+                <Setter Property="Background" Value="{StaticResource ButtonImage}"></Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                    Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" RecognizesAccessKey="True"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Opacity" Value="0.3" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </Grid.Resources>
+        <Label Content="{DynamicResource keyCurrentLevel}" Height="28" HorizontalAlignment="Left" Margin="610,20,0,0" Name="lbl_Current" VerticalAlignment="Top"  FontSize="26" Foreground="#FF0070EA" HorizontalContentAlignment="Right" Width="314" />
+        <Label Height="28" HorizontalAlignment="left" Margin="930,20,80,0" Name="lbl_CurrentLvl" VerticalAlignment="Top" FontSize="26" Foreground="#FF5BD8FF" />
+
+        <Grid Name="grd_reprogramCards" HorizontalAlignment="Left">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="95*" />
+                <ColumnDefinition Width="399*" />
+            </Grid.ColumnDefinitions>
+            <Label Content="{DynamicResource keyChangeLvlLabel}" Height="28" HorizontalAlignment="Center" Margin="112,80,207,0" Name="lbl_ChangeLvl" VerticalAlignment="Top" FontSize="26" Foreground="#FF5BD8FF" Grid.ColumnSpan="2"></Label>
+            <s:SurfaceListBox Height="491"  Width="300" HorizontalAlignment="Left" Name="lbx_path" VerticalAlignment="Top" Margin="50,147,0,0" HorizontalContentAlignment="Stretch" Grid.ColumnSpan="2">
+                <!--="{StaticResource UserButtonTemplate}"-->
+                <s:SurfaceListBox.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF3C3C3C" Offset="0" />
+                        <GradientStop Color="#FF020202" Offset="1" />
+                    </LinearGradientBrush>
+                </s:SurfaceListBox.Background>
+            </s:SurfaceListBox>
+
+            <Canvas Width="300" Height="150" Name="sqare" Background="LightGray" TouchEnter="sqare_TouchEnter" TouchLeave="sqare_TouchLeave" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="50,0,0,198" Grid.ColumnSpan="2">
+
+                <Label Content="{DynamicResource keyPlaceSmartCard}" FontSize="19" Foreground="#FF0070EA" Canvas.Left="45" Canvas.Top="56"></Label>
+
+            </Canvas>
+
+
+            <s:SurfaceButton IsEnabled="False" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="58" HorizontalAlignment="Left" Margin="50,644,0,0" Name="btn_Back" VerticalAlignment="Top" Width="38" Click="btn_Back_Click" Foreground="#FF5BD8FF" FontSize="12" Style="{StaticResource ButtonStyled}">
+                <s:SurfaceButton.Background>
+                    <ImageBrush ImageSource="/ABB Product Browser;component/Resources/btnNavBack.png"/>
+                </s:SurfaceButton.Background>
+            </s:SurfaceButton>
+
+            <s:SurfaceButton IsEnabled="False" Content="{DynamicResource keySave}" FontSize="25" Foreground="#FF5BD8FF" Height="58" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Margin="50,934,0,0" Name="btn_Save" Click="btn_Save_Click"  VerticalAlignment="Top" VerticalContentAlignment="Center" Width="133">
+                <s:SurfaceButton.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF3C3C3C" Offset="0.0" />
+                        <GradientStop Color="#FF020202" Offset="1.0" />
+                    </LinearGradientBrush>
+                </s:SurfaceButton.Background>
+            </s:SurfaceButton>
+
+
+            <Label Height="28" HorizontalAlignment="Left" Margin="50,0,0,148" IsEnabled="False" Name="lbl_cantEdit" VerticalAlignment="Bottom" FontSize="19" Foreground="#f26760" Opacity="0" Grid.ColumnSpan="2" Width="438" />
+            <s:SurfaceButton Content="{DynamicResource keyGoTo}" FontSize="25" Foreground="#FF5BD8FF" Height="58" HorizontalAlignment="Left" HorizontalContentAlignment="Center" IsEnabled="False" Margin="206,934,0,0" Name="btn_moveToLvl" VerticalAlignment="Top" VerticalContentAlignment="Center" Click="btn_moveToLvl_Click" Width="144" Grid.ColumnSpan="2">
+                <s:SurfaceButton.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF3C3C3C" Offset="0.0" />
+                        <GradientStop Color="#FF020202" Offset="1.0" />
+                    </LinearGradientBrush>
+                </s:SurfaceButton.Background>
+            </s:SurfaceButton>
+        </Grid>
+        <Grid Name="grd_FileTransfere" Margin="0,0,0,0" HorizontalAlignment="Center">
+
+            <Label  Content="{DynamicResource keyAddDeleteData}" Height="28" HorizontalAlignment="Center" Margin="0,80,0,0" Name="lbl_addDelete" VerticalAlignment="Top" FontSize="26" Foreground="#FF5BD8FF"></Label>
+            <Label Content="{DynamicResource keyFileType}" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,146,0,0" Name="lbl_FileType" />
+            <Label Content="{DynamicResource keyCategory}" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,216,0,0" Name="lbl_Category" />
+            <Label Content="{DynamicResource keyAvailable}" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,304,0,0" Name="lbl_Available" />
+            <Label Content="{DynamicResource keyContains}" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="400,304,0,0" Name="lbl_Contains" />
+            <Label Content="Pictures" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="297,146,0,0" Name="lbl_CurrentFileType" />
+            <Label Content="" Height="28" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,216,0,0"  Opacity="0.5" Name="lbl_CurrentCategory" />
+            <control:LoadingAnimation x:Name="loadingAnimation" Visibility="Collapsed" VerticalAlignment="Center" HorizontalAlignment="Center" />
+            <s:SurfaceButton VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="58" HorizontalAlignment="Left" Margin="168,133,0,0" Name="btn_FileTypeBack" VerticalAlignment="Top" Width="50" Click="btn_FileTypeBack_Click" Foreground="#FF5BD8FF" FontSize="12" Style="{StaticResource ButtonStyled}">
+                <s:SurfaceButton.Background>
+                    <ImageBrush ImageSource="/ABB Product Browser;component/Resources/btnTransPrevious.png"/>
+                </s:SurfaceButton.Background>
+            </s:SurfaceButton>
+
+            <s:SurfaceButton IsEnabled="False" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="58" HorizontalAlignment="Left" Margin="6,0,0,130" Name="btn_FolderBack" VerticalAlignment="Bottom" Width="38" Click="btn_FolderBack_Click" Foreground="#FF5BD8FF" FontSize="12" Style="{StaticResource ButtonStyled}">
+                <s:SurfaceButton.Background>
+                    <ImageBrush ImageSource="/ABB Product Browser;component/Resources/btnNavBack.png"/>
+                </s:SurfaceButton.Background>
+            </s:SurfaceButton>
+            <s:SurfaceButton VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="58" HorizontalAlignment="Left" Margin="168,203,0,0" Name="btn_CategoryBack" VerticalAlignment="Top" Width="50" Click="btn_CategoryBack_Click" Foreground="#FF5BD8FF" FontSize="12" Style="{StaticResource ButtonStyled}">
+                <s:SurfaceButton.Background>
+                    <ImageBrush ImageSource="/ABB Product Browser;component/Resources/btnTransPrevious.png"/>
+                </s:SurfaceButton.Background>
+            </s:SurfaceButton>
+
+            <s:SurfaceButton VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="58" HorizontalAlignment="Left" Margin="481,133,0,0" Name="btn_FileTypeForward" VerticalAlignment="Top" Width="50" Click="btn_FileTypeForward_Click"  Foreground="#FF5BD8FF" FontSize="12" Style="{StaticResource ButtonStyled}">
+                <s:SurfaceButton.Background>
+                    <ImageBrush ImageSource="/ABB Product Browser;component/Resources/btnTransNext.png"/>
+                </s:SurfaceButton.Background>
+            </s:SurfaceButton>
+
+            <s:SurfaceButton VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="58" HorizontalAlignment="Left" Margin="481,203,0,0" Name="btn_CategoryForward" VerticalAlignment="Top" Width="50" Click="btn_CategoryForward_Click"  Foreground="#FF5BD8FF" FontSize="12" Style="{StaticResource ButtonStyled}">
+                <s:SurfaceButton.Background>
+                    <ImageBrush ImageSource="/ABB Product Browser;component/Resources/btnTransNext.png"/>
+                </s:SurfaceButton.Background>
+            </s:SurfaceButton>
+
+            <s:SurfaceButton VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="58" HorizontalAlignment="Left" Margin="323,0,0,590" Name="btn_MoveToDb" VerticalAlignment="Bottom" Width="50"  Click="btn_MoveToDb_Click" Foreground="#FF5BD8FF" FontSize="12" Style="{StaticResource ButtonStyled}">
+                <s:SurfaceButton.Background>
+                    <ImageBrush ImageSource="/ABB Product Browser;component/Resources/btnTransNext.png"/>
+                </s:SurfaceButton.Background>
+            </s:SurfaceButton>
+            <s:SurfaceButton VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="58" HorizontalAlignment="Left" Margin="323,0,0,432" Name="btn_DeleteFromDb"  VerticalAlignment="Bottom" Width="50" Foreground="#FF5BD8FF" FontSize="12" Style="{StaticResource ButtonStyled}" Click="btn_DeleteFromDb_Click">
+                <s:SurfaceButton.Background>
+                    <ImageBrush ImageSource="/ABB Product Browser;component/Resources/btnDelete.png"/>
+                </s:SurfaceButton.Background>
+            </s:SurfaceButton>
+
+            <s:SurfaceButton Content="{DynamicResource keyChangeFolder}" HorizontalContentAlignment="Center" Name="btn_ChangeDir" Click="btn_ChangeDir_Click" VerticalContentAlignment="Center" MinHeight="20" Height="38" Width="150" FontSize="15" Margin="0,260,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FF5BD8FF" >
+                <s:SurfaceButton.Background>
+                    <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                        <GradientStop Color="#FF3C3C3C" Offset="0.0"></GradientStop>
+                        <GradientStop Color="#FF020202" Offset="1.0"></GradientStop>
+                    </LinearGradientBrush>
+                </s:SurfaceButton.Background>
+            </s:SurfaceButton>
+            <s:SurfaceListBox Height="532"  Width="300" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,350,0,0" HorizontalContentAlignment="Stretch" Name="lbx_Available">
+                <s:SurfaceListBox.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF3C3C3C" Offset="0" />
+                        <GradientStop Color="#FF020202" Offset="1" />
+                    </LinearGradientBrush>
+                </s:SurfaceListBox.Background>
+            </s:SurfaceListBox>
+
+
+            <s:SurfaceListBox Height="532"  Width="300" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="400,350,0,0" HorizontalContentAlignment="Stretch" Name="lbx_Contains">
+                <s:SurfaceListBox.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF3C3C3C" Offset="0" />
+                        <GradientStop Color="#FF020202" Offset="1" />
+                    </LinearGradientBrush>
+                </s:SurfaceListBox.Background>
+            </s:SurfaceListBox>
+
+            <s:SurfaceCheckBox Content="{DynamicResource keyEnableDeleting}" Height="16" HorizontalAlignment="Left" Margin="544,304,0,0" Name="chb_delete" Checked="chb_delete_Checked" Unchecked="chb_delete_Checked"  VerticalAlignment="Top" />
+            <s:SurfaceCheckBox Content="{DynamicResource keyAllCategories}" Height="16" HorizontalAlignment="Left" Margin="544,218,0,0" Name="chb_allCategories" VerticalAlignment="Top" Checked="chb_allCategories_Checked" Unchecked="chb_allCategories_Checked"/>
+
+            <s:SurfaceButton IsEnabled="False" Content="{DynamicResource keySave}" FontSize="25" Foreground="#FF5BD8FF" Height="58" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Margin="400,934,0,0" Name="btn_SaveFiles" Click="btn_SaveFiles_Click" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="131">
+                <s:SurfaceButton.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF3C3C3C" Offset="0.0" />
+                        <GradientStop Color="#FF020202" Offset="1.0" />
+                    </LinearGradientBrush>
+                </s:SurfaceButton.Background>
+            </s:SurfaceButton>
+            <s:SurfaceButton IsEnabled="False" Content="{DynamicResource keyCancel}" FontSize="24" Foreground="#FF5BD8FF" Height="58" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Margin="558,934,0,0" Name="btn_cancelFiles" Click="btn_cancelFiles_Click" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="142">
+                <s:SurfaceButton.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF3C3C3C" Offset="0.0" />
+                        <GradientStop Color="#FF020202" Offset="1.0" />
+                    </LinearGradientBrush>
+                </s:SurfaceButton.Background>
+            </s:SurfaceButton>
+            <s:SurfaceCheckBox Content="{DynamicResource keyShowFolders}" Height="16" HorizontalAlignment="Left" Margin="164,306,0,0" Name="enableFolders" VerticalAlignment="Top" Checked="enableFolders_Checked" Unchecked="enableFolders_Checked" />
+        </Grid>
+        <Grid Name="grd_AddNewOffering" Margin="1465,0,0,0">
+            <Label  Content="{DynamicResource keyAddNewOffering}" Height="28" HorizontalAlignment="Center" Margin="0,80,0,0" Name="lbl_addOffering" VerticalAlignment="Top" FontSize="26" Foreground="#FF5BD8FF"></Label>
+            <Label Content="{DynamicResource keyOfferingName}" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,147,0,0" Name="lbl_OfferingName" />
+            <s:SurfaceListBox Height="345"  Width="300" HorizontalAlignment="right" VerticalAlignment="Top" Margin="0,508,50,0" HorizontalContentAlignment="Stretch" Name="lbx_Categories">
+                <s:SurfaceListBox.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF3C3C3C" Offset="0" />
+                        <GradientStop Color="#FF020202" Offset="1" />
+                    </LinearGradientBrush>
+                </s:SurfaceListBox.Background>
+            </s:SurfaceListBox>
+
+            <s:SurfaceTextBox Margin="0,147,50,894" HorizontalAlignment="Right" Width="258" Name="tb_OfferingName" IsEnabled="False"/>
+            <s:SurfaceButton IsEnabled="True" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="right" VerticalAlignment="Bottom" Margin="0,0,50,88" Name="btn_Exit" Height="100" Width="80" Click="btn_Exit_Click"  Foreground="#FF5BD8FF" FontSize="12" Style="{StaticResource ButtonStyled}">
+                <s:SurfaceButton.Background>
+                    <ImageBrush ImageSource="/ABB Product Browser;component/Resources/btnExit.png"/>
+                </s:SurfaceButton.Background>
+            </s:SurfaceButton>
+            <s:SurfaceButton Content="{DynamicResource keyNew}" HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" Height="38" Width="100" FontSize="15" Margin="305,203,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="btn_Cancel1" Foreground="#FF5BD8FF" Click="btn_Cancel1_Click">
+                <s:SurfaceButton.Background>
+                    <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                        <GradientStop Color="#FF3C3C3C" Offset="0.0"></GradientStop>
+                        <GradientStop Color="#FF020202" Offset="1.0"></GradientStop>
+                    </LinearGradientBrush>
+                </s:SurfaceButton.Background>
+            </s:SurfaceButton>
+            <s:SurfaceButton IsEnabled="False" Name="btn_SaveOffering" Content="{DynamicResource keySave}" HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" Height="38" Width="100" FontSize="15" Margin="198,203,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FF5BD8FF" Click="btn_SaveOffering_Click" >
+                <s:SurfaceButton.Background>
+                    <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                        <GradientStop Color="#FF3C3C3C" Offset="0.0"></GradientStop>
+                        <GradientStop Color="#FF020202" Offset="1.0"></GradientStop>
+                    </LinearGradientBrush>
+                </s:SurfaceButton.Background>
+            </s:SurfaceButton>
+
+            <Label Content="{DynamicResource keyAddNewCategory}" Height="28" HorizontalAlignment="Center" Margin="0,275,0,0" Name="lbl_addCategory" VerticalAlignment="Top" FontSize="26" Foreground="#FF5BD8FF"></Label>
+            <Label Content="{DynamicResource keyCategoryName}" Height="28" HorizontalAlignment="Left" Margin="0,342,0,0" Name="label1" VerticalAlignment="Top" />
+            <Label Content="{DynamicResource keyAvailableCategories}" Height="28" HorizontalAlignment="Left" Margin="105,462,0,0" VerticalAlignment="Top" />
+            <s:SurfaceTextBox HorizontalAlignment="Right" Margin="0,342,50,699" Name="tb_CategoryName" IsEnabled="False" Width="258" TextChanged="tb_CategoryName_TextChanged" />
+            <Label  Content="{DynamicResource keyExit}" Height="28"  HorizontalContentAlignment="Left" HorizontalAlignment="Right" Margin="0,0,20,190" Name="lbl_Exit" VerticalAlignment="Bottom" FontSize="26" Foreground="#FF5BD8FF" Width="110" VerticalContentAlignment="Bottom"></Label>
+            <s:SurfaceButton Content="{DynamicResource keyNew}" FontSize="15" Foreground="#FF5BD8FF" Height="38" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Margin="305,398,0,0" Name="btn_Cancel2" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="100" Click="btn_Cancel2_Click">
+                <s:SurfaceButton.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF3C3C3C" Offset="0.0" />
+                        <GradientStop Color="#FF020202" Offset="1.0" />
+                    </LinearGradientBrush>
+                </s:SurfaceButton.Background>
+            </s:SurfaceButton>
+            <s:SurfaceButton Content="{DynamicResource keySave}" FontSize="15" Foreground="#FF5BD8FF" Height="38" HorizontalAlignment="Left" HorizontalContentAlignment="Center" IsEnabled="False" Margin="198,398,0,0" Name="btn_saveCategory"  Click="btn_saveCategory_Click" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="100">
+                <s:SurfaceButton.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF3C3C3C" Offset="0.0" />
+                        <GradientStop Color="#FF020202" Offset="1.0" />
+                    </LinearGradientBrush>
+                </s:SurfaceButton.Background>
+            </s:SurfaceButton>
+        </Grid>
+
+    </Grid>
+</s:SurfaceWindow>

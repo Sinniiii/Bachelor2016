@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="ABB Product Browser Database" Class="ABBDataClassesDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=SHOWBOARD-SEC;Initial Catalog=&quot;ABB Product Browser Database&quot;;Integrated Security=True" SettingsObjectName="ProductBrowser.Properties.Settings" SettingsPropertyName="ABB_Product_Browser_DatabaseConnectionString5" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Background" Member="Backgrounds">
+    <Type Name="Background">
+      <Column Name="BackgroundID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="BackgroundBinary" Type="System.Byte[]" DbType="VarBinary(MAX)" CanBeNull="true" UpdateCheck="Never" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Video" Member="Videos">
+    <Type Name="Video">
+      <Column Name="VideoID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="OfferingID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="OfferingName" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="VideoBinary" Type="System.Byte[]" DbType="VarBinary(MAX)" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="Title" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Association Name="Offering_Video" Member="Offering" ThisKey="OfferingID" OtherKey="OfferingID" Type="Offering" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Category" Member="Categories">
+    <Type Name="Category">
+      <Column Name="CategoryID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="CategoryName" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Association Name="Category_Document" Member="Documents" ThisKey="CategoryID" OtherKey="CategoryID" Type="Document" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Document" Member="Documents">
+    <Type Name="Document">
+      <Column Name="DocumentID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="OfferingID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="OfferingName" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="DocumentBinary" Type="System.Byte[]" DbType="VarBinary(MAX)" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="Title" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="CategoryID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CategoryName" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Association Name="Category_Document" Member="Category" ThisKey="CategoryID" OtherKey="CategoryID" Type="Category" IsForeignKey="true" />
+      <Association Name="Offering_Document" Member="Offering" ThisKey="OfferingID" OtherKey="OfferingID" Type="Offering" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Image" Member="Images">
+    <Type Name="Image">
+      <Column Name="ImageID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="OfferingID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="OfferingName" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="ImageBinary" Type="System.Byte[]" DbType="VarBinary(MAX)" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="Title" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Association Name="Offering_Image" Member="Offering" ThisKey="OfferingID" OtherKey="OfferingID" Type="Offering" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Offering" Member="Offerings">
+    <Type Name="Offering">
+      <Column Name="OfferingID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="OfferingName" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="Parent" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="Category" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="ParentID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Offering_Video" Member="Videos" ThisKey="OfferingID" OtherKey="OfferingID" Type="Video" />
+      <Association Name="Offering_Document" Member="Documents" ThisKey="OfferingID" OtherKey="OfferingID" Type="Document" />
+      <Association Name="Offering_Image" Member="Images" ThisKey="OfferingID" OtherKey="OfferingID" Type="Image" />
+      <Association Name="Offering_Tag" Member="Tags" ThisKey="OfferingID" OtherKey="OfferingID" Type="Tag" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Setting" Member="Settings">
+    <Type Name="Setting">
+      <Column Name="SettingID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="SettingName" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="RootFolder" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="Language" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="FontSize" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="LostTagTimeout" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="OrientationOffsetFromTag" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BoxColorFrameThickness" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CardColorFrameThickness" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CloseButtonSize" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DoubleTap" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="BgTimer" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Tag" Member="Tags">
+    <Type Name="Tag">
+      <Column Name="TagID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="HexValue" Type="System.Data.Linq.Binary" DbType="VarBinary(8)" IsDbGenerated="true" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="OfferingID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="OfferingName" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="IsEditable" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="Offering_Tag" Member="Offering" ThisKey="OfferingID" OtherKey="OfferingID" Type="Offering" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>

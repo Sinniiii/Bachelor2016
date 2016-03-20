@@ -1,0 +1,49 @@
+﻿<ResourceDictionary 
+    x:Class="ProductBrowser.Resources.EnglishLanguage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    mc:Ignorable="d" 
+    xmlns:s="clr-namespace:System;assembly=mscorlib">
+    
+    <s:String x:Key="keyRootFolder">Root Folder</s:String>
+    <s:String x:Key="keyLanguage">Language</s:String>
+    <s:String x:Key="keyFontSize">Font Size</s:String>
+    <s:String x:Key="keySlideShowTimer">Slideshow Timer</s:String>
+    <s:String x:Key="keyVideoSize">Video Size</s:String>
+    <s:String x:Key="keyLostTagTimeout">Lost Tag Timeout</s:String>
+    <s:String x:Key="keyOrientationOffset">Orientation Offset From Tag</s:String>
+    <s:String x:Key="keyBoxColorFrameThickness">Box Color Frame Thickness</s:String>
+    <s:String x:Key="keyCardColorFrameThickness">Card Color Frame Thickness</s:String>
+    <s:String x:Key="keyCloseButtonSize">Close Button Size</s:String>
+    <s:String x:Key="keyAllowDoubleTap">Allow Double Tap</s:String>
+    <s:String x:Key="keySettings">Settings</s:String>
+    <s:String x:Key="keyChange">Change</s:String>
+    <s:String x:Key="keyImagesIn">Images In: </s:String>
+    <s:String x:Key="keyCurrentBackgrounds">Current Backgrounds</s:String>
+    <s:String x:Key="keySave">Save</s:String>
+    <s:String x:Key="keyExit">Exit</s:String>
+    <s:String x:Key="keyPlaceSmartCard">Place SmartCard here</s:String>
+    <s:String x:Key="keyGoTo">Go To...</s:String>
+    <s:String x:Key="keyCurrentLevel">Current Level: </s:String>
+    <s:String x:Key="keyAddDeleteData">Add / Delete Data At Current Level</s:String>
+    <s:String x:Key="keyFileType">Filetype: </s:String>
+    <s:String x:Key="keyCategory">Category: </s:String>
+    <s:String x:Key="keyChangeFolder">Change Folder</s:String>
+    <s:String x:Key="keyAvailable">Available: </s:String>
+    <s:String x:Key="keyShowFolders">Show Folders</s:String>
+    <s:String x:Key="keyAllCategories">All Categories</s:String>
+    <s:String x:Key="keyContains">Contains: </s:String>
+    <s:String x:Key="keyEnableDeleting">Enable Deleting</s:String>
+    <s:String x:Key="keyFilesInDatabase">Files in Database</s:String>
+    <s:String x:Key="keyNewFiles">New Files</s:String>
+    <s:String x:Key="keyAddNewOffering">Add New Offering</s:String>
+    <s:String x:Key="keyOfferingName">Offering Name: </s:String>
+    <s:String x:Key="keyNew">New</s:String>
+    <s:String x:Key="keyAddNewCategory">Add New Category</s:String>
+    <s:String x:Key="keyCategoryName">Category Name: </s:String>
+    <s:String x:Key="keyAvailableCategories">Available Categories: </s:String>
+    <s:String x:Key="keyCancel">Cancel</s:String>
+
+</ResourceDictionary>
