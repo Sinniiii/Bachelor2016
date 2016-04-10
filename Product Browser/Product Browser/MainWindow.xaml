@@ -1,0 +1,12 @@
+﻿<s:SurfaceWindow x:Class="Product_Browser.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:s="http://schemas.microsoft.com/surface/2008"
+        xmlns:local="clr-namespace:Product_Browser"
+        Title="MainWindow" Height="728" Width="1024">
+    <Grid>
+        <s:TagVisualizer Name="tagVisualizer" HorizontalAlignment="Left" VerticalAlignment="Top" Width="1024" Height="728"/>
+        <s:SurfaceButton x:Name="surfaceButton" Content="Create Image" HorizontalAlignment="Left" Margin="160,34,0,0" VerticalAlignment="Top" Click="SurfaceButton_Click"/>
+
+    </Grid>
+</s:SurfaceWindow>
