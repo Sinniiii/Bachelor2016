@@ -2,10 +2,13 @@
 using System.Windows;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using Microsoft.Surface.Core;
 using Microsoft.Surface.Presentation.Controls;
 using Microsoft.Surface.Presentation.Input;
+using DatabaseModel;
+using DatabaseModel.Model;
 using TouchEventArgs = System.Windows.Input.TouchEventArgs;
 using Tesseract;
 
@@ -18,23 +21,40 @@ namespace Product_Browser
     /// </summary>
     public partial class MainWindow : SurfaceWindow
     {
-
+        
         public MainWindow()
         {
             InitializeComponent();
 
-            InitializeCamera();
+            try
+            {
+                ABBDataContext context = new ABBDataContext();
+                Product p = new Product();
+                p.Name = "I am a new product";
+                p.TagId = 40;
 
-            Bitmap bitmap = new Bitmap("testimage.bmp");
-            TesseractEngine ocrEngine = new TesseractEngine("", "eng", EngineMode.Default);
-            ocrEngine.SetVariable("tessedit_char_whitelist", "0123456789");
-            Tesseract.Page page = ocrEngine.Process(bitmap);
+                context.Products.Add(p);
+                context.SaveChanges();
 
-            Console.WriteLine(page.GetText());
-            int success = 0;
-            int.TryParse(page.GetText(), out success);
-            Console.WriteLine(success);
-            File.WriteAllText("result", success.ToString());
+                Console.WriteLine(context.Products.FirstOrDefault().Name);
+            }
+            catch (Exception e)
+            {
+                Console.Write(e.ToString());
+            }
+
+            //InitializeCamera();
+
+            //Bitmap bitmap = new Bitmap("testimage.bmp");
+            //TesseractEngine ocrEngine = new TesseractEngine("", "eng", EngineMode.Default);
+            //ocrEngine.SetVariable("tessedit_char_whitelist", "0123456789");
+            //Tesseract.Page page = ocrEngine.Process(bitmap);
+
+            //Console.WriteLine(page.GetText());
+            //int success = 0;
+            //int.TryParse(page.GetText(), out success);
+            //Console.WriteLine(success);
+            //File.WriteAllText("result", success.ToString());
 
             // ScatterView
         }
@@ -44,7 +64,7 @@ namespace Product_Browser
             TagVisualizationDefinition tagDef = new TagVisualizationDefinition();
             
             tagDef.Source = new Uri("TagWindow.xaml", UriKind.Relative);
-            tagDef.MaxCount = 10;
+            tagDef.MaxCount = 1;
             tagDef.Value = e.TouchDevice.GetTagData().Value;
 
             tagVisualizer.Definitions.Add(tagDef);

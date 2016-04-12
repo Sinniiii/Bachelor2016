@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web;
 using System.Web.UI;
+using DatabaseModel.Model;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Owin;
@@ -13,6 +14,14 @@ namespace SmartcardManagementSystem.Account
     {
         protected void CreateUser_Click(object sender, EventArgs e)
         {
+            //DatabaseModel.ABBDataContext dataContext = new DatabaseModel.ABBDataContext();
+            //var cards = dataContext.Products;
+            //var match = dataContext.Products.Where(a => (a.Name == "ehei")).FirstOrDefault();
+            //Product c = new Product();
+
+            //dataContext.Products.Add(c);
+            //dataContext.SaveChanges();
+
             var manager = Context.GetOwinContext().GetUserManager<ApplicationUserManager>();
             var signInManager = Context.GetOwinContext().Get<ApplicationSignInManager>();
             var user = new ApplicationUser() { UserName = Email.Text, Email = Email.Text };
