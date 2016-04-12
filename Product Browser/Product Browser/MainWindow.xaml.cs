@@ -9,6 +9,8 @@ using Microsoft.Surface.Presentation.Input;
 using TouchEventArgs = System.Windows.Input.TouchEventArgs;
 using Tesseract;
 
+//Baard was here
+
 namespace Product_Browser
 {
     /// <summary>
