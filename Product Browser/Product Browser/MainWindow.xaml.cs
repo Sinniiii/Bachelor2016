@@ -52,10 +52,17 @@ namespace Product_Browser
         // TEMP
         protected void HandleLoad(object sender, EventArgs e)
         {
-            ABBDataContext context = new ABBDataContext();
-            
-            image.Source = context.SmartCardDataItems.FirstOrDefault().GetDocumentAsImageSources().FirstOrDefault();
-            //mediaElement.Source = context.SmartCardDataItems.Fi
+            try
+            {
+                ABBDataContext context = new ABBDataContext();
+                var a = context.SmartCards.FirstOrDefault();
+                image.Source = context.SmartCardDataItems.FirstOrDefault().GetDocumentAsImageSources().FirstOrDefault();
+                //mediaElement.Source = context.SmartCardDataItems.Fi
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine(a);
+            }
         }
 
         protected override void OnTouchDown(TouchEventArgs e)
