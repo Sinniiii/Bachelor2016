@@ -5,9 +5,9 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Product Browser", "Product Browser\Product Browser.csproj", "{D8205244-CAD2-4A76-A400-C49D062363AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartcardManagementSystem", "SmartcardManagementSystem\SmartcardManagementSystem.csproj", "{6E0C94E6-8A27-4453-89FD-C2ED279E9E86}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseModel", "DatabaseModel\DatabaseModel.csproj", "{59439B50-F8CA-47F6-9C19-75A73796D9E1}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "SmartCardManagementSystem", "SmartCardManagementSystem\SmartCardManagementSystem.xproj", "{9500D0E1-414C-4FD2-85AF-A922312E62BA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,14 +19,14 @@ Global
 		{D8205244-CAD2-4A76-A400-C49D062363AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8205244-CAD2-4A76-A400-C49D062363AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D8205244-CAD2-4A76-A400-C49D062363AA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6E0C94E6-8A27-4453-89FD-C2ED279E9E86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6E0C94E6-8A27-4453-89FD-C2ED279E9E86}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6E0C94E6-8A27-4453-89FD-C2ED279E9E86}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6E0C94E6-8A27-4453-89FD-C2ED279E9E86}.Release|Any CPU.Build.0 = Release|Any CPU
 		{59439B50-F8CA-47F6-9C19-75A73796D9E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{59439B50-F8CA-47F6-9C19-75A73796D9E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59439B50-F8CA-47F6-9C19-75A73796D9E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59439B50-F8CA-47F6-9C19-75A73796D9E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9500D0E1-414C-4FD2-85AF-A922312E62BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9500D0E1-414C-4FD2-85AF-A922312E62BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9500D0E1-414C-4FD2-85AF-A922312E62BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9500D0E1-414C-4FD2-85AF-A922312E62BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

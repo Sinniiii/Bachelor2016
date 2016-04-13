@@ -23,13 +23,31 @@ namespace DatabaseModel
         protected override void Seed(ABBDataContext context)
         {
             // seed database here
-            SmartCardDataItem item = null;
             byte[] bytes = File.ReadAllBytes("TestData\\Theory Of Random.pdf");
 
-            item = new SmartCardDataItem("Test1", SmartCardDataItemCategory.Document,
+            var item1 = new SmartCardDataItem("Test1", SmartCardDataItemCategory.Document,
                     bytes);
 
-            context.SmartCardDataItems.Add(item);
+            bytes = File.ReadAllBytes("TestData\\arkema-st-auban.png");
+
+            var item2 = new SmartCardDataItem("Test2", SmartCardDataItemCategory.Image,
+                    bytes);
+
+            bytes = File.ReadAllBytes("TestData\\ABB_ Life_Cycle_Assessment_service.mp4");
+
+            var item3 = new SmartCardDataItem("Test3", SmartCardDataItemCategory.Video,
+                    bytes);
+            
+            var smartcard = new SmartCard();
+            smartcard.Name = "Test card 1";
+            smartcard.TagId = 1;
+            smartcard.DataItems = new List<SmartCardDataItem>();
+
+            smartcard.DataItems.Add(item1);
+            smartcard.DataItems.Add(item2);
+            smartcard.DataItems.Add(item3);
+
+            context.SmartCards.Add(smartcard);
 
             context.SaveChanges();
         }

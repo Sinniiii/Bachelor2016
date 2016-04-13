@@ -6,9 +6,10 @@
         Title="MainWindow" Height="728" Width="1024">
     <Grid>
         <s:TagVisualizer Name="tagVisualizer" HorizontalAlignment="Left" VerticalAlignment="Top" Width="1024" Height="728">
-            
         </s:TagVisualizer>
         <s:SurfaceButton x:Name="surfaceButton" Content="Create Image" HorizontalAlignment="Left" Margin="160,34,0,0" VerticalAlignment="Top" Click="SurfaceButton_Click"/>
         <Image x:Name="image" HorizontalAlignment="Left" Height="200" Margin="395,269,0,0" VerticalAlignment="Top" Width="200"/>
+        <MediaElement x:Name="mediaElement" HorizontalAlignment="Left" Height="200" Margin="600,364,0,0" VerticalAlignment="Top" Width="200"/>
+
     </Grid>
 </s:SurfaceWindow>

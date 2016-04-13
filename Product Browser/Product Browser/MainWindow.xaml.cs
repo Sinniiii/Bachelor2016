@@ -55,7 +55,7 @@ namespace Product_Browser
             ABBDataContext context = new ABBDataContext();
             
             image.Source = context.SmartCardDataItems.FirstOrDefault().GetDocumentAsImageSources().FirstOrDefault();
-
+            //mediaElement.Source = context.SmartCardDataItems.Fi
         }
 
         protected override void OnTouchDown(TouchEventArgs e)
