@@ -5,6 +5,7 @@ namespace DatabaseModel
     using System;
     using System.Data.Entity;
     using System.Linq;
+    using Model;
 
     public class ABBDataContext : DbContext
     {
@@ -13,10 +14,8 @@ namespace DatabaseModel
         {
         }
 
-        public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<SmartCard> SmartCards { get; set; }
 
-        public virtual DbSet<ProductDataItem> ProductDataItems { get; set; }
-
-        public virtual DbSet<ProductDataItemCategory> ProductDataItemCategories { get; set; }
+        public virtual DbSet<SmartCardDataItem> SmartCardDataItems { get; set; }
     }
 }

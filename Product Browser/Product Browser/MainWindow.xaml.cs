@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Windows;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using Microsoft.Surface.Core;
 using Microsoft.Surface.Presentation.Controls;
 using Microsoft.Surface.Presentation.Input;
@@ -26,23 +29,10 @@ namespace Product_Browser
         {
             InitializeComponent();
 
-            try
-            {
-                ABBDataContext context = new ABBDataContext();
-                Product p = new Product();
-                p.Name = "I am a new product";
-                p.TagId = 40;
+            Database.SetInitializer(new DevelopmentInitializer()); // This is only while developing, it drops database and reseeds it
 
-                context.Products.Add(p);
-                context.SaveChanges();
-
-                Console.WriteLine(context.Products.FirstOrDefault().Name);
-            }
-            catch (Exception e)
-            {
-                Console.Write(e.ToString());
-            }
-
+            // TEMP
+            Loaded += HandleLoad;
             //InitializeCamera();
 
             //Bitmap bitmap = new Bitmap("testimage.bmp");
@@ -57,6 +47,15 @@ namespace Product_Browser
             //File.WriteAllText("result", success.ToString());
 
             // ScatterView
+        }
+
+        // TEMP
+        protected void HandleLoad(object sender, EventArgs e)
+        {
+            ABBDataContext context = new ABBDataContext();
+            
+            image.Source = context.SmartCardDataItems.FirstOrDefault().GetDocumentAsImageSources().FirstOrDefault();
+
         }
 
         protected override void OnTouchDown(TouchEventArgs e)
