@@ -1,5 +1,5 @@
 {
-  "userSecretsId": "aspnet5-SmartCardManagementSystem-3d57dedf-d17b-4f78-9914-7c0406d90c8b",
+  "userSecretsId": "aspnet5-SmartCardManagementSystem-c156c4e5-b912-4eae-a432-cac62b328cab",
   "version": "1.0.0-*",
   "compilationOptions": {
     "emitEntryPoint": true
@@ -8,7 +8,6 @@
   "dependencies": {
     "EntityFramework.Commands": "7.0.0-rc1-final",
     "EntityFramework.MicrosoftSqlServer": "7.0.0-rc1-final",
-    "Microsoft.ApplicationInsights.AspNet": "1.0.0-rc1",
     "Microsoft.AspNet.Authentication.Cookies": "1.0.0-rc1-final",
     "Microsoft.AspNet.Diagnostics.Entity": "7.0.0-rc1-final",
     "Microsoft.AspNet.Identity.EntityFramework": "3.0.0-rc1-final",

@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0-*",
+  "frameworks": {
+    "net45": {
+      "bin": {
+        "assembly": "../../Product Browser/ExtensibilityLib/Microsoft.Windows.Design.Interaction.dll"
+      },
+      "dependencies": {
+        "Microsoft.Windows.Design.Extensibility": "1.0.0-*"
+      }
+    }
+  }
+}

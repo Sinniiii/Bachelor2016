@@ -1,0 +1,14 @@
+{
+  "version": "1.0.0-*",
+  "frameworks": {
+    "net45": {
+      "bin": {
+        "assembly": "../../../../../../../Program Files (x86)/Microsoft SDKs/Surface/v2.0/Reference Assemblies/Microsoft.Surface.Presentation.dll"
+      },
+      "dependencies": {
+        "Microsoft.Surface.Core": "1.0.0-*",
+        "Microsoft.Surface": "1.0.0-*"
+      }
+    }
+  }
+}

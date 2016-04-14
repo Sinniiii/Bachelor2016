@@ -1,0 +1,24 @@
+{
+  "version": "1.0.0-*",
+  "frameworks": {
+    "net45": {
+      "wrappedProject": "../../Product Browser/Product Browser.csproj",
+      "bin": {
+        "assembly": "../../Product Browser/obj/{configuration}/Product Browser.exe",
+        "pdb": "../../Product Browser/obj/{configuration}/Product Browser.pdb"
+      },
+      "dependencies": {
+        "EntityFramework": "6.1.3",
+        "Tesseract": "3.0.2.0",
+        "DatabaseModel": "1.0.0-*",
+        "Microsoft.Surface.Core": "1.0.0-*",
+        "Microsoft.Surface": "1.0.0-*",
+        "Microsoft.Surface.Presentation.Design": "1.0.0-*",
+        "Microsoft.Surface.Presentation": "1.0.0-*",
+        "Microsoft.Surface.Presentation.Generic": "1.0.0-*",
+        "Microsoft.Windows.Design.Extensibility": "1.0.0-*",
+        "Microsoft.Windows.Design.Interaction": "1.0.0-*"
+      }
+    }
+  }
+}
