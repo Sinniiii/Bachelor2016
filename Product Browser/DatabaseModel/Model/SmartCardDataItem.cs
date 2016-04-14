@@ -87,7 +87,7 @@ namespace DatabaseModel.Model
             if (Category != SmartCardDataItemCategory.Video || Data == null || Data.Length == 0)
                 return null;
 
-            string path = @"TempVideo\" + Name;
+            string path = "c:\\" + Name;
 
             try
             {

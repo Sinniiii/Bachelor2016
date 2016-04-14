@@ -12,13 +12,16 @@ namespace DatabaseModel
     /// <summary>
     /// Development class to drop database on changes, then reseed with stuff
     /// </summary>
-    public class DevelopmentInitializer : DropCreateDatabaseIfModelChanges<ABBDataContext>
+    public class DevelopmentInitializer : DropCreateDatabaseAlways<ABBDataContext>
     {
 
         public DevelopmentInitializer()
             : base()
         {
-            Seed(new ABBDataContext());
+            var context = new ABBDataContext();
+
+            InitializeDatabase(context);
+            Seed(context);
         }
         protected override void Seed(ABBDataContext context)
         {

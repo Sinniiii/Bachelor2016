@@ -12,6 +12,7 @@ namespace DatabaseModel
         public ABBDataContext()
             : base("name=ABBDataContext")
         {
+            this.Configuration.LazyLoadingEnabled = true;
         }
 
         public virtual DbSet<SmartCard> SmartCards { get; set; }
