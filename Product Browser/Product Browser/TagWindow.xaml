@@ -7,11 +7,29 @@
         xmlns:controls="http://schemas.microsoft.com/surface/2008"
         mc:Ignorable="d">
     <Grid>
-        <controls:ScatterView Name="scatterView" 
-                              HorizontalAlignment="Left"
-                              VerticalAlignment="Top"
+        <!-- foundSmartCardControl needs to be enabled always, or we'll get trouble adding items to the scatterview-->
+        <ContentControl Name="foundSmartCardControl" 
+                        IsEnabled="True"
+                        Visibility="Visible">
+            
+            <controls:ScatterView Name="scatterView" HorizontalAlignment="Left" VerticalAlignment="Top"
                               Width="1920"
-                              Height="1080"/>
+                              Height="1080"
+                              ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:TagVisualization}}, Path=ScatterViewItems}"/>
+        </ContentControl>
 
+        <ContentControl Name="loadingControl"
+                        IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:TagVisualization}}, Path=LoadingSmartCard, FallbackValue=True}"
+                        Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:TagVisualization}}, Path=LoadingSmartCard, Converter={StaticResource BoolToVisCon}, FallbackValue=Visible}">
+            
+            <controls:SurfaceTextBox x:Name="loadingText" Text="Loading Smart Card" Height="50" Width="200"/>
+        </ContentControl>
+
+        <ContentControl Name="notFoundControl"
+                        IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:TagVisualization}}, Path=NotFoundSmartCard, FallbackValue=False}"
+                        Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:TagVisualization}}, Path=NotFoundSmartCard, Converter={StaticResource BoolToVisCon}, FallbackValue=Hidden}">
+
+            <controls:SurfaceTextBox x:Name="notFoundText" Text="Smart Card does not contain data" Height="50" Width="300"/>
+        </ContentControl>
     </Grid>
 </controls:TagVisualization>

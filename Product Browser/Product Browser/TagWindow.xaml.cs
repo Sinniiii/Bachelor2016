@@ -18,6 +18,7 @@ using DatabaseModel;
 using DatabaseModel.Model;
 using System.Data.Entity;
 using Product_Browser.ScatterItems;
+using System.Collections.ObjectModel;
 
 namespace Product_Browser
 {
@@ -42,60 +43,111 @@ namespace Product_Browser
 
         SmartCard smartCard = null;
 
-        bool firstLoad = true;
+        /// <summary>
+        /// These are helpers to determine visibility of UI elements in TagWindow.xaml. Start by displaying loading
+        /// </summary>
+        bool foundSmartCard = false,
+            notFoundSmartCard = false,
+            loadingSmartCard = true;
+
+        bool alreadyLoaded = false; // Keep track of whether the Loaded event has already fired, so we don't reload data from db
 
         #endregion
 
         #region Properties
 
-        private long _value;
-        public long Value {
-            get { return _value; }
-            set { _value = value;
+        /// <summary>
+        /// These are states, and should only ever be set true
+        /// </summary>
+        public bool FoundSmartCard { get { return foundSmartCard; }
+            set
+            {
+                if (!value)
+                    return;
+
+                foundSmartCard = value;
+                loadingSmartCard = !value;
+                foundSmartCard = !value;
                 NotifyPropertyChanged();
+                NotifyPropertyChanged("NotFoundSmartCard");
+                NotifyPropertyChanged("LoadingSmartCard");
             }
         }
 
+        public bool NotFoundSmartCard { get { return notFoundSmartCard; }
+            set {
+                if (!value)
+                    return;
+
+                notFoundSmartCard = value;
+                foundSmartCard = !value;
+                loadingSmartCard = !value;
+                NotifyPropertyChanged();
+                NotifyPropertyChanged("LoadingSmartCard");
+                NotifyPropertyChanged("FoundSmartCard");
+            }
+        }
+
+        public bool LoadingSmartCard { get { return loadingSmartCard; }
+            set
+            {
+                if (!value)
+                    return;
+
+                loadingSmartCard = value;
+                notFoundSmartCard = !value;
+                foundSmartCard = !value;
+                NotifyPropertyChanged();
+                NotifyPropertyChanged("NotFoundSmartCard");
+                NotifyPropertyChanged("FoundSmartCard");
+            }
+        }
+
+        public ObservableCollection<ScatterViewItem> ScatterViewItems { get; set; } = new ObservableCollection<ScatterViewItem>();
         #endregion
 
         public TagWindow()
         {
             InitializeComponent();
-            DataContext = this;
 
-            Loaded += TagWindowLoaded;
+            // Have to wait until Loaded event fires before we can initialize, otherwise
+            // the VisualizedTag.Value may not be set and we won't recognize the tag.
+            Loaded += InitializeSmartCard;
         }
 
-        private async void TagWindowLoaded(object sender, EventArgs args)
+        private async void InitializeSmartCard(object sender, EventArgs e)
         {
-            if (!firstLoad) // Event can be fired more than once; skip out early if we already did this!
+            if (alreadyLoaded) // Don't want to load a Smart Card's data more than once; possible because Loaded can fire several times
                 return;
 
-            firstLoad = false;
-
-            Value = VisualizedTag.Value;
+            alreadyLoaded = true;
 
             ABBDataContext context = new ABBDataContext();
             
-            smartCard = await context.SmartCards.FirstAsync(a => a.TagId == Value);
+            smartCard = await context.SmartCards.FirstOrDefaultAsync(a => a.TagId == VisualizedTag.Value);
 
-            if (smartCard == null)
-                return; // Handle this better, maybe visual feedback
+            List<SmartCardDataItem> dataItems = null;
 
-            var dataItems = smartCard.DataItems;
+            if (smartCard == null || (dataItems = smartCard.DataItems) == null || dataItems.Count == 0)
+            {
+                NotFoundSmartCard = true;
+                return;
+            }
 
-            foreach(SmartCardDataItem item in dataItems)
+            FoundSmartCard = true;
+
+            foreach (SmartCardDataItem item in dataItems)
             {
                 switch (item.Category)
                 {
                     case SmartCardDataItemCategory.Document:
-                        scatterView.Items.Add(new DocumentScatterItem(item));
+                        ScatterViewItems.Add(new DocumentScatterItem(item));
                         break;
                     case SmartCardDataItemCategory.Image:
-                        scatterView.Items.Add(new ImageScatterItem(item)); // Temporary, for final all images should be sent to same imagescatteritem
+                        ScatterViewItems.Add(new ImageScatterItem(item)); // Temporary, for final all images should be sent to same imagescatteritem
                         break;
                     case SmartCardDataItemCategory.Video:
-                        scatterView.Items.Add(new VideoScatterItem(item));
+                        ScatterViewItems.Add(new VideoScatterItem(item));
                         break;
                 }
             }

@@ -15,6 +15,6 @@
         </Grid.ColumnDefinitions>
 
         <MediaElement x:Name="videoPlayer" HorizontalAlignment="Left" Height="200" VerticalAlignment="Top" Width="200"
-                      ScrubbingEnabled="True" Stretch="Fill"/>
+                      ScrubbingEnabled="True" Stretch="Fill" IsMuted="True"/>
     </Grid>
 </controls:ScatterViewItem>

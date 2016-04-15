@@ -31,8 +31,8 @@ namespace Product_Browser
 
             Database.SetInitializer(new DevelopmentInitializer()); // This is only while developing, it drops database and reseeds it
 
-            // TEMP
-            Loaded += HandleLoad;
+            InitializeTagVisualizer();
+            
             //InitializeCamera();
 
             //Bitmap bitmap = new Bitmap("testimage.bmp");
@@ -45,29 +45,26 @@ namespace Product_Browser
             //int.TryParse(page.GetText(), out success);
             //Console.WriteLine(success);
             //File.WriteAllText("result", success.ToString());
-
-            // ScatterView
         }
 
-        // TEMP
-        protected void HandleLoad(object sender, EventArgs e)
+        /// <summary>
+        /// Adds definitions for the Tag Visualizer item, which makes it be on the lookout for those tags being
+        /// placed on the board.
+        /// </summary>
+        private void InitializeTagVisualizer()
         {
-        }
+            for (int i = 0; i < 256; i++) // For now just add definitions for all tag ids
+            {
+                TagVisualizationDefinition tagDef = new TagVisualizationDefinition();
 
-        protected override void OnTouchDown(TouchEventArgs e)
-        {
-            TagVisualizationDefinition tagDef = new TagVisualizationDefinition();
-            
-            tagDef.Source = new Uri("TagWindow.xaml", UriKind.Relative);
-            tagDef.MaxCount = 1;
-            tagDef.Value = e.TouchDevice.GetTagData().Value;
-            tagDef.LostTagTimeout = 1500;
-            tagDef.TagRemovedBehavior = TagRemovedBehavior.Fade;
+                tagDef.Source = new Uri("TagWindow.xaml", UriKind.Relative);
+                tagDef.MaxCount = 1;
+                tagDef.LostTagTimeout = 1500;
+                tagDef.TagRemovedBehavior = TagRemovedBehavior.Fade;
+                tagDef.Value = i;
 
-            if (tagVisualizer.Definitions.Where(a => a.Value == tagDef.Value).Count() > 0)
-                return;
-
-            tagVisualizer.Definitions.Add(tagDef);
+                tagVisualizer.Definitions.Add(tagDef);
+            }
         }
 
         /****** TEMP ***************/

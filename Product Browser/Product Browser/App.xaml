@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:Product_Browser"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <BooleanToVisibilityConverter x:Key="BoolToVisCon"/>
     </Application.Resources>
 </Application>

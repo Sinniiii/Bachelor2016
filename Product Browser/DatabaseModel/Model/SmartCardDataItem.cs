@@ -32,49 +32,31 @@ namespace DatabaseModel.Model
         public byte[] Data { get; private set; }
 
         /// <summary>
-        /// Retrieves an image from the Data byte array. Returns null if Data is null
-        /// or if Category does not match "image"
-        /// </summary>
-        /// <returns></returns>
-        public Bitmap GetImage()
-        {
-            if (Category != SmartCardDataItemCategory.Image || Data == null && Data.Length == 0)
-                return null;
-
-            Bitmap image = null;
-                
-            try
-            {
-                image = (Bitmap)Bitmap.FromStream(new MemoryStream(Data));
-            }
-            catch (ArgumentException e)
-            {
-                Console.WriteLine("Error loading image file...");
-            }
-
-            return image;
-        }
-
-        /// <summary>
         /// Retrieves the document from the Data array as an image source which can be used directly in
         /// an Image WPF element.
         /// Returns null if Data is null or if Category does not match "document".
         /// </summary>
         /// <returns></returns>
-        public ImageSource GetImageSource()
+        public BitmapImage GetImageSource()
         {
-            Bitmap image = GetImage();
-
-            if (image == null)
+            if (Category != SmartCardDataItemCategory.Image || Data == null && Data.Length == 0)
                 return null;
 
-            ImageSource source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
-                                      image.GetHbitmap(),
-                                      IntPtr.Zero,
-                                      Int32Rect.Empty,
-                                      BitmapSizeOptions.FromEmptyOptions());
+            BitmapImage image = new BitmapImage();
 
-            return source;
+            using (var mem = new MemoryStream(Data))
+            {
+                mem.Position = 0;
+                image.BeginInit();
+                image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
+                image.CacheOption = BitmapCacheOption.OnLoad;
+                image.UriSource = null;
+                image.StreamSource = mem;
+                image.EndInit();
+            }
+            image.Freeze();
+
+            return image;
         }
 
         /// <summary>
@@ -107,17 +89,17 @@ namespace DatabaseModel.Model
         /// Returns null if Data is null or if Category does not match "document".
         /// </summary>
         /// <returns></returns>
-        public List<Bitmap> GetDocumentAsBitmapList()
+        public List<BitmapImage> GetDocumentAsImageSources()
         {
             if (Category != SmartCardDataItemCategory.Document || Data == null || Data.Length == 0)
                 return null;
 
-            List<Bitmap> images = new List<Bitmap>();
+            List<BitmapImage> images = new List<BitmapImage>();
 
             int current = 0;
             while (current < Data.Length)
             {
-                Bitmap newImage = null;
+                BitmapImage newImage = new BitmapImage();
 
                 // Find size of next element
                 int elementSize = BitConverter.ToInt32(Data, current);
@@ -131,42 +113,22 @@ namespace DatabaseModel.Model
                     break;
 
                 // Else we have an image, convert the byte array
-                MemoryStream imageStream = new MemoryStream(imageBytes); // No point disposing of memory stream, it doesn't lock any resources
-
-                newImage = (Bitmap)Bitmap.FromStream(imageStream);
+                using (var mem = new MemoryStream(imageBytes))
+                {
+                    mem.Position = 0;
+                    newImage.BeginInit();
+                    newImage.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
+                    newImage.CacheOption = BitmapCacheOption.OnLoad;
+                    newImage.UriSource = null;
+                    newImage.StreamSource = mem;
+                    newImage.EndInit();
+                }
+                newImage.Freeze();
 
                 images.Add(newImage);
             }
 
             return images;
-        }
-
-        /// <summary>
-        /// Retrieves the document from the Data array as a list of image sources which can be used directly in
-        /// an Image WPF element.
-        /// Returns null if Data is null or if Category does not match "document".
-        /// </summary>
-        /// <returns></returns>
-        public List<ImageSource> GetDocumentAsImageSources()
-        {
-            List<Bitmap> images = GetDocumentAsBitmapList();
-
-            if (images == null || images.Count == 0)
-                return null;
-
-            List<ImageSource> sources = new List<ImageSource>(images.Count);
-
-            for (int i = 0; i < images.Count; i++)
-            {
-                ImageSource source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
-                                      images[i].GetHbitmap(),
-                                      IntPtr.Zero,
-                                      Int32Rect.Empty,
-                                      BitmapSizeOptions.FromEmptyOptions());
-                sources.Add(source);
-            }
-
-            return sources;
         }
 
         /// <summary>
