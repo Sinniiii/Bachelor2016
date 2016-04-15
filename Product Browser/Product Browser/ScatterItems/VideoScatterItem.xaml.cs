@@ -31,19 +31,11 @@ namespace Product_Browser.ScatterItems
             InitializeComponent();
 
             this.video = video;
-            //Loaded += VideoScatterItemLoaded;
 
-            videoPlayer.LoadedBehavior = MediaState.Manual;
-            videoPlayer.UnloadedBehavior = MediaState.Manual;
-            
+            videoPlayer.LoadedBehavior = MediaState.Play;
+            videoPlayer.UnloadedBehavior = MediaState.Stop;
 
-            videoPlayer.Loaded += VideoScatterItemLoaded;
-        }
-
-        protected void VideoScatterItemLoaded(object sender, EventArgs e)
-        {
             videoPlayer.Source = video.GetVideo();
-            videoPlayer.Play();
         }
     }
 }

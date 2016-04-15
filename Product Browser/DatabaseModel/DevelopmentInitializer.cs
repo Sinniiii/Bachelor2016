@@ -38,7 +38,7 @@ namespace DatabaseModel
 
             bytes = File.ReadAllBytes("TestData\\ABB_ Life_Cycle_Assessment_service.mp4");
 
-            var item3 = new SmartCardDataItem("Test3", SmartCardDataItemCategory.Video,
+            var item3 = new SmartCardDataItem("ABB_ Life_Cycle_Assessment_service.mp4", SmartCardDataItemCategory.Video,
                     bytes);
             
             var smartcard = new SmartCard();

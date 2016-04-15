@@ -10,8 +10,8 @@
         <controls:ScatterView Name="scatterView" 
                               HorizontalAlignment="Left"
                               VerticalAlignment="Top"
-                              Width="200"
-                              Height="200"/>
+                              Width="1920"
+                              Height="1080"/>
 
     </Grid>
 </controls:TagVisualization>

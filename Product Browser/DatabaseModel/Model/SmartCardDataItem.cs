@@ -87,7 +87,7 @@ namespace DatabaseModel.Model
             if (Category != SmartCardDataItemCategory.Video || Data == null || Data.Length == 0)
                 return null;
 
-            string path = "c:\\" + Name;
+            string path = @"c:\" + Name;
 
             try
             {
@@ -99,7 +99,7 @@ namespace DatabaseModel.Model
                 return null;
             }
 
-            return new Uri(path, UriKind.Relative);
+            return new Uri(path, UriKind.Absolute);
         }
 
         /// <summary>

@@ -179,6 +179,12 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DatabaseModel\DatabaseModel.csproj">
+      <Project>{59439b50-f8ca-47f6-9c19-75a73796d9e1}</Project>
+      <Name>DatabaseModel</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="x64\liblept172.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -192,13 +198,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DatabaseModel\DatabaseModel.csproj">
-      <Project>{59439b50-f8ca-47f6-9c19-75a73796d9e1}</Project>
-      <Name>DatabaseModel</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -52,17 +52,6 @@ namespace Product_Browser
         // TEMP
         protected void HandleLoad(object sender, EventArgs e)
         {
-            try
-            {
-                ABBDataContext context = new ABBDataContext();
-                var a = context.SmartCards.FirstOrDefault();
-                image.Source = context.SmartCardDataItems.FirstOrDefault().GetDocumentAsImageSources().FirstOrDefault();
-                //mediaElement.Source = context.SmartCardDataItems.Fi
-            }
-            catch (Exception a)
-            {
-                Console.WriteLine(a);
-            }
         }
 
         protected override void OnTouchDown(TouchEventArgs e)
@@ -72,6 +61,11 @@ namespace Product_Browser
             tagDef.Source = new Uri("TagWindow.xaml", UriKind.Relative);
             tagDef.MaxCount = 1;
             tagDef.Value = e.TouchDevice.GetTagData().Value;
+            tagDef.LostTagTimeout = 1500;
+            tagDef.TagRemovedBehavior = TagRemovedBehavior.Fade;
+
+            if (tagVisualizer.Definitions.Where(a => a.Value == tagDef.Value).Count() > 0)
+                return;
 
             tagVisualizer.Definitions.Add(tagDef);
         }
