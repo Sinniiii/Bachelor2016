@@ -88,6 +88,7 @@
     <Compile Include="ScatterItems\ImageScatterItem.xaml.cs">
       <DependentUpon>ImageScatterItem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ScatterItems\ScatterItemPhysics.cs" />
     <Compile Include="ScatterItems\VideoScatterItem.xaml.cs">
       <DependentUpon>VideoScatterItem.xaml</DependentUpon>
     </Compile>

@@ -7,17 +7,6 @@
         xmlns:controls="http://schemas.microsoft.com/surface/2008"
         mc:Ignorable="d">
     <Grid>
-        <!-- foundSmartCardControl needs to be enabled always, or we'll get trouble adding items to the scatterview-->
-        <ContentControl Name="foundSmartCardControl" 
-                        IsEnabled="True"
-                        Visibility="Visible">
-            
-            <controls:ScatterView Name="scatterView" HorizontalAlignment="Left" VerticalAlignment="Top"
-                              Width="1920"
-                              Height="1080"
-                              ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:TagVisualization}}, Path=ScatterViewItems}"/>
-        </ContentControl>
-
         <ContentControl Name="loadingControl"
                         IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:TagVisualization}}, Path=LoadingSmartCard, FallbackValue=True}"
                         Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:TagVisualization}}, Path=LoadingSmartCard, Converter={StaticResource BoolToVisCon}, FallbackValue=Visible}">

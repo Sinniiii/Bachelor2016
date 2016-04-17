@@ -65,6 +65,20 @@ namespace Product_Browser
 
                 tagVisualizer.Definitions.Add(tagDef);
             }
+
+            // Subscribe to add/remove events, since we need to handle those
+            tagVisualizer.VisualizationInitialized += VisualizationAdded;
+            tagVisualizer.VisualizationRemoved += VisualizationRemoved;
+        }
+
+        private void VisualizationAdded(object sender, TagVisualizerEventArgs args)
+        {
+            (args.TagVisualization as TagWindow).InitializeSmartCard(scatterView);
+        }
+
+        private void VisualizationRemoved(object sender, TagVisualizerEventArgs args)
+        {
+            (args.TagVisualization as TagWindow).DestroySmartCard(scatterView);
         }
 
         /****** TEMP ***************/

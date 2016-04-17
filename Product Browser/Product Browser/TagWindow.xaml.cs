@@ -1,24 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using Microsoft.Surface.Presentation.Controls;
 using DatabaseModel;
 using DatabaseModel.Model;
 using System.Data.Entity;
 using Product_Browser.ScatterItems;
 using System.Collections.ObjectModel;
+using System.Windows.Threading;
+using Microsoft.Surface.Core;
 
 namespace Product_Browser
 {
@@ -27,6 +19,13 @@ namespace Product_Browser
     /// </summary>
     public partial class TagWindow : TagVisualization, INotifyPropertyChanged
     {
+        const double
+            CIRCLE_Y_OFFSET = -50d,
+            CIRCLE_SIZE = 150d,
+            SCATTERITEM_STARTING_WIDTH = 200d,
+            SCATTERITEM_STARTING_HEIGHT = 100d;
+
+
         #region PropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -43,14 +42,17 @@ namespace Product_Browser
 
         SmartCard smartCard = null;
 
+        List<ScatterItemPhysics> physicsItemsActive = new List<ScatterItemPhysics>();
+        List<ScatterItemPhysics> physicsItemsInactive = new List<ScatterItemPhysics>();
+
+        DispatcherTimer physicsTimer;
+
         /// <summary>
         /// These are helpers to determine visibility of UI elements in TagWindow.xaml. Start by displaying loading
         /// </summary>
         bool foundSmartCard = false,
             notFoundSmartCard = false,
             loadingSmartCard = true;
-
-        bool alreadyLoaded = false; // Keep track of whether the Loaded event has already fired, so we don't reload data from db
 
         #endregion
 
@@ -102,26 +104,72 @@ namespace Product_Browser
                 NotifyPropertyChanged("FoundSmartCard");
             }
         }
-
-        public ObservableCollection<ScatterViewItem> ScatterViewItems { get; set; } = new ObservableCollection<ScatterViewItem>();
+        
         #endregion
 
         public TagWindow()
         {
             InitializeComponent();
-
-            // Have to wait until Loaded event fires before we can initialize, otherwise
-            // the VisualizedTag.Value may not be set and we won't recognize the tag.
-            Loaded += InitializeSmartCard;
         }
 
-        private async void InitializeSmartCard(object sender, EventArgs e)
+        protected override void OnMoved(RoutedEventArgs args)
         {
-            if (alreadyLoaded) // Don't want to load a Smart Card's data more than once; possible because Loaded can fire several times
-                return;
+            base.OnMoved(args);
 
-            alreadyLoaded = true;
+            foreach (ScatterItemPhysics item in physicsItemsInactive)
+            {
+                item.ResetToDefault(Center, Orientation);
+            }
+        }
 
+        private void ScatterViewItemMovedHandler(object sender, EventArgs args)
+        {
+            if (physicsItemsActive.Count == 0)
+                physicsTimer.Start();
+
+            ScatterItemPhysics phy = null;
+            foreach(ScatterItemPhysics p in physicsItemsInactive)
+            {
+                if (p.Item == sender as ScatterViewItem)
+                {
+                    phy = p;
+                    physicsItemsActive.Add(p);
+                    break;
+                }
+            }
+
+            if (phy != null) // If it's null, it already exists in the active container
+                physicsItemsInactive.Remove(phy);
+        }
+
+        private void ScatterViewItemLockedHandler(ScatterItemPhysics e)
+        {
+            physicsItemsInactive.Add(e);
+            physicsItemsActive.Remove(e);
+
+            if (physicsItemsActive.Count == 0)
+                physicsTimer.Stop();
+        }
+
+        private void PhysicsEventHandler(object sender, EventArgs args)
+        {
+            for(int i = 0; i < physicsItemsActive.Count; i++)
+                physicsItemsActive[i].Run(Center, Orientation, -50d, 150d);
+        }
+
+        public void DestroySmartCard(ScatterView view)
+        {
+            for (int i = 0; i < physicsItemsInactive.Count; i++)
+                view.Items.Remove(physicsItemsInactive[i].Item);
+            for (int i = 0; i < physicsItemsActive.Count; i++)
+                view.Items.Remove(physicsItemsActive[i].Item);
+
+            physicsItemsActive.Clear();
+            physicsItemsInactive.Clear();
+        }
+
+        public async void InitializeSmartCard(ScatterView view)
+        {
             ABBDataContext context = new ABBDataContext();
             
             smartCard = await context.SmartCards.FirstOrDefaultAsync(a => a.TagId == VisualizedTag.Value);
@@ -136,21 +184,47 @@ namespace Product_Browser
 
             FoundSmartCard = true;
 
-            foreach (SmartCardDataItem item in dataItems)
+            double radianMultiplier = Math.PI / (dataItems.Count + 1); // Radians so PI = 180 degrees
+            for(int i = 0; i < dataItems.Count; i++)
             {
-                switch (item.Category)
+                ScatterViewItem item = null;
+                switch (dataItems[i].Category)
                 {
                     case SmartCardDataItemCategory.Document:
-                        ScatterViewItems.Add(new DocumentScatterItem(item));
+                        item = new DocumentScatterItem(dataItems[i]);
                         break;
                     case SmartCardDataItemCategory.Image:
-                        ScatterViewItems.Add(new ImageScatterItem(item)); // Temporary, for final all images should be sent to same imagescatteritem
+                        item = new ImageScatterItem(dataItems[i]); // Temporary, for final all images should be sent to same imagescatteritem
                         break;
                     case SmartCardDataItemCategory.Video:
-                        ScatterViewItems.Add(new VideoScatterItem(item));
+                        item = new VideoScatterItem(dataItems[i]);
                         break;
                 }
+
+                // Calculate position, place items on half circle
+                double positionRadians = radianMultiplier * (i + 1) + Math.PI;
+
+                double posXOffset = Math.Cos(positionRadians) * CIRCLE_SIZE;
+                double posYOffset = Math.Sin(positionRadians) * CIRCLE_SIZE + CIRCLE_Y_OFFSET;
+
+                ScatterItemPhysics physics = new ScatterItemPhysics(item, posXOffset, posYOffset, positionRadians * 57.295d, // Convert that one to degrees
+                    SCATTERITEM_STARTING_WIDTH, SCATTERITEM_STARTING_HEIGHT);
+
+                physics.ResetToDefault(Center, Orientation);
+
+                item.PreviewTouchDown += ScatterViewItemMovedHandler;
+                item.PreviewMouseLeftButtonDown += ScatterViewItemMovedHandler;
+
+                physics.PositionLocked += ScatterViewItemLockedHandler;
+
+                physicsItemsInactive.Add(physics);
+                view.Items.Add(item);
             }
+
+            physicsTimer = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);
+            physicsTimer.Interval = new TimeSpan(0, 0, 0, 0, 5);
+            physicsTimer.Tick += PhysicsEventHandler;
+            physicsTimer.Start();
         }
     }
 }

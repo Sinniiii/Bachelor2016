@@ -27,6 +27,7 @@ namespace Product_Browser.ScatterItems
             InitializeComponent();
 
             mainImage.Source = image.GetImageSource();
+            
         }
     }
 }
