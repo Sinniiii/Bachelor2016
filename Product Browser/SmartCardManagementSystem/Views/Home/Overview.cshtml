@@ -9,7 +9,8 @@
         <div class="panel-heading">
             <h4 class="panel-title">
                 <a data-toggle="collapse" data-parent="#accordion" href="#collapse_0">
-                    Edit cards for the showboard
+                    <p>Edit cards for the showboard</p>
+                    <p># &nbsp; &emsp; &emsp; Status &emsp; &emsp; Cardname</p>
                 </a>
             </h4>
         </div>
@@ -22,26 +23,52 @@
 
     @for (int i = 1; i <= @Model.Count; i++)
     {
-        <div class="@(@Model[i-1].DataItems.Count > 0 ? "panel panel-success" : "panel panel-default")">
+        <div class="@(@Model[i - 1].DataItems.Count > 0 ? "panel panel-success" : "panel panel-default")">
         <div class="panel-heading">
             <h4 class="panel-title">
                 <a data-toggle="collapse" data-parent="#accordion" href="#collapse_@i">
-                    @Model[i-1].Name
+                    #@Model[i - 1].Id &emsp; &emsp; @(@Model[i - 1].DataItems.Count > 0 ? "Active" : "Empty") &emsp; &emsp; @Model[i - 1].Name
                 </a>
             </h4>
         </div>
         <div id="collapse_@i" class="panel-collapse collapse">
             <div class="panel-body">
-                TODO - more stuff in here
+
+                <form class="form-inline" role="form" method="post" action="">
+                    <div class="form-group">
+                        <label for="nameOfCard">Name of Card:</label>
+                        <input type="text" class="form-control" id="nameOfCard" placeholder="@Model[i - 1].Name">
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </div>
+                </form>
+
+                <p></p>
+
+                @if (Model[i - 1].DataItems.Count > 0)
+                {
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Media Content</div>
+                        @for (int j = 0; j < Model[i - 1].DataItems.Count; j++)
+                        {
+                            <div class="panel-body">Category: @Model[i - 1].DataItems[j].Category &emsp; &emsp; @Model[i - 1].DataItems[j].Name</div>
+                        }
+
+                    </div>
+                }
             </div>
         </div>
     </div>
     }
-    
 
 </div>
 
 @*
+
+                        <div>
+                            <label class="control-label">Select File</label>
+                            <input id="input-1" type="file" class="file">
+                        </div>
     
     @(i == 1 ? "panel-collapse collapse in" : "panel-collapse collapse")
 
