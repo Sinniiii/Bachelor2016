@@ -19,6 +19,7 @@ namespace SmartCardManagementSystem.Controllers
         {
             ABBDataContext context = new ABBDataContext();
             var smartcardList = context.SmartCards.OrderBy(a => a.TagId).ToList();
+            var x = context.SmartCardDataItems;
 
             //var firstname = smartcardList[0].Name;
 

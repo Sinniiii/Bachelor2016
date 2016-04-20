@@ -5,10 +5,24 @@
 
 
 <div class="panel-group" id="accordion">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse_0">
+                    Edit cards for the showboard
+                </a>
+            </h4>
+        </div>
+        <div id="collapse_0" class="panel-collapse collapse in">
+            <div class="panel-body">
+                Here you can edit your cards by connecting data to an empty card, or editing an existing card.
+            </div>
+        </div>
+    </div>
 
     @for (int i = 1; i <= @Model.Count; i++)
     {
-        <div class="panel panel-default">
+        <div class="@(@Model[i-1].DataItems.Count > 0 ? "panel panel-success" : "panel panel-default")">
         <div class="panel-heading">
             <h4 class="panel-title">
                 <a data-toggle="collapse" data-parent="#accordion" href="#collapse_@i">
@@ -16,7 +30,7 @@
                 </a>
             </h4>
         </div>
-        <div id="collapse_@i" class="@(i == 1 ? "panel-collapse collapse in" : "panel-collapse collapse")">
+        <div id="collapse_@i" class="panel-collapse collapse">
             <div class="panel-body">
                 TODO - more stuff in here
             </div>
@@ -26,3 +40,64 @@
     
 
 </div>
+
+@*
+    
+    @(i == 1 ? "panel-collapse collapse in" : "panel-collapse collapse")
+
+<div class="panel-group" id="accordion">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+                    Collapsible Group 1
+                </a>
+            </h4>
+        </div>
+        <div id="collapse1" class="panel-collapse collapse in">
+            <div class="panel-body">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+                minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                commodo consequat.
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">
+                    Collapsible Group 2
+                </a>
+            </h4>
+        </div>
+        <div id="collapse2" class="panel-collapse collapse">
+            <div class="panel-body">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+                minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                commodo consequat.
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">
+                    Collapsible Group 3
+                </a>
+            </h4>
+        </div>
+        <div id="collapse3" class="panel-collapse collapse">
+            <div class="panel-body">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+                minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                commodo consequat.
+            </div>
+        </div>
+    </div>
+</div>
+
+
+*@
