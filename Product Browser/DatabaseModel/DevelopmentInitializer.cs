@@ -55,7 +55,7 @@ namespace DatabaseModel
             for (int i = 3; i < 15; i++)
             {
                 var temp = new SmartCard();
-                temp.Name = $"Test Card {i}";
+                temp.Name = $"Empty Card {i}";
                 temp.TagId = i;
                 temp.DataItems = new List<SmartCardDataItem>();
                 context.SmartCards.Add(temp);
