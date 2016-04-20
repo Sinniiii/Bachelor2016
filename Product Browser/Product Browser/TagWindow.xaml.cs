@@ -207,7 +207,6 @@ namespace Product_Browser
             ABBDataContext context = new ABBDataContext();
 
             smartCard = await context.SmartCards.FirstOrDefaultAsync(a => a.TagId == VisualizedTag.Value);
-            var test = context.SmartCards.FirstOrDefaultAsync(a => a.TagId == VisualizedTag.Value);
             
             List<SmartCardDataItem> dataItems = null;
 
