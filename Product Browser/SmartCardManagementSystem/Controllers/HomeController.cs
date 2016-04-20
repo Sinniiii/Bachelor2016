@@ -13,6 +13,11 @@ namespace SmartCardManagementSystem.Controllers
             return View();
         }
 
+        public IActionResult Overview()
+        {
+            return View();
+        }
+
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
