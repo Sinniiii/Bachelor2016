@@ -5,6 +5,7 @@ namespace DatabaseModel
     using System;
     using System.Data.Entity;
     using System.Linq;
+    using System.Threading.Tasks;
     using Model;
 
     public class ABBDataContext : DbContext
@@ -18,6 +19,11 @@ namespace DatabaseModel
         }
 
         public virtual DbSet<SmartCard> SmartCards { get; set; }
+
+        public Task ToListAsync()
+        {
+            throw new NotImplementedException();
+        }
 
         public virtual DbSet<SmartCardDataItem> SmartCardDataItems { get; set; }
     }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
+using DatabaseModel;
+using Microsoft.Data.Entity;
 
 namespace SmartCardManagementSystem.Controllers
 {
@@ -15,6 +17,14 @@ namespace SmartCardManagementSystem.Controllers
 
         public IActionResult Overview()
         {
+            //ABBDataContext context = new ABBDataContext();
+            //var smartcardListTask = context.SmartCards.ToListAsync();
+            //while (!smartcardListTask.IsCompleted)
+            //{
+            //    //wait
+            //}
+            //var smartcardList = smartcardListTask.Result;
+            //var firstname = smartcardList[0].Name;
             return View();
         }
 
