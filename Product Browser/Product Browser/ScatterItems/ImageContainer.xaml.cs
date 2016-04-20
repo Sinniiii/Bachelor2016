@@ -12,32 +12,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Microsoft.Surface.Presentation.Controls;
-using DatabaseModel.Model;
 
 namespace Product_Browser.ScatterItems
 {
     /// <summary>
-    /// Interaction logic for ImageScatterItem.xaml
+    /// Interaction logic for ImageContainer.xaml
     /// </summary>
-    public partial class ImageScatterItem : ScatterViewItem
+    public partial class ImageContainer : UserControl
     {
-        #region Fields
-
-        List<BitmapImage> images = new List<BitmapImage>();
-
-        #endregion
-
-        #region Members
-
-        #endregion
-
-        public ImageScatterItem(SmartCardDataItem image) // This should eventually take an array of images
+        public ImageContainer()
         {
             InitializeComponent();
-
-            mainImage.Source = image.GetImageSource();
-            
         }
     }
 }

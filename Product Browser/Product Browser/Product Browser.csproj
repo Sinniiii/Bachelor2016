@@ -85,6 +85,9 @@
     <Compile Include="ScatterItems\DocumentScatterItem.xaml.cs">
       <DependentUpon>DocumentScatterItem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ScatterItems\ImageContainer.xaml.cs">
+      <DependentUpon>ImageContainer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ScatterItems\ImageScatterItem.xaml.cs">
       <DependentUpon>ImageScatterItem.xaml</DependentUpon>
     </Compile>
@@ -108,6 +111,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="ScatterItems\DocumentScatterItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ScatterItems\ImageContainer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

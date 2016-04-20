@@ -23,6 +23,9 @@ namespace Product_Browser.ScatterItems
         public delegate void PositionLockedHandler(ScatterItemPhysics e);
         public event PositionLockedHandler PositionLocked;
 
+        public delegate void PriorityHandler(ScatterItemPhysics e);
+        public event PriorityHandler LowPriority, HighPriority;
+
         #region Properties
         public Point OriginalPositionOffset { get; set; } = new Point();
 
@@ -36,15 +39,9 @@ namespace Product_Browser.ScatterItems
 
         public double SpeedY { get; set; }
 
-        public double SpeedZ { get; set; }
-        
-        public double SpeedWidth { get; set; }
-
-        public double SpeedHeight { get; set; }
-
         #endregion
 
-        public async void Run(Point tagPosition, double tagRotation, double yPullOffset, double pullRadius)
+        public void Run(Point tagPosition, double tagRotation, double yPullOffset, double pullRadius)
         {
             Point circlePosition = GetConvertedPosition(tagPosition, new Point(0d, yPullOffset), tagRotation);
 
@@ -52,7 +49,7 @@ namespace Product_Browser.ScatterItems
 
             if (distance >= pullRadius || Item.AreAnyTouchesCapturedWithin || Item.IsMouseCaptured)
             {
-                SpeedX = SpeedY = SpeedZ = 0d;
+                LowPriority(this);
                 return;
             }
 
@@ -65,6 +62,18 @@ namespace Product_Browser.ScatterItems
             Move(tagRotation);
 
             TryLockPosition(new Vector(targetPosition.X, targetPosition.Y), (tagRotation + OriginalOrientationOffset) % 360d);
+        }
+
+        public void RunLowPriority(Point tagPosition, double tagRotation, double yPullOffset, double pullRadius)
+        {
+            Point circlePosition = GetConvertedPosition(tagPosition, new Point(0d, yPullOffset), tagRotation);
+
+            double distance = (Item.Center - circlePosition).Length;
+
+            if (distance >= pullRadius || Item.AreAnyTouchesCapturedWithin || Item.IsMouseCaptured)
+                return;
+
+            HighPriority(this);
         }
 
         private void CalculateSpeed(Vector relativePosition)
@@ -139,7 +148,8 @@ namespace Product_Browser.ScatterItems
             if (deltaY > 3d)
                 return;
 
-            double deltaZ = Math.Abs(targetAngle - Item.Orientation);
+            // Orientation can be < 0 due to our movement, but targetAngle won't be. Thus, use ActualOrientation, which is also never < 0
+            double deltaZ = Math.Abs(targetAngle - Item.ActualOrientation);
 
             if (deltaZ > 3d)
                 return;

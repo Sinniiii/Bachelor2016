@@ -24,8 +24,7 @@ namespace Product_Browser
             CIRCLE_SIZE = 150d,
             SCATTERITEM_STARTING_WIDTH = 200d,
             SCATTERITEM_STARTING_HEIGHT = 100d;
-
-
+        
         #region PropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -43,9 +42,11 @@ namespace Product_Browser
         SmartCard smartCard = null;
 
         List<ScatterItemPhysics> physicsItemsActive = new List<ScatterItemPhysics>();
+        List<ScatterItemPhysics> physicsItemsActiveLowPriority = new List<ScatterItemPhysics>();
         List<ScatterItemPhysics> physicsItemsInactive = new List<ScatterItemPhysics>();
 
         DispatcherTimer physicsTimer;
+        DispatcherTimer physicsTimerLowPriority;
 
         /// <summary>
         /// These are helpers to determine visibility of UI elements in TagWindow.xaml. Start by displaying loading
@@ -124,8 +125,8 @@ namespace Product_Browser
 
         private void ScatterViewItemMovedHandler(object sender, EventArgs args)
         {
-            if (physicsItemsActive.Count == 0)
-                physicsTimer.Start();
+            if (physicsItemsActiveLowPriority.Count == 0)
+                physicsTimerLowPriority.Start();
 
             ScatterItemPhysics phy = null;
             foreach(ScatterItemPhysics p in physicsItemsInactive)
@@ -133,7 +134,7 @@ namespace Product_Browser
                 if (p.Item == sender as ScatterViewItem)
                 {
                     phy = p;
-                    physicsItemsActive.Add(p);
+                    physicsItemsActiveLowPriority.Add(p);
                     break;
                 }
             }
@@ -151,10 +152,40 @@ namespace Product_Browser
                 physicsTimer.Stop();
         }
 
+        private void ScatterViewItemLowPriorityHandler(ScatterItemPhysics e)
+        {
+            if (physicsItemsActiveLowPriority.Count == 0)
+                physicsTimerLowPriority.Start();
+
+            physicsItemsActiveLowPriority.Add(e);
+            physicsItemsActive.Remove(e);
+
+            if (physicsItemsActive.Count == 0)
+                physicsTimer.Stop();
+        }
+
+        private void ScatterViewItemHighPriorityHandler(ScatterItemPhysics e)
+        {
+            if (physicsItemsActive.Count == 0)
+                physicsTimer.Start();
+
+            physicsItemsActiveLowPriority.Remove(e);
+            physicsItemsActive.Add(e);
+
+            if (physicsItemsActiveLowPriority.Count == 0)
+                physicsTimerLowPriority.Stop();
+        }
+
         private void PhysicsEventHandler(object sender, EventArgs args)
         {
             for(int i = 0; i < physicsItemsActive.Count; i++)
-                physicsItemsActive[i].Run(Center, Orientation, -50d, 150d);
+                physicsItemsActive[i].Run(Center, Orientation, -50d, 175d);
+        }
+
+        private void PhysicsLowPriorityEventHandler(object sender, EventArgs args)
+        {
+            for (int i = 0; i < physicsItemsActiveLowPriority.Count; i++)
+                physicsItemsActiveLowPriority[i].RunLowPriority(Center, Orientation, -50d, 175d);
         }
 
         public void DestroySmartCard(ScatterView view)
@@ -163,9 +194,12 @@ namespace Product_Browser
                 view.Items.Remove(physicsItemsInactive[i].Item);
             for (int i = 0; i < physicsItemsActive.Count; i++)
                 view.Items.Remove(physicsItemsActive[i].Item);
+            for (int i = 0; i < physicsItemsActiveLowPriority.Count; i++)
+                view.Items.Remove(physicsItemsActiveLowPriority[i].Item);
 
             physicsItemsActive.Clear();
             physicsItemsInactive.Clear();
+            physicsItemsActiveLowPriority.Clear();
         }
 
         public async void InitializeSmartCard(ScatterView view)
@@ -216,6 +250,8 @@ namespace Product_Browser
                 item.PreviewMouseLeftButtonDown += ScatterViewItemMovedHandler;
 
                 physics.PositionLocked += ScatterViewItemLockedHandler;
+                physics.HighPriority += ScatterViewItemHighPriorityHandler;
+                physics.LowPriority += ScatterViewItemLowPriorityHandler;
 
                 physicsItemsInactive.Add(physics);
                 view.Items.Add(item);
@@ -224,7 +260,12 @@ namespace Product_Browser
             physicsTimer = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);
             physicsTimer.Interval = new TimeSpan(0, 0, 0, 0, 5);
             physicsTimer.Tick += PhysicsEventHandler;
-            physicsTimer.Start();
+
+            physicsTimerLowPriority = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);
+            physicsTimerLowPriority.Interval = new TimeSpan(0, 0, 0, 0, 200);
+            physicsTimerLowPriority.Tick += PhysicsLowPriorityEventHandler;
+
+            //physicsTimer.Start();
         }
     }
 }

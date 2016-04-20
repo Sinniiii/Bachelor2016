@@ -14,15 +14,6 @@ namespace DatabaseModel
     /// </summary>
     public class DevelopmentInitializer : DropCreateDatabaseAlways<ABBDataContext>
     {
-
-        public DevelopmentInitializer()
-            : base()
-        {
-            var context = new ABBDataContext();
-
-            InitializeDatabase(context);
-            Seed(context);
-        }
         protected override void Seed(ABBDataContext context)
         {
             // seed database here
@@ -50,7 +41,15 @@ namespace DatabaseModel
             smartcard.DataItems.Add(item2);
             smartcard.DataItems.Add(item3);
 
+            var smartcard2 = new SmartCard();
+            smartcard2.Name = "Test card 2";
+            smartcard2.TagId = 2;
+            smartcard2.DataItems = new List<SmartCardDataItem>();
+
+            smartcard2.DataItems.Add(item1);
+
             context.SmartCards.Add(smartcard);
+            context.SmartCards.Add(smartcard2);
 
             context.SaveChanges();
         }

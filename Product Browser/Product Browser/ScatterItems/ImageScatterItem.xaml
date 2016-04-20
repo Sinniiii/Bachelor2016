@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:controls="http://schemas.microsoft.com/surface/2008"
              xmlns:local="clr-namespace:Product_Browser.ScatterItems"
-             mc:Ignorable="d">
+             mc:Ignorable="d" Height="100" Width="200">
     <Grid>
         <Grid.RowDefinitions>
 
@@ -13,7 +13,7 @@
         <Grid.ColumnDefinitions>
 
         </Grid.ColumnDefinitions>
-        <Image x:Name="mainImage" HorizontalAlignment="Left" VerticalAlignment="Top" Height="200" Width="200" Stretch="Fill"/>
+        <Image x:Name="mainImage" HorizontalAlignment="Left" VerticalAlignment="Top" Stretch="Fill"/>
 
 
     </Grid>
