@@ -6,17 +6,22 @@
              xmlns:controls="http://schemas.microsoft.com/surface/2008"
              xmlns:local="clr-namespace:Product_Browser.ScatterItems"
              mc:Ignorable="d" Height="100" Width="200">
+    <controls:ScatterViewItem.Background>
+        <SolidColorBrush Opacity="1.0"></SolidColorBrush>
+    </controls:ScatterViewItem.Background>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.5*"/>
-            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="0.7*"/>
+            <RowDefinition Height="0.3*" MaxHeight="200"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Image x:Name="mainImage" HorizontalAlignment="Left" VerticalAlignment="Top" Stretch="Fill" Grid.Row="0"/>
-        <controls:LibraryContainer HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" MinHeight="0" MinWidth="">
-        </controls:LibraryContainer>
+        
+        <controls:LibraryBar       HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="0"
+                                   MinWidth="0" MinHeight="0" Rows="1" MaxHeight="5000" MaxWidth="5000" BorderThickness="40"
+                                   Grid.RowSpan="1" Grid.ColumnSpan="1"/>
 
 
     </Grid>

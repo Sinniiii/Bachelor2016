@@ -11,7 +11,7 @@ namespace DatabaseModel
     public class ABBDataContext : DbContext
     {
         public ABBDataContext()
-            : base("name=ABBDataContext")
+            : base("Server=(LocalDb)\\MSSQLLocalDB;initial catalog=DatabaseModel.ABBDataContext;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework")//base("name =ABBDataContext")
         {
             Database.SetInitializer(new DevelopmentInitializer()); // This is only while developing, it drops database and reseeds it
 

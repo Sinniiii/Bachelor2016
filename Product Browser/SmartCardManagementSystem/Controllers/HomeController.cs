@@ -17,14 +17,10 @@ namespace SmartCardManagementSystem.Controllers
 
         public IActionResult Overview()
         {
-            //ABBDataContext context = new ABBDataContext();
-            //var smartcardListTask = context.SmartCards.ToListAsync();
-            //while (!smartcardListTask.IsCompleted)
-            //{
-            //    //wait
-            //}
-            //var smartcardList = smartcardListTask.Result;
-            //var firstname = smartcardList[0].Name;
+            ABBDataContext context = new ABBDataContext();
+            var smartcardList = context.SmartCards.ToList();
+
+            var firstname = smartcardList[0].Name;
             return View();
         }
 
