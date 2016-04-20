@@ -20,6 +20,8 @@ namespace Product_Browser.ScatterItems
     /// </summary>
     public partial class ImageContainer : UserControl
     {
+
+
         public ImageContainer()
         {
             InitializeComponent();

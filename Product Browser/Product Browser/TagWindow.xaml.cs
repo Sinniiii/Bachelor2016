@@ -205,9 +205,10 @@ namespace Product_Browser
         public async void InitializeSmartCard(ScatterView view)
         {
             ABBDataContext context = new ABBDataContext();
-            
-            smartCard = await context.SmartCards.FirstOrDefaultAsync(a => a.TagId == VisualizedTag.Value);
 
+            smartCard = await context.SmartCards.FirstOrDefaultAsync(a => a.TagId == VisualizedTag.Value);
+            var test = context.SmartCards.FirstOrDefaultAsync(a => a.TagId == VisualizedTag.Value);
+            
             List<SmartCardDataItem> dataItems = null;
 
             if (smartCard == null || (dataItems = smartCard.DataItems) == null || dataItems.Count == 0)

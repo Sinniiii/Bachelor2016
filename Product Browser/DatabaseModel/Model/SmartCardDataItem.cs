@@ -29,7 +29,7 @@ namespace DatabaseModel.Model
 
         public SmartCardDataItemCategory Category { get; private set; }
 
-        public byte[] Data { get; private set; }
+        public virtual byte[] Data { get; private set; }
 
         /// <summary>
         /// Retrieves the document from the Data array as an image source which can be used directly in
