@@ -51,6 +51,16 @@ namespace DatabaseModel
             context.SmartCards.Add(smartcard);
             context.SmartCards.Add(smartcard2);
 
+            //legger til et par flere kort, uten innhold - Bård
+            for (int i = 3; i < 15; i++)
+            {
+                var temp = new SmartCard();
+                temp.Name = $"Test Card {i}";
+                temp.TagId = i;
+                temp.DataItems = new List<SmartCardDataItem>();
+                context.SmartCards.Add(temp);
+            }
+
             context.SaveChanges();
         }
     }
