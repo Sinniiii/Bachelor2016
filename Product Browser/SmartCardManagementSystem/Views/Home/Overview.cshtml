@@ -1,55 +1,28 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model List<DatabaseModel.Model.SmartCard>
 
-@for (int i = 0; i < 3; i++)
-{
-    <p>for loop example </p>
-}
+<p> Debug data:</p>
+<p> Number of cards in passed list: @Model.Count</p>
+
 
 <div class="panel-group" id="accordion">
-    <div class="panel panel-default">
+
+    @for (int i = 1; i <= @Model.Count; i++)
+    {
+        <div class="panel panel-default">
         <div class="panel-heading">
             <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
-                    Smartcard 1 : "dummytitle"
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse_@i">
+                    @Model[i-1].Name
                 </a>
             </h4>
         </div>
-        <div id="collapse1" class="panel-collapse collapse in">
+        <div id="collapse_@i" class="@(i == 1 ? "panel-collapse collapse in" : "panel-collapse collapse")">
             <div class="panel-body">
                 TODO - more stuff in here
             </div>
         </div>
     </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">
-                    Smartcard 2 : "dummytitle"
-                </a>
-            </h4>
-        </div>
-        <div id="collapse2" class="panel-collapse collapse">
-            <div class="panel-body">
-                TODO - more stuff in here
-            </div>
-        </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">
-                    Smartcard 3 : "dummytitle"
-                </a>
-            </h4>
-        </div>
-        <div id="collapse3" class="panel-collapse collapse">
-            <div class="panel-body">
-                TODO - more stuff in here
-            </div>
-        </div>
-    </div>
+    }
+    
+
 </div>

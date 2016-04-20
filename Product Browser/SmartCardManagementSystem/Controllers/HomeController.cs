@@ -20,8 +20,11 @@ namespace SmartCardManagementSystem.Controllers
             ABBDataContext context = new ABBDataContext();
             var smartcardList = context.SmartCards.ToList();
 
-            var firstname = smartcardList[0].Name;
-            return View();
+            //var firstname = smartcardList[0].Name;
+
+            //ViewData["SmartcardList"] = smartcardList.Count;
+
+            return View(smartcardList);
         }
 
         public IActionResult About()
