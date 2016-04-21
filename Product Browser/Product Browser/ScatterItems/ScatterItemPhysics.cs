@@ -16,15 +16,20 @@ namespace Product_Browser.ScatterItems
         public const double
             ACCELERATION = 0.5d,
             SPEED_ANGULAR = 2d,
-            SPEED_SIZE = 2d;
+            SPEED_SIZE = 4d,
+            DEFAULT_ROTATION_OFFSET = 90d;
 
         public ScatterViewItem Item { get; private set; }
+
+        #region Events
 
         public delegate void PositionLockedHandler(ScatterItemPhysics e);
         public event PositionLockedHandler PositionLocked;
 
         public delegate void PriorityHandler(ScatterItemPhysics e);
         public event PriorityHandler LowPriority, HighPriority;
+
+        #endregion
 
         #region Properties
         public Point OriginalPositionOffset { get; set; } = new Point();
@@ -43,6 +48,8 @@ namespace Product_Browser.ScatterItems
 
         public void Run(Point tagPosition, double tagRotation, double yPullOffset, double pullRadius)
         {
+            if (Item is ImageScatterItem)
+                Console.WriteLine("y");
             Point circlePosition = GetConvertedPosition(tagPosition, new Point(0d, yPullOffset), tagRotation);
 
             double distance = (Item.Center - circlePosition).Length;
@@ -54,14 +61,14 @@ namespace Product_Browser.ScatterItems
             }
 
             Point targetPosition = GetConvertedPosition(tagPosition, OriginalPositionOffset, tagRotation);
-
-            Vector relativePosition = targetPosition - Item.Center;
-               
-            CalculateSpeed(relativePosition);
-
-            Move(tagRotation);
-
-            TryLockPosition(new Vector(targetPosition.X, targetPosition.Y), (tagRotation + OriginalOrientationOffset) % 360d);
+            
+            if(!TryLockPosition(new Vector(targetPosition.X, targetPosition.Y),
+                (tagRotation + OriginalOrientationOffset + DEFAULT_ROTATION_OFFSET) % 360d))
+            {
+                Vector relativePosition = targetPosition - Item.Center;
+                CalculateSpeed(relativePosition);
+                Move(tagRotation);
+            }
         }
 
         public void RunLowPriority(Point tagPosition, double tagRotation, double yPullOffset, double pullRadius)
@@ -107,7 +114,7 @@ namespace Product_Browser.ScatterItems
         {
             Item.Center = new Point(Item.Center.X + SpeedX, Item.Center.Y + SpeedY);
 
-            double deltaAngle = (tagOrientation + OriginalOrientationOffset) - Item.Orientation;
+            double deltaAngle = (tagOrientation + OriginalOrientationOffset + DEFAULT_ROTATION_OFFSET) - Item.Orientation;
             deltaAngle = (deltaAngle + 180) % 360 - 180;
 
             if (deltaAngle > SPEED_ANGULAR)
@@ -136,46 +143,48 @@ namespace Product_Browser.ScatterItems
             Item.Height += deltaHeight;
         }
 
-        private void TryLockPosition(Vector targetPosition, double targetAngle)
+        private bool TryLockPosition(Vector targetPosition, double targetAngle)
         {
             double deltaX = Math.Abs(targetPosition.X - Item.Center.X);
 
-            if (deltaX > 3d)
-                return;
+            if (deltaX > 1d)
+                return false;
 
             double deltaY = Math.Abs(targetPosition.Y - Item.Center.Y);
 
-            if (deltaY > 3d)
-                return;
+            if (deltaY > 1d)
+                return false;
 
             // Orientation can be < 0 due to our movement, but targetAngle won't be. Thus, use ActualOrientation, which is also never < 0
             double deltaZ = Math.Abs(targetAngle - Item.ActualOrientation);
 
-            if (deltaZ > 3d)
-                return;
+            if (deltaZ > 1d)
+                return false;
 
             double deltaWidth = Math.Abs(OriginalWidth - Item.Width);
 
-            if (deltaWidth > 3d)
-                return;
+            if (deltaWidth > 1d)
+                return false;
 
             double deltaHeight = Math.Abs(OriginalHeight - Item.Height);
 
-            if (deltaHeight > 3d)
-                return;
-            
+            if (deltaHeight > 1d)
+                return false;
+
             Item.Center = new Point(targetPosition.X, targetPosition.Y);
             Item.Orientation = targetAngle;
             Item.Width = OriginalWidth;
             Item.Height = OriginalHeight;
 
             PositionLocked(this);
+
+            return true;
         }
 
         public void ResetToDefault(Point visualizerPosition, double visualizerOrientation)
         {
             Item.Center = GetConvertedPosition(visualizerPosition, OriginalPositionOffset, visualizerOrientation);
-            Item.Orientation = OriginalOrientationOffset + visualizerOrientation;
+            Item.Orientation = OriginalOrientationOffset + visualizerOrientation + DEFAULT_ROTATION_OFFSET;
             Item.Width = OriginalWidth;
             Item.Height = OriginalHeight;
         }
@@ -192,14 +201,9 @@ namespace Product_Browser.ScatterItems
             return new Point(convertedX, convertedY);
         }
 
-        public ScatterItemPhysics(ScatterViewItem item, double xOffset, double yOffset, double orientationOffset, double startWidth, double startHeight)
+        public ScatterItemPhysics(ScatterViewItem item)
         {
             this.Item = item;
-
-            OriginalOrientationOffset = orientationOffset;
-            OriginalPositionOffset = new Point(xOffset, yOffset);
-            OriginalWidth = startWidth;
-            OriginalHeight = startHeight;
         }
     }
 }

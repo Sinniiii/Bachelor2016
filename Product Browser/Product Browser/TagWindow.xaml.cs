@@ -22,8 +22,8 @@ namespace Product_Browser
         const double
             CIRCLE_Y_OFFSET = -50d,
             CIRCLE_SIZE = 150d,
-            SCATTERITEM_STARTING_WIDTH = 200d,
-            SCATTERITEM_STARTING_HEIGHT = 100d;
+            SCATTERITEM_STARTING_WIDTH = 100d,
+            SCATTERITEM_STARTING_HEIGHT = 200d;
         
         #region PropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
@@ -105,13 +105,10 @@ namespace Product_Browser
                 NotifyPropertyChanged("FoundSmartCard");
             }
         }
-        
+
         #endregion
 
-        public TagWindow()
-        {
-            InitializeComponent();
-        }
+        #region Event Handlers
 
         protected override void OnMoved(RoutedEventArgs args)
         {
@@ -125,7 +122,7 @@ namespace Product_Browser
 
         private void ScatterViewItemMovedHandler(object sender, EventArgs args)
         {
-            if (physicsItemsActiveLowPriority.Count == 0)
+            if (!physicsTimerLowPriority.IsEnabled)
                 physicsTimerLowPriority.Start();
 
             ScatterItemPhysics phy = null;
@@ -139,8 +136,22 @@ namespace Product_Browser
                 }
             }
 
-            if (phy != null) // If it's null, it already exists in the active container
+            if (phy != null) // If it's null, it already exists in the active container so no need to do anything
+            {
                 physicsItemsInactive.Remove(phy);
+                
+                // Add all inactive to active
+                physicsItemsActive.AddRange(physicsItemsInactive);
+                // Clear inactive
+                physicsItemsInactive.Clear();
+
+                // Calculate new positions for all of them
+                CalculateNewPositions(physicsItemsActive);
+
+                // Start timer if not running
+                if (!physicsTimer.IsEnabled)
+                    physicsTimer.Start();
+            }
         }
 
         private void ScatterViewItemLockedHandler(ScatterItemPhysics e)
@@ -154,40 +165,53 @@ namespace Product_Browser
 
         private void ScatterViewItemLowPriorityHandler(ScatterItemPhysics e)
         {
-            if (physicsItemsActiveLowPriority.Count == 0)
+            if (!physicsTimerLowPriority.IsEnabled)
                 physicsTimerLowPriority.Start();
 
             physicsItemsActiveLowPriority.Add(e);
             physicsItemsActive.Remove(e);
-
-            if (physicsItemsActive.Count == 0)
-                physicsTimer.Stop();
         }
 
         private void ScatterViewItemHighPriorityHandler(ScatterItemPhysics e)
         {
-            if (physicsItemsActive.Count == 0)
+            if (!physicsTimer.IsEnabled)
                 physicsTimer.Start();
 
+            // Remove from low priority container
             physicsItemsActiveLowPriority.Remove(e);
-            physicsItemsActive.Add(e);
 
-            if (physicsItemsActiveLowPriority.Count == 0)
-                physicsTimerLowPriority.Stop();
+            // Add all inactive to active
+            physicsItemsActive.AddRange(physicsItemsInactive);
+            // And add this one
+            physicsItemsActive.Add(e);
+            // Then clear inactive
+            physicsItemsInactive.Clear();
+
+            // Calculate new positions for all active items
+            CalculateNewPositions(physicsItemsActive);
         }
 
         private void PhysicsEventHandler(object sender, EventArgs args)
         {
             for(int i = 0; i < physicsItemsActive.Count; i++)
                 physicsItemsActive[i].Run(Center, Orientation, -50d, 175d);
+
+            if (physicsItemsActive.Count == 0)
+                physicsTimer.Stop();
         }
 
         private void PhysicsLowPriorityEventHandler(object sender, EventArgs args)
         {
             for (int i = 0; i < physicsItemsActiveLowPriority.Count; i++)
                 physicsItemsActiveLowPriority[i].RunLowPriority(Center, Orientation, -50d, 175d);
+
+            if (physicsItemsActiveLowPriority.Count == 0)
+                physicsTimerLowPriority.Stop();
         }
 
+        #endregion
+
+        #region Methods
         public void DestroySmartCard(ScatterView view)
         {
             for (int i = 0; i < physicsItemsInactive.Count; i++)
@@ -200,6 +224,25 @@ namespace Product_Browser
             physicsItemsActive.Clear();
             physicsItemsInactive.Clear();
             physicsItemsActiveLowPriority.Clear();
+        }
+
+        private void CalculateNewPositions(List<ScatterItemPhysics> items)
+        {
+            double radianMultiplier = Math.PI / (items.Count + 1); // Radians so PI = 180 degrees
+
+            for (int i = 0; i < items.Count; i++)
+            {
+                // Calculate position, place items on half circle
+                double positionRadians = radianMultiplier * (i + 1) + Math.PI;
+
+                double posXOffset = Math.Cos(positionRadians) * CIRCLE_SIZE;
+                double posYOffset = Math.Sin(positionRadians) * CIRCLE_SIZE + CIRCLE_Y_OFFSET;
+
+                items[i].OriginalPositionOffset = new Point(posXOffset, posYOffset);
+                items[i].OriginalOrientationOffset = positionRadians * 57.295d; // Convert to degrees
+                items[i].OriginalWidth = SCATTERITEM_STARTING_WIDTH;
+                items[i].OriginalHeight = SCATTERITEM_STARTING_HEIGHT;
+            }
         }
 
         public async void InitializeSmartCard(ScatterView view)
@@ -218,8 +261,19 @@ namespace Product_Browser
 
             FoundSmartCard = true;
 
-            double radianMultiplier = Math.PI / (dataItems.Count + 1); // Radians so PI = 180 degrees
-            for(int i = 0; i < dataItems.Count; i++)
+            List<ScatterViewItem> scatterItems = new List<ScatterViewItem>();
+
+            // Place all images inside one scatter item
+            dataItems = smartCard.DataItems.FindAll(a => a.Category == SmartCardDataItemCategory.Image);
+            if(dataItems.Count != 0)
+            {
+                ScatterViewItem item = new ImageScatterItem(dataItems);
+                scatterItems.Add(item);
+            }
+
+            // One scatter item each for everything else
+            dataItems = smartCard.DataItems.FindAll(a => a.Category != SmartCardDataItemCategory.Image);
+            for (int i = 0; i < dataItems.Count; i++)
             {
                 ScatterViewItem item = null;
                 switch (dataItems[i].Category)
@@ -227,35 +281,43 @@ namespace Product_Browser
                     case SmartCardDataItemCategory.Document:
                         item = new DocumentScatterItem(dataItems[i]);
                         break;
-                    case SmartCardDataItemCategory.Image:
-                        item = new ImageScatterItem(dataItems[i]); // Temporary, for final all images should be sent to same imagescatteritem
-                        break;
                     case SmartCardDataItemCategory.Video:
                         item = new VideoScatterItem(dataItems[i]);
                         break;
                 }
+                scatterItems.Add(item);
+            }
 
-                // Calculate position, place items on half circle
-                double positionRadians = radianMultiplier * (i + 1) + Math.PI;
+            for (int i = 0; i < scatterItems.Count; i++)
+            {
+                ScatterItemPhysics physics = new ScatterItemPhysics(scatterItems[i]);
 
-                double posXOffset = Math.Cos(positionRadians) * CIRCLE_SIZE;
-                double posYOffset = Math.Sin(positionRadians) * CIRCLE_SIZE + CIRCLE_Y_OFFSET;
-
-                ScatterItemPhysics physics = new ScatterItemPhysics(item, posXOffset, posYOffset, positionRadians * 57.295d, // Convert that one to degrees
-                    SCATTERITEM_STARTING_WIDTH, SCATTERITEM_STARTING_HEIGHT);
-
-                physics.ResetToDefault(Center, Orientation);
-
-                item.PreviewTouchDown += ScatterViewItemMovedHandler;
-                item.PreviewMouseLeftButtonDown += ScatterViewItemMovedHandler;
+                scatterItems[i].PreviewTouchDown += ScatterViewItemMovedHandler;
+                scatterItems[i].PreviewMouseDown += ScatterViewItemMovedHandler;
 
                 physics.PositionLocked += ScatterViewItemLockedHandler;
                 physics.HighPriority += ScatterViewItemHighPriorityHandler;
                 physics.LowPriority += ScatterViewItemLowPriorityHandler;
 
-                physicsItemsInactive.Add(physics);
-                view.Items.Add(item);
+                scatterItems[i].Center = this.Center;
+                scatterItems[i].Orientation = this.Orientation;
+
+                scatterItems[i].Width = SCATTERITEM_STARTING_WIDTH;
+                scatterItems[i].Height = SCATTERITEM_STARTING_HEIGHT;
+
+                view.Items.Add(scatterItems[i]);
+                physicsItemsActive.Add(physics);
             }
+
+            CalculateNewPositions(physicsItemsActive);
+            physicsTimer.Start();
+        }
+
+        #endregion
+
+        public TagWindow()
+        {
+            InitializeComponent();
 
             physicsTimer = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);
             physicsTimer.Interval = new TimeSpan(0, 0, 0, 0, 5);
@@ -264,8 +326,6 @@ namespace Product_Browser
             physicsTimerLowPriority = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);
             physicsTimerLowPriority.Interval = new TimeSpan(0, 0, 0, 0, 200);
             physicsTimerLowPriority.Tick += PhysicsLowPriorityEventHandler;
-
-            //physicsTimer.Start();
         }
     }
 }

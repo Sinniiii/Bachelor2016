@@ -22,16 +22,42 @@ namespace Product_Browser.ScatterItems
     /// </summary>
     public partial class DocumentScatterItem : ScatterViewItem
     {
+        List<BitmapImage> images;
+
+        protected override void OnMouseDown(MouseButtonEventArgs e)
+        {
+            if (!container.IsMouseOver) // Else we capture with imagecontainer
+                base.OnMouseDown(e);
+        }
+
+        protected override void OnTouchDown(TouchEventArgs e)
+        {
+            if (!container.TouchesOver.Contains(e.TouchDevice)) // Else we capture with imagecontainer
+                base.OnTouchDown(e);
+            else
+                e.Handled = true;
+        }
+
+        public void OnBarLoaded(object obj, EventArgs args)
+        {
+            container.Populate(images, this);
+        }
+
+        public void OnNewMainImage(ImageSource source)
+        {
+            mainImage.Source = source;
+        }
+
         public DocumentScatterItem(SmartCardDataItem document)
         {
             InitializeComponent();
 
-            var images = document.GetDocumentAsImageSources();
-
-            if (images == null || images.Count == 0) // Something weird, ignore for now
-                return;
+            images = document.GetDocumentAsImageSources();
 
             mainImage.Source = images[0];
+
+            container.Loaded += OnBarLoaded;
+            container.NewMainImage += OnNewMainImage;
         }
     }
 }

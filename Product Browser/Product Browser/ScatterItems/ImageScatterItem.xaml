@@ -9,7 +9,7 @@
     <controls:ScatterViewItem.Background>
         <SolidColorBrush Opacity="1.0"></SolidColorBrush>
     </controls:ScatterViewItem.Background>
-    <Grid>
+    <Grid Name="grid">
         <Grid.RowDefinitions>
             <RowDefinition Height="0.7*"/>
             <RowDefinition Height="0.3*" MaxHeight="200"/>
@@ -17,12 +17,8 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Image x:Name="mainImage" HorizontalAlignment="Left" VerticalAlignment="Top" Stretch="Fill" Grid.Row="0"/>
-        
-        <controls:LibraryBar       HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="0"
-                                   MinWidth="0" MinHeight="0" Rows="1" MaxHeight="5000" MaxWidth="5000" BorderThickness="40"
-                                   Grid.RowSpan="1" Grid.ColumnSpan="1"/>
-
+        <Image x:Name="mainImage" HorizontalAlignment="Left" VerticalAlignment="Top" Stretch="UniformToFill" Grid.Row="0"/>
+        <local:ImageContainer x:Name="container" HorizontalAlignment="Left" MinHeight="50" Grid.Row="1" VerticalAlignment="Top"/>
 
     </Grid>
 </controls:ScatterViewItem>

@@ -24,7 +24,7 @@ namespace Product_Browser.ScatterItems
     {
         #region Fields
 
-        List<BitmapImage> images = new List<BitmapImage>();
+        List<BitmapImage> images;
 
         #endregion
 
@@ -32,12 +32,44 @@ namespace Product_Browser.ScatterItems
 
         #endregion
 
-        public ImageScatterItem(SmartCardDataItem image) // This should eventually take an array of images
+        protected override void OnPreviewMouseDown(MouseButtonEventArgs e)
+        {
+            if (!container.IsMouseOver) // Else we capture with imagecontainer
+                base.OnPreviewMouseDown(e);
+            else
+                e.Handled = true;
+        }
+
+        protected override void OnPreviewTouchDown(TouchEventArgs e)
+        {
+            if (!container.TouchesOver.Contains(e.TouchDevice)) // Else we capture with imagecontainer
+                base.OnPreviewTouchDown(e);
+            else
+                e.Handled = true;
+        }
+
+        public void OnBarLoaded(object obj, EventArgs args)
+        {
+            container.Populate(images, this);
+        }
+
+        public void OnNewMainImage(ImageSource source)
+        {
+            mainImage.Source = source;
+        }
+
+        public ImageScatterItem(List<SmartCardDataItem> imageItems)
         {
             InitializeComponent();
 
-            mainImage.Source = image.GetImageSource();
-            
+            images = new List<BitmapImage>();
+            foreach (SmartCardDataItem item in imageItems)
+                images.Add(item.GetImageSource());
+
+            mainImage.Source = images[0];
+
+            container.Loaded += OnBarLoaded;
+            container.NewMainImage += OnNewMainImage;
         }
     }
 }
