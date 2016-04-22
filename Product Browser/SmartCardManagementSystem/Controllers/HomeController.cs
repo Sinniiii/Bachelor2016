@@ -15,8 +15,32 @@ namespace SmartCardManagementSystem.Controllers
             return View();
         }
 
+        [HttpPost]
+        public IActionResult Overview(string nameOfCard, int tagID)
+        {
+            System.Diagnostics.Debug.WriteLine("-------RUNNING POST----------");
+
+            ABBDataContext context = new ABBDataContext();
+            var smartcardList = context.SmartCards.OrderBy(a => a.TagId).ToList();
+            var x = context.SmartCardDataItems;
+
+            var cardToUpdate = smartcardList.Find(a => a.TagId == tagID);
+            cardToUpdate.Name = nameOfCard;
+            context.SaveChanges();
+
+            //DEBUG
+            //System.Diagnostics.Debug.WriteLine(nameOfCard);
+            //ViewData["nameOfCard"] = nameOfCard;
+            //ViewData["tagID"] = tagID;
+
+            return View(smartcardList);
+        }
+
+        [HttpGet]
         public IActionResult Overview()
         {
+            System.Diagnostics.Debug.WriteLine("-------RUNNING GET----------");
+
             ABBDataContext context = new ABBDataContext();
             var smartcardList = context.SmartCards.OrderBy(a => a.TagId).ToList();
             var x = context.SmartCardDataItems;
@@ -27,6 +51,7 @@ namespace SmartCardManagementSystem.Controllers
 
             return View(smartcardList);
         }
+
 
         public IActionResult About()
         {

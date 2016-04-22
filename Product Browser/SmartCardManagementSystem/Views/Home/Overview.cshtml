@@ -2,8 +2,10 @@
 
 <p> Debug data:</p>
 <p> Number of cards in passed list: @Model.Count</p>
+<h2>@ViewData["nameOfCard"]</h2>
+<h2>@ViewData["tagID"]</h2>
 
-
+@* Top panel - information/description*@
 <div class="panel-group" id="accordion">
     <div class="panel panel-primary">
         <div class="panel-heading">
@@ -21,41 +23,66 @@
         </div>
     </div>
 
+    @* Smart-card panels - one pr card*@
     @for (int i = 1; i <= @Model.Count; i++)
     {
         <div class="@(@Model[i - 1].DataItems.Count > 0 ? "panel panel-success" : "panel panel-default")">
         <div class="panel-heading">
             <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapse_@i">
-                    #@Model[i - 1].Id &emsp; &emsp; @(@Model[i - 1].DataItems.Count > 0 ? "Active" : "Empty") &emsp; &emsp; @Model[i - 1].Name
-                </a>
+                <span data-toggle="collapse" data-parent="#accordion" href="#collapse_@i">
+                    #@Model[i - 1].TagId &emsp; &emsp;
+
+                    @*formating, not in use
+                    @(@Model[i - 1].TagId < 10 ? "yes" : "no")
+                    @(@Model[i - 1].TagId < 100 ? "" : "")
+                    *@
+
+                    @(@Model[i - 1].DataItems.Count > 0 ? "Active" : "Empty") &emsp; &emsp; @Model[i - 1].Name
+                    <span class="pull-right glyphicon glyphicon-menu-down"></span>
             </h4>
         </div>
         <div id="collapse_@i" class="panel-collapse collapse">
             <div class="panel-body">
 
-                <form class="form-inline" role="form" method="post" action="">
+                <form class="form-inline" role="form" method="post" action="Overview">
                     <div class="form-group">
-                        <label for="nameOfCard">Name of Card:</label>
-                        <input type="text" class="form-control" id="nameOfCard" placeholder="@Model[i - 1].Name">
-                        <button type="submit" class="btn btn-default">Submit</button>
+                        @*<label for="nameOfCard">Name of Card:</label>*@
+                        <input type="text" class="form-control" id="nameOfCard" name="nameOfCard" placeholder="@Model[i - 1].Name" data-toggle="tooltip" title="Name of card">
+                        <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
+                        <button type="submit" class="btn btn-primary glyphicon glyphicon-floppy-disk" data-toggle="tooltip" title="Save new card name"></button>
                     </div>
                 </form>
 
                 <p></p>
 
+                @* Does the card have no dataitems? Then we can skip this, otherwise...*@
                 @if (Model[i - 1].DataItems.Count > 0)
                 {
-
+                    @* Make a top-panel for the data-items section*@
                     <div class="panel panel-default">
-                        <div class="panel-heading">Media Content</div>
+                        <div class="panel-heading" data-toggle="tooltip" title="List of all media files on this card">Media Content</div>
+
+                        @* List all dataitems in this Smartcard*@
                         @for (int j = 0; j < Model[i - 1].DataItems.Count; j++)
                         {
-                            <div class="panel-body">Category: @Model[i - 1].DataItems[j].Category &emsp; &emsp; @Model[i - 1].DataItems[j].Name</div>
+                            <div class="panel-body">
+                                <form class="form-inline" role="form" method="post" action="">
+                                    <div class="form-group">
+                                        
+                                        <button type="submit" class="btn btn-danger btn-sm glyphicon glyphicon-remove" data-toggle="tooltip" title="Delete this mediafile"></button>
+                                        &emsp;&emsp;
+                                        <label for="nameOfCard"><span data-toggle="tooltip" title="Media type">@Model[i - 1].DataItems[j].Category</span>
+                                        &emsp; &emsp;
+                                        <span data-toggle="tooltip" title="Filename">@Model[i - 1].DataItems[j].Name</span></label>
+                                        
+                                    </div>
+                                </form>
+                            </div>
                         }
 
                     </div>
                 }
+
             </div>
         </div>
     </div>
@@ -65,66 +92,80 @@
 
 @*
 
-                        <div>
-                            <label class="control-label">Select File</label>
-                            <input id="input-1" type="file" class="file">
-                        </div>
-    
-    @(i == 1 ? "panel-collapse collapse in" : "panel-collapse collapse")
+        POSSIBLE UPLOAD SOLUTION?
 
-<div class="panel-group" id="accordion">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
-                    Collapsible Group 1
-                </a>
-            </h4>
+
+                            <div style="position:relative;">
+                            <a class='btn btn-primary' href='javascript:;'>
+                                Choose File...
+                                <input type="file" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' name="file_source" size="40" onchange='$("#upload-file-info").html($(this).val());'>
+                            </a>
+                            &nbsp;
+                            <span class='label label-info' id="upload-file-info"></span>
+                        </div>
+    http://stackoverflow.com/questions/11235206/twitter-bootstrap-form-file-element-upload-button
+
+
+                            <div>
+                                <label class="control-label">Select File</label>
+                                <input id="input-1" type="file" class="file">
+                            </div>
+
+        @(i == 1 ? "panel-collapse collapse in" : "panel-collapse collapse")
+
+    <div class="panel-group" id="accordion">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+                        Collapsible Group 1
+                    </a>
+                </h4>
+            </div>
+            <div id="collapse1" class="panel-collapse collapse in">
+                <div class="panel-body">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+                    minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                    commodo consequat.
+                </div>
+            </div>
         </div>
-        <div id="collapse1" class="panel-collapse collapse in">
-            <div class="panel-body">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-                minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                commodo consequat.
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">
+                        Collapsible Group 2
+                    </a>
+                </h4>
+            </div>
+            <div id="collapse2" class="panel-collapse collapse">
+                <div class="panel-body">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+                    minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                    commodo consequat.
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">
+                        Collapsible Group 3
+                    </a>
+                </h4>
+            </div>
+            <div id="collapse3" class="panel-collapse collapse">
+                <div class="panel-body">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+                    minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                    commodo consequat.
+                </div>
             </div>
         </div>
     </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">
-                    Collapsible Group 2
-                </a>
-            </h4>
-        </div>
-        <div id="collapse2" class="panel-collapse collapse">
-            <div class="panel-body">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-                minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                commodo consequat.
-            </div>
-        </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">
-                    Collapsible Group 3
-                </a>
-            </h4>
-        </div>
-        <div id="collapse3" class="panel-collapse collapse">
-            <div class="panel-body">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-                minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                commodo consequat.
-            </div>
-        </div>
-    </div>
-</div>
 
 
 *@
