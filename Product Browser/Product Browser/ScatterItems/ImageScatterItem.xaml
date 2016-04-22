@@ -5,10 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:controls="http://schemas.microsoft.com/surface/2008"
              xmlns:local="clr-namespace:Product_Browser.ScatterItems"
-             mc:Ignorable="d" Height="100" Width="200">
-    <controls:ScatterViewItem.Background>
-        <SolidColorBrush Opacity="1.0"></SolidColorBrush>
-    </controls:ScatterViewItem.Background>
+             mc:Ignorable="d" Height="100" Width="200" BorderThickness="2" BorderBrush="Beige" Background="Black">
     <Grid Name="grid">
         <Grid.RowDefinitions>
             <RowDefinition Height="0.7*"/>
@@ -17,7 +14,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Image x:Name="mainImage" HorizontalAlignment="Left" VerticalAlignment="Top" Stretch="UniformToFill" Grid.Row="0"/>
+        <Image x:Name="mainImage" HorizontalAlignment="Center" VerticalAlignment="Center" Height="Auto" Width="Auto" Stretch="Uniform" Grid.Row="0"/>
         <local:ImageContainer x:Name="container" HorizontalAlignment="Left" MinHeight="50" Grid.Row="1" VerticalAlignment="Top"/>
 
     </Grid>

@@ -50,10 +50,17 @@ namespace DatabaseModel.Model
                 image.BeginInit();
                 image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
                 image.CacheOption = BitmapCacheOption.OnLoad;
+                image.Rotation = Rotation.Rotate90;
                 image.UriSource = null;
                 image.StreamSource = mem;
                 image.EndInit();
             }
+
+            // Rotate the image if necessary
+            //if (image.Width < image.Height)
+                
+
+
             image.Freeze();
 
             return image;

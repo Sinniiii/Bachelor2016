@@ -5,10 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:controls="http://schemas.microsoft.com/surface/2008"
              xmlns:local="clr-namespace:Product_Browser.ScatterItems"
-             mc:Ignorable="d" Height="200" Width="100">
-    <controls:ScatterViewItem.Background>
-        <SolidColorBrush Opacity="1.0"></SolidColorBrush>
-    </controls:ScatterViewItem.Background>
+             mc:Ignorable="d" Height="200" Width="100" BorderThickness="2" BorderBrush="Beige" Background="Black">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.7*"/>
