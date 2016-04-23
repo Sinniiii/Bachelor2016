@@ -11,8 +11,8 @@
         <div class="panel-heading">
             <h4 class="panel-title">
                 <a data-toggle="collapse" data-parent="#accordion" href="#collapse_0">
-                    <p>Edit cards for the showboard</p>
-                    <p># &nbsp; &emsp; &emsp; Status &emsp; &emsp; Cardname</p>
+                    # &nbsp; &emsp; &emsp; Status &emsp; &emsp; Cardname
+                    <span class="pull-right glyphicon glyphicon-menu-down"></span>
                 </a>
             </h4>
         </div>
@@ -27,68 +27,146 @@
     @for (int i = 1; i <= @Model.Count; i++)
     {
         <div class="@(@Model[i - 1].DataItems.Count > 0 ? "panel panel-success" : "panel panel-default")">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <span data-toggle="collapse" data-parent="#accordion" href="#collapse_@i">
-                    #@Model[i - 1].TagId &emsp; &emsp;
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <span data-toggle="collapse" data-parent="#accordion" href="#collapse_@i">
+                        #@Model[i - 1].TagId &emsp; &emsp;
 
-                    @*formating, not in use
-                    @(@Model[i - 1].TagId < 10 ? "yes" : "no")
-                    @(@Model[i - 1].TagId < 100 ? "" : "")
-                    *@
+                        @*formating, not in use
+                            @(@Model[i - 1].TagId < 10 ? "yes" : "no")
+                            @(@Model[i - 1].TagId < 100 ? "" : "")
+                        *@
 
-                    @(@Model[i - 1].DataItems.Count > 0 ? "Active" : "Empty") &emsp; &emsp; @Model[i - 1].Name
-                    <span class="pull-right glyphicon glyphicon-menu-down"></span>
-            </h4>
-        </div>
-        <div id="collapse_@i" class="panel-collapse collapse">
-            <div class="panel-body">
+                        @(@Model[i - 1].DataItems.Count > 0 ? "Active" : "Empty") &emsp; &emsp; @Model[i - 1].Name
+                        <span class="pull-right glyphicon glyphicon-menu-down"></span>
+                </h4>
+            </div>
+            <div id="collapse_@i" class="panel-collapse collapse">
+                <div class="panel-body">
 
-                <form class="form-inline" role="form" method="post" action="Overview">
-                    <div class="form-group">
-                        @*<label for="nameOfCard">Name of Card:</label>*@
-                        <input type="text" class="form-control" id="nameOfCard" name="nameOfCard" placeholder="@Model[i - 1].Name" data-toggle="tooltip" title="Name of card">
-                        <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
-                        <button type="submit" class="btn btn-primary glyphicon glyphicon-floppy-disk" data-toggle="tooltip" title="Save new card name"></button>
-                    </div>
-                </form>
+                    <form class="form-inline" role="form" method="post" action="OverviewSaveSmartcardName">
+                        <div class="form-group">
+                            @*<label for="nameOfCard">Name of Card:</label>*@
+                            <input type="text" class="form-control" id="nameOfCard" name="nameOfCard" placeholder="@Model[i - 1].Name" data-toggle="tooltip" title="Name of card">
+                            <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
+                            <button type="submit" class="btn btn-primary btn-sm glyphicon glyphicon-floppy-disk" data-toggle="tooltip" title="Save new card name"></button>
+                        </div>
+                    </form>
 
-                <p></p>
+                    <p></p>
 
-                @* Does the card have no dataitems? Then we can skip this, otherwise...*@
-                @if (Model[i - 1].DataItems.Count > 0)
+                    @* Does the card have no dataitems? Then we can skip this, otherwise...*@
+                    @if (Model[i - 1].DataItems.Count > 0)
                 {
-                    @* Make a top-panel for the data-items section*@
-                    <div class="panel panel-default">
-                        <div class="panel-heading" data-toggle="tooltip" title="List of all media files on this card">Media Content</div>
+                        @* Make a top-panel for the data-items section*@
+                        <div class="panel panel-default">
+                            <div class="panel-heading" data-toggle="tooltip" title="List of all media files on this card">Media Content</div>
 
-                        @* List all dataitems in this Smartcard*@
-                        @for (int j = 0; j < Model[i - 1].DataItems.Count; j++)
-                        {
-                            <div class="panel-body">
-                                <form class="form-inline" role="form" method="post" action="">
-                                    <div class="form-group">
-                                        
-                                        <button type="submit" class="btn btn-danger btn-sm glyphicon glyphicon-remove" data-toggle="tooltip" title="Delete this mediafile"></button>
-                                        &emsp;&emsp;
-                                        <label for="nameOfCard"><span data-toggle="tooltip" title="Media type">@Model[i - 1].DataItems[j].Category</span>
-                                        &emsp; &emsp;
-                                        <span data-toggle="tooltip" title="Filename">@Model[i - 1].DataItems[j].Name</span></label>
-                                        
-                                    </div>
-                                </form>
-                            </div>
-                        }
+                            @* List all dataitems in this Smartcard*@
+                            @for (int j = 0; j < Model[i - 1].DataItems.Count; j++)
+                            {
+                                <div class="panel-body">
+                                    <form class="form-inline" role="form" method="post" action="OverviewDeleteDataitem">
+                                        <div class="form-group">
 
-                    </div>
-                }
+                                            <button type="submit" class="btn btn-danger btn-xs glyphicon glyphicon-minus" data-toggle="tooltip" title="Delete this mediafile"></button>
+                                            <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
+                                            <input type="hidden" class="form-control" id="dataItemID" name="dataItemID" value="@Model[i - 1].DataItems[j].Id">
+                                            &emsp;&emsp;
+                                            <label for="mediaType">
+                                                <span data-toggle="tooltip" title="Media type">@Model[i - 1].DataItems[j].Category</span>
+                                                &emsp; &emsp;
+                                                <span data-toggle="tooltip" title="Filename">@Model[i - 1].DataItems[j].Name</span>
+                                            </label>
 
+                                        </div>
+                                    </form>
+                                </div>
+
+                            }
+
+                        </div>
+                    }
+                    <p></p>
+                    @*<form class="form-inline" role="form" method="post" action="OverviewUploadDataitem">
+                            <label class="btn btn-primary btn-sm glyphicon glyphicon-plus" for="my-file-selector" data-toggle="tooltip" title="Upoload new media file">
+                                <input id="my-file-selector" type="file" style="display:none;">
+                                Button Text Here
+                            </label>
+                        </form>*@
+
+                    @*<form class="form-inline" role="form" method="post" action="@Url.Content("OverviewUploadDataitem")" enctype="multipart/form-data">
+                        <label class="btn btn-default btn-sm" for="uploadfile" data-toggle="tooltip" title="Upload new media file">
+
+                            <input type="file" name="uploadfile" class="" id="uploadfile" style="display:none;" accept="image/*,video/*,.pdf" />
+                            <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
+
+
+
+                            Click to add new file
+                            <input type="submit" name="Submit" value="Upload" class="btn btn-primary btn-sm" />
+                        </label>
+                    </form>
+                        *@
+
+
+                    @*<form class="form-inline" method="post" action="@Url.Content("OverviewUploadDataitem")" enctype="multipart/form-data">
+
+                        <div class="field">
+                            <input type="file" name="uploadfile" class="" id="uploadfile" style="display:inline-block;" accept="image/*,video/*,.pdf" />
+                            <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
+
+                            <input type="submit" name="Submit" value="Submit" class="btn btn-primary btn-sm" />
+                        </div>
+
+                    </form>*@
+
+                    <form class="form-inline" method="post" action="@Url.Content("OverviewUploadDataitem")" enctype="multipart/form-data">
+                        <div style="position:relative;">
+                            <a class='btn btn-primary btn-sm' href='javascript:;'>
+                                Select a new file...
+                                <input type="file" name="uploadfile" accept="image/*,video/*,.pdf" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' name="file_source" size="40" onchange='$("#upload-file-info").html($(this).val());'>
+                                <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
+                            </a>
+                            &nbsp;
+                            <span class='label label-info' id="upload-file-info"></span>
+                            
+                        </div>
+                        <p></p>
+                        <input type="submit" name="Submit" value="Upload selected file" class="btn btn-primary btn-sm" />
+                        
+                    </form>
+
+                </div>
             </div>
         </div>
-    </div>
     }
 
 </div>
+
+
+
+        .btn-file {
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-file input[type=file] {
+            position: absolute;
+            top: 0;
+            right: 0;
+            min-width: 100%;
+            min-height: 100%;
+            font-size: 100px;
+            text-align: right;
+            filter: alpha(opacity=0);
+            opacity: 0;
+            outline: none;
+            background: white;
+            cursor: inherit;
+            display: block;
+        }
+
+
 
 @*
 
