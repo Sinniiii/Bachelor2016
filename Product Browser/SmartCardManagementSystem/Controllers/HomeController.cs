@@ -33,6 +33,9 @@ namespace SmartCardManagementSystem.Controllers
             context.SmartCardDataItems.Remove(dataItemToRemove);
             context.SaveChanges();
 
+            ViewData["tagID"] = tagID;
+            ViewData["activePanel"] = "paneltitle_" + tagID;
+
             return View("Overview",smartcardList);
         }
 
@@ -54,6 +57,9 @@ namespace SmartCardManagementSystem.Controllers
             //System.Diagnostics.Debug.WriteLine(nameOfCard);
             //ViewData["nameOfCard"] = nameOfCard;
             //ViewData["tagID"] = tagID;
+
+            ViewData["tagID"] = tagID;
+            ViewData["activePanel"] = "paneltitle_" + tagID;
 
             return View("Overview", smartcardList);
         }
@@ -104,6 +110,9 @@ namespace SmartCardManagementSystem.Controllers
 
             context.SaveChanges();
 
+            ViewData["tagID"] = tagID;
+            ViewData["activePanel"] = "paneltitle_" + tagID;
+
             return View("Overview", smartcardList);
 
         }
@@ -121,6 +130,8 @@ namespace SmartCardManagementSystem.Controllers
             //var firstname = smartcardList[0].Name;
 
             //ViewData["SmartcardList"] = smartcardList.Count;
+
+            ViewData["tagID"] = -1;
 
             return View(smartcardList);
         }
