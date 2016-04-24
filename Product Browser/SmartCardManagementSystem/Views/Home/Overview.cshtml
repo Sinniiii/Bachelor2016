@@ -1,4 +1,28 @@
-﻿@model List<DatabaseModel.Model.SmartCard>
+﻿
+<style>
+    .btn-file {
+        position: relative;
+        overflow: hidden;
+    }
+
+        .btn-file input[type=file] {
+            position: absolute;
+            top: 0;
+            right: 0;
+            min-width: 100%;
+            min-height: 100%;
+            font-size: 100px;
+            text-align: right;
+            filter: alpha(opacity=0);
+            opacity: 0;
+            outline: none;
+            background: white;
+            cursor: inherit;
+            display: block;
+        }
+</style>
+
+@model List<DatabaseModel.Model.SmartCard>
 
 <p> Debug data:</p>
 <p> Number of cards in passed list: @Model.Count</p>
@@ -96,32 +120,32 @@
                         </form>*@
 
                     @*<form class="form-inline" role="form" method="post" action="@Url.Content("OverviewUploadDataitem")" enctype="multipart/form-data">
-                        <label class="btn btn-default btn-sm" for="uploadfile" data-toggle="tooltip" title="Upload new media file">
+                            <label class="btn btn-default btn-sm" for="uploadfile" data-toggle="tooltip" title="Upload new media file">
 
-                            <input type="file" name="uploadfile" class="" id="uploadfile" style="display:none;" accept="image/*,video/*,.pdf" />
-                            <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
+                                <input type="file" name="uploadfile" class="" id="uploadfile" style="display:none;" accept="image/*,video/*,.pdf" />
+                                <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
 
 
 
-                            Click to add new file
-                            <input type="submit" name="Submit" value="Upload" class="btn btn-primary btn-sm" />
-                        </label>
-                    </form>
-                        *@
+                                Click to add new file
+                                <input type="submit" name="Submit" value="Upload" class="btn btn-primary btn-sm" />
+                            </label>
+                        </form>
+                    *@
 
 
                     @*<form class="form-inline" method="post" action="@Url.Content("OverviewUploadDataitem")" enctype="multipart/form-data">
 
-                        <div class="field">
-                            <input type="file" name="uploadfile" class="" id="uploadfile" style="display:inline-block;" accept="image/*,video/*,.pdf" />
-                            <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
+                            <div class="field">
+                                <input type="file" name="uploadfile" class="" id="uploadfile" style="display:inline-block;" accept="image/*,video/*,.pdf" />
+                                <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
 
-                            <input type="submit" name="Submit" value="Submit" class="btn btn-primary btn-sm" />
-                        </div>
+                                <input type="submit" name="Submit" value="Submit" class="btn btn-primary btn-sm" />
+                            </div>
 
-                    </form>*@
+                        </form>*@
 
-                    <form class="form-inline" method="post" action="@Url.Content("OverviewUploadDataitem")" enctype="multipart/form-data">
+                    @*<form class="form-inline" method="post" action="@Url.Content("OverviewUploadDataitem")" enctype="multipart/form-data">
                         <div style="position:relative;">
                             <a class='btn btn-primary btn-sm' href='javascript:;'>
                                 Select a new file...
@@ -130,11 +154,21 @@
                             </a>
                             &nbsp;
                             <span class='label label-info' id="upload-file-info"></span>
-                            
+
                         </div>
                         <p></p>
                         <input type="submit" name="Submit" value="Upload selected file" class="btn btn-primary btn-sm" />
-                        
+                    </form>*@
+
+
+                    <form class="form-inline" method="post" action="@Url.Content("OverviewUploadDataitem")" enctype="multipart/form-data">
+                        <span class="btn btn-default btn-file">
+                            Select new file... <input type="file">
+                            <input type="file" name="uploadfile" class="" id="uploadfile" style="display:inline-block;" accept="image/*,video/*,.pdf" />
+                            <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
+                            
+                        </span>
+                        <input type="submit" name="Submit" value="Upload selected" class="btn btn-primary" />
                     </form>
 
                 </div>
