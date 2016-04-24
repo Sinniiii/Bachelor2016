@@ -21,7 +21,30 @@
             display: block;
         }
 </style>
+
 <body onload="myFunction()">
+
+    <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
+    <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
+
+    <script>
+        Dropzone.options.mydropzone = {
+            init: function() {
+                this.on("queuecomplete", function(file) {
+                    @*alert("Added file.");*@
+                    location.reload();
+                });
+            }
+        };
+
+    </script>
+
+    @*<script>
+        Dropzone.prototype.defaultOptions.dictDefaultMessage = "Drop files here to upload, or click";
+        mydropzone.onclick.
+
+    </script>*@
+
 
     <script>
         function myFunction() {
@@ -52,7 +75,7 @@
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse_0">
+                    <a data-toggle="collapse" data-parent="#accordion" id="paneltitle_0" href="#collapse_0">
                         # &nbsp; &emsp; &emsp; Status &emsp; &emsp; Cardname
                         <span class="pull-right glyphicon glyphicon-menu-down"></span>
                     </a>
@@ -179,14 +202,19 @@
                             </form>*@
 
 
-                        <form class="form-inline" method="post" action="@Url.Content("OverviewUploadDataitem")" enctype="multipart/form-data">
-                            <span class="btn btn-default btn-file">
-                                Select new file... <input type="file">
-                                <input type="file" name="uploadfile" class="" id="uploadfile" style="display:inline-block;" accept="image/*,video/*,.pdf" />
-                                <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
+                        @*<form class="form-inline" method="post" action="@Url.Content("OverviewUploadDataitem")" enctype="multipart/form-data">
+                                <span class="btn btn-default btn-file">
+                                    Select new file... <input type="file">
+                                    <input type="file" name="uploadfile" class="" id="uploadfile" style="display:inline-block;" accept="image/*,video/*,.pdf" />
+                                    <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
 
-                            </span>
-                            <input type="submit" name="Submit" value="Upload selected" class="btn btn-primary" />
+                                </span>
+                                <input type="submit" name="Submit" value="Upload selected" class="btn btn-primary" />
+                            </form>*@
+
+                        <form asp-action="OverviewUploadDataitemDZ" asp-controller="Home" method="post" enctype="multipart/form-data" class="dropzone" id="mydropzone">
+                            <div class="dz-message" data-dz-message><span>Drop files to upload, or click to browse</span></div>
+                            <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
                         </form>
 
                     </div>
