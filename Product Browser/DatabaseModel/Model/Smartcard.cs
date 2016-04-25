@@ -18,6 +18,6 @@ namespace DatabaseModel.Model
 
         public int TagId { get; set; }
 
-        public virtual List<SmartCardDataItem> DataItems { get; set; }
+        public List<SmartCardDataItem> DataItems { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Drawing;
 using System.IO;
 using System.Windows;
@@ -30,6 +31,12 @@ namespace DatabaseModel.Model
         public SmartCardDataItemCategory Category { get; private set; }
 
         public virtual byte[] Data { get; private set; }
+
+        [ForeignKey("SmartCard")]
+        [Column("SmartCard_Id")]
+        public int SmartCard_Id { get; private set; }
+
+        public SmartCard SmartCard { get; private set; }
 
         /// <summary>
         /// Retrieves the document from the Data array as an image source which can be used directly in

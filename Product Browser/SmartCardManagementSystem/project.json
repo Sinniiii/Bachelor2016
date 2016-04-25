@@ -35,9 +35,11 @@
 
   "frameworks": {
     "dnx451": {
-      "dependencies": {
-        "DatabaseModel": "1.0.0-*"
-      }
+        "dependencies": {
+            "DatabaseModel": "1.0.0-*"
+        },
+        "frameworkAssemblies": {
+        }
     }
   },
 
