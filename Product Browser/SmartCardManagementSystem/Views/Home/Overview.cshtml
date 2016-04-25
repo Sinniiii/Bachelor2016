@@ -22,32 +22,47 @@
         }
 </style>
 
-<body onload="myFunction()">
+<body onload="scrollToActivePanel()">
 
     <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
     <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
 
     <script>
+
+        var activetagID = -1;
+
+        function scrollToActivePanel() {
+
+            @*alert("@ViewData["activepanel"]");*@
+            var el = document.getElementById('@ViewData["activepanel"]');
+            el.scrollIntoView(true);
+            window.scrollBy(0, -65);
+
+            @*$('html, body').animate({
+                scrollTop: $("#@ViewData["activepanel"]").offset().top
+        }, 500);*@
+        }
+
+        function setactivetagID(newactivetagID) {
+            activetagID = newactivetagID;
+        }
+
+
         Dropzone.options.mydropzone = {
             init: function() {
                 this.on("queuecomplete", function(file) {
-                    @*alert("Added file.");*@
-                    location.reload();
+                    @*alert(@ViewData["activepanel"]);
+                    location.reload();*@
+                    window.location.href = '/Home/Overview?tagID=' + activetagID;
                 });
             }
         };
 
     </script>
 
-    @*<script>
-        Dropzone.prototype.defaultOptions.dictDefaultMessage = "Drop files here to upload, or click";
-        mydropzone.onclick.
-
-    </script>*@
-
-
     <script>
-        function myFunction() {
+
+        function scrollToActivePanel() {
 
             @*alert("@ViewData["activepanel"]");*@
             var el = document.getElementById('@ViewData["activepanel"]');
@@ -58,6 +73,7 @@
                 scrollTop: $("#@ViewData["activepanel"]").offset().top
             }, 500);*@
         }
+
     </script>
 
 
@@ -76,7 +92,7 @@
             <div class="panel-heading">
                 <h4 class="panel-title">
                     <a data-toggle="collapse" data-parent="#accordion" id="paneltitle_0" href="#collapse_0">
-                        # &nbsp; &emsp; &emsp; Status &emsp; &emsp; Cardname
+                        #  &nbsp; <span style="padding-left: 20px"></span>&emsp; &emsp; Status &emsp; &emsp; Cardname
                         <span class="pull-right glyphicon glyphicon-menu-down"></span>
                     </a>
                 </h4>
@@ -91,19 +107,25 @@
         @* Smart-card panels - one pr card*@
         @for (int i = 1; i <= @Model.Count; i++)
         {
-            <div class="@(@Model[i - 1].DataItems.Count > 0 ? "panel panel-success" : "panel panel-default")">
+            <div onclick="setactivetagID(@( (int) Model[i - 1].TagId) )" class="@(@Model[i - 1].DataItems.Count > 0 ? "panel panel-success" : "panel panel-default")">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <span data-toggle="collapse" data-parent="#accordion" id="paneltitle_@i" href="#collapse_@i">
                             #@Model[i - 1].TagId &emsp; &emsp;
 
-                            @*formating, not in use
-                                @(@Model[i - 1].TagId < 10 ? "yes" : "no")
-                                @(@Model[i - 1].TagId < 100 ? "" : "")
-                            *@
+                            @*formatting*@
+                            @if (@Model[i - 1].TagId < 10)
+                            {
+                                <span style="padding-left: 10px"></span>
+                            }
+                            @if (@Model[i - 1].TagId < 100)
+                            {
+                                <span style="padding-left: 10px"></span>
+                            }
 
                             @(@Model[i - 1].DataItems.Count > 0 ? "Active" : "Empty") &emsp; &emsp; @Model[i - 1].Name
-                            <span class="pull-right glyphicon glyphicon-menu-down"></span>
+                        </span>
+                        <span class="pull-right glyphicon glyphicon-menu-down"></span>
                     </h4>
                 </div>
                 <div id="collapse_@i" class="@( (int) @ViewData["tagID"] == (i) ? "panel-collapse collapse in" : "panel-collapse collapse")">
@@ -114,7 +136,7 @@
                                 @*<label for="nameOfCard">Name of Card:</label>*@
                                 <input type="text" class="form-control" id="nameOfCard" name="nameOfCard" value="@Model[i - 1].Name" data-toggle="tooltip" title="Name of card">
                                 <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
-                                <button type="submit" class="btn btn-primary btn-sm glyphicon glyphicon-floppy-disk" data-toggle="tooltip" title="Save new card name"></button>
+                                <button type="submit" class="btn btn-primary btn-sm glyphicon " data-toggle="tooltip" title="Save new card name">Save</button>
                             </div>
                         </form>
 
@@ -134,7 +156,7 @@
                                         <form class="form-inline" role="form" method="post" action="OverviewDeleteDataitem">
                                             <div class="form-group">
 
-                                                <button type="submit" class="btn btn-danger btn-xs glyphicon glyphicon-remove" data-toggle="tooltip" title="Delete this mediafile"></button>
+                                                <button type="submit" class="btn btn-danger btn-xs glyphicon glyphicon-trash" data-toggle="tooltip" title="Delete this mediafile"></button>
                                                 <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
                                                 <input type="hidden" class="form-control" id="dataItemID" name="dataItemID" value="@Model[i - 1].DataItems[j].Id">
                                                 &emsp;&emsp;
@@ -213,7 +235,7 @@
                             </form>*@
 
                         <form asp-action="OverviewUploadDataitemDZ" asp-controller="Home" method="post" enctype="multipart/form-data" class="dropzone" id="mydropzone">
-                            <div class="dz-message" data-dz-message><span>Drop files to upload, or click to browse</span></div>
+                            <div class="dz-message" data-dz-message><span>Drop files to upload, or click to browse (multiple selection supported)</span></div>
                             <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
                         </form>
 
