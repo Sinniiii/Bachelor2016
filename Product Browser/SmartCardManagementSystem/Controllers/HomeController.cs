@@ -14,9 +14,6 @@ namespace SmartCardManagementSystem.Controllers
 {
     public class HomeController : Controller
     {
-        [FromServices]
-        public Models.ABBDataContext context { get; set; }
-
         public IActionResult Index()
         {
             return View();
@@ -28,9 +25,8 @@ namespace SmartCardManagementSystem.Controllers
         {
             System.Diagnostics.Debug.WriteLine("-------RUNNING POST----------");
 
-            //ABBDataContext context = new ABBDataContext();
-            //var smartcardList = context.SmartCards.OrderBy(a => a.TagId).ToList();
-            var smartcardList = context.SmartCards.Include(s => s.DataItems).OrderBy(a => a.TagId).ToList();
+            ABBDataContext context = new ABBDataContext();
+            var smartcardList = context.SmartCards.OrderBy(a => a.TagId).ToList();
             var x = context.SmartCardDataItems;
 
             var dataItemToRemove = context.SmartCardDataItems.Where(a => a.Id == dataItemID).FirstOrDefault();
@@ -49,9 +45,8 @@ namespace SmartCardManagementSystem.Controllers
         {
             System.Diagnostics.Debug.WriteLine("-------RUNNING POST----------");
 
-            //ABBDataContext context = new ABBDataContext();
-            //var smartcardList = context.SmartCards.OrderBy(a => a.TagId).ToList();
-            var smartcardList = context.SmartCards.Include(s => s.DataItems).OrderBy(a => a.TagId).ToList();
+            ABBDataContext context = new ABBDataContext();
+            var smartcardList = context.SmartCards.OrderBy(a => a.TagId).ToList();
             var x = context.SmartCardDataItems;
 
             var cardToUpdate = smartcardList.Find(a => a.TagId == tagID);
@@ -108,9 +103,8 @@ namespace SmartCardManagementSystem.Controllers
             }
 
             //Add to smartcard based on tagID
-            //ABBDataContext context = new ABBDataContext();
-            //var smartcardList = context.SmartCards.OrderBy(a => a.TagId).ToList();
-            var smartcardList = context.SmartCards.Include(s => s.DataItems).OrderBy(a => a.TagId).ToList();
+            ABBDataContext context = new ABBDataContext();
+            var smartcardList = context.SmartCards.OrderBy(a => a.TagId).ToList();
             var cardToUpdate = smartcardList.Find(a => a.TagId == tagID);
             cardToUpdate.DataItems.Add(item1);
 
@@ -164,9 +158,8 @@ namespace SmartCardManagementSystem.Controllers
             }
 
             //Add to smartcard based on tagID
-            //ABBDataContext context = new ABBDataContext();
-            //var smartcardList = context.SmartCards.OrderBy(a => a.TagId).ToList();
-            var smartcardList = context.SmartCards.Include(s => s.DataItems).OrderBy(a => a.TagId).ToList();
+            ABBDataContext context = new ABBDataContext();
+            var smartcardList = context.SmartCards.OrderBy(a => a.TagId).ToList();
             var cardToUpdate = smartcardList.Find(a => a.TagId == tagID);
             cardToUpdate.DataItems.Add(item1);
 
@@ -205,8 +198,8 @@ namespace SmartCardManagementSystem.Controllers
         {
             System.Diagnostics.Debug.WriteLine("-------RUNNING GET----------");
 
-            //ABBDataContext context = new ABBDataContext();
-            var smartcardList = context.SmartCards.Include(s => s.DataItems).OrderBy(a => a.TagId).ToList();
+            ABBDataContext context = new ABBDataContext();
+            var smartcardList = context.SmartCards.OrderBy(a => a.TagId).ToList();
             var x = context.SmartCardDataItems;
 
             //var firstname = smartcardList[0].Name;
