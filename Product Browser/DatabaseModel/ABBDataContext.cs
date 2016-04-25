@@ -11,11 +11,11 @@ namespace DatabaseModel
     public class ABBDataContext : DbContext
     {
         public ABBDataContext()
-            : base("Server=(LocalDb)\\MSSQLLocalDB;initial catalog=DatabaseModel.ABBDataContext;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework")//base("name =ABBDataContext")
+            : base("name=ABBDataContext")
         {
             Database.SetInitializer(new DevelopmentInitializer()); // This is only while developing, it drops database and reseeds it
 
-            this.Configuration.LazyLoadingEnabled = true;
+
         }
 
         public virtual DbSet<SmartCard> SmartCards { get; set; }
