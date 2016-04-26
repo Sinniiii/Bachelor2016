@@ -25,6 +25,9 @@ namespace DatabaseModel.Model
     /// </summary>
     public class SmartCardDataItem
     {
+        [NotMapped]
+        public const string VIDEO_FOLDER = @"c:\ABBProductBrowser\Videos\Tag\";
+
         public int Id { get; private set; }
         
         public string Name { get; private set; }
@@ -32,6 +35,8 @@ namespace DatabaseModel.Model
         public SmartCardDataItemCategory Category { get; private set; }
         
         public virtual SmartCardDataItemData DataField { get; private set; }
+
+        public virtual SmartCard SmartCard { get; private set; }
 
         /// <summary>
         /// Retrieves the document from the Data array as an image source which can be used directly in
@@ -78,17 +83,7 @@ namespace DatabaseModel.Model
             if (Category != SmartCardDataItemCategory.Video || DataField == null || DataField.Data.Length == 0)
                 return null;
 
-            string path = @"c:\" + Name;
-
-            try
-            {
-                System.IO.File.WriteAllBytes(path, DataField.Data);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Error attempting to temporarily save video file to disk...");
-                return null;
-            }
+            string path = VIDEO_FOLDER + SmartCard.TagId + @"\" + Name;
 
             return new Uri(path, UriKind.Absolute);
         }
@@ -224,7 +219,7 @@ namespace DatabaseModel.Model
         }
 
         /// <summary>
-        /// Constructor. Use this rather than setting Data directly, since Documents needs to be converted
+        /// Constructor. Use this rather than setting Data directly, since Documents needs to be converted. Not for video files!
         /// </summary>
         /// <param name="name">The data item's name</param>
         /// <param name="category">The data item's category; document expects pdf!</param>
@@ -234,11 +229,22 @@ namespace DatabaseModel.Model
             Name = name;
             Category = category;
 
-            // Copy byte array, since it may come from HttpStream?
-            DataField = new SmartCardDataItemData(data);
+            if (category == SmartCardDataItemCategory.Video)
+                return;
+            else if (category == SmartCardDataItemCategory.Document) // If we have a document, split it up into images
+                DataField = new SmartCardDataItemData(ConvertPDFToImageArray(data));
+            else // Image
+                DataField = new SmartCardDataItemData(data);
+        }
 
-            if (category == SmartCardDataItemCategory.Document) // If we have a document, split it up into images
-                DataField.SetData(ConvertPDFToImageArray(DataField.Data));
+        /// <summary>
+        /// Constructor for video data items that are stored on HDD
+        /// </summary>
+        /// <param name="name"></param>
+        public SmartCardDataItem(string name)
+        {
+            Name = name;
+            Category = SmartCardDataItemCategory.Video;
         }
 
         /// <summary>

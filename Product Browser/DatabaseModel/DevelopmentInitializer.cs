@@ -41,9 +41,6 @@ namespace DatabaseModel
             bytes = File.ReadAllBytes("TestData\\arkema-st-auban.png");
             var item8 = new SmartCardDataItem("Test8", SmartCardDataItemCategory.Image, bytes);
 
-            //bytes = File.ReadAllBytes("TestData\\ABB_ Life_Cycle_Assessment_service.mp4");
-            //var item3 = new SmartCardDataItem("ABB_ Life_Cycle_Assessment_service.mp4", SmartCardDataItemCategory.Video, bytes);
-
             var smartcard = new SmartCard();
             smartcard.Name = "Test card 1";
             smartcard.TagId = 1;

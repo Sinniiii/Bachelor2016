@@ -63,12 +63,7 @@ namespace SmartCardManagementSystem.Controllers
 
             var fileName = ContentDispositionHeaderValue.Parse(uploadfile.ContentDisposition).FileName.Trim('"');
             var extension = fileName.Substring(Math.Max(0, fileName.Length - 3));
-
-            var readstream = uploadfile.OpenReadStream();
-            byte[] bytes;
-            bytes = new byte[readstream.Length];  //declare arraysize
-            readstream.Read(bytes, 0, bytes.Length); // read from stream to byte array
-
+            
             System.Diagnostics.Debug.WriteLine("-------Extension was----------");
             System.Diagnostics.Debug.WriteLine(extension);
 
@@ -78,16 +73,28 @@ namespace SmartCardManagementSystem.Controllers
             //Create new dataitem
             if (extension == "pdf")
             {
+                var readstream = uploadfile.OpenReadStream();
+                byte[] bytes = new byte[readstream.Length];  //declare arraysize
+                readstream.Read(bytes, 0, bytes.Length); // read from stream to byte array
+
                 System.Diagnostics.Debug.WriteLine("-------Creating document category----------");
                 item1 = new SmartCardDataItem(fileName, SmartCardDataItemCategory.Document, bytes);
             }
             else if (extension == "mp4")
             {
                 System.Diagnostics.Debug.WriteLine("-------Creating video category----------");
-                item1 = new SmartCardDataItem(fileName, SmartCardDataItemCategory.Video, bytes);
+
+                // Special stuff for making video items
+                item1 = new SmartCardDataItem(fileName);
+
+                uploadfile.SaveAs(SmartCardDataItem.VIDEO_FOLDER + tagID + @"\" + fileName);
             }
             else
             {
+                var readstream = uploadfile.OpenReadStream();
+                byte[] bytes = new byte[readstream.Length];  //declare arraysize
+                readstream.Read(bytes, 0, bytes.Length); // read from stream to byte array
+
                 System.Diagnostics.Debug.WriteLine("-------Creating image category----------");
                 item1 = new SmartCardDataItem(fileName, SmartCardDataItemCategory.Image, bytes);
             }
@@ -119,11 +126,6 @@ namespace SmartCardManagementSystem.Controllers
             var fileName = ContentDispositionHeaderValue.Parse(uploadfile.ContentDisposition).FileName.Trim('"');
             var extension = fileName.Substring(Math.Max(0, fileName.Length - 3));
 
-            var readstream = uploadfile.OpenReadStream();
-            byte[] bytes;
-            bytes = new byte[readstream.Length];  //declare arraysize
-            readstream.Read(bytes, 0, bytes.Length); // read from stream to byte array
-
             System.Diagnostics.Debug.WriteLine("-------Extension was----------");
             System.Diagnostics.Debug.WriteLine(extension);
 
@@ -133,16 +135,29 @@ namespace SmartCardManagementSystem.Controllers
             //Create new dataitem
             if (extension == "pdf")
             {
+                var readstream = uploadfile.OpenReadStream();
+                byte[] bytes = new byte[readstream.Length];  //declare arraysize
+                readstream.Read(bytes, 0, bytes.Length); // read from stream to byte array
+
                 System.Diagnostics.Debug.WriteLine("-------Creating document category----------");
                 item1 = new SmartCardDataItem(fileName, SmartCardDataItemCategory.Document, bytes);
             }
             else if (extension == "mp4")
             {
                 System.Diagnostics.Debug.WriteLine("-------Creating video category----------");
-                item1 = new SmartCardDataItem(fileName, SmartCardDataItemCategory.Video, bytes);
+
+                // Special stuff for making video items
+                item1 = new SmartCardDataItem(fileName);
+
+                System.IO.Directory.CreateDirectory(SmartCardDataItem.VIDEO_FOLDER + tagID);
+                uploadfile.SaveAs(SmartCardDataItem.VIDEO_FOLDER + tagID + @"\" + fileName);
             }
             else
             {
+                var readstream = uploadfile.OpenReadStream();
+                byte[] bytes = new byte[readstream.Length];  //declare arraysize
+                readstream.Read(bytes, 0, bytes.Length); // read from stream to byte array
+
                 System.Diagnostics.Debug.WriteLine("-------Creating image category----------");
                 item1 = new SmartCardDataItem(fileName, SmartCardDataItemCategory.Image, bytes);
             }
