@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Drawing;
 using System.IO;
@@ -26,17 +27,13 @@ namespace DatabaseModel.Model
     {
         public int Id { get; private set; }
 
+        [Column(TypeName = "char")]
+        [StringLength(50)]
         public string Name { get; private set; }
 
         public SmartCardDataItemCategory Category { get; private set; }
-
-        public virtual byte[] Data { get; private set; }
-
-        [ForeignKey("SmartCard")]
-        [Column("SmartCard_Id")]
-        public int SmartCard_Id { get; private set; }
-
-        public SmartCard SmartCard { get; private set; }
+        
+        public virtual SmartCardDataItemData DataField { get; private set; }
 
         /// <summary>
         /// Retrieves the document from the Data array as an image source which can be used directly in
@@ -46,12 +43,12 @@ namespace DatabaseModel.Model
         /// <returns></returns>
         public BitmapImage GetImageSource()
         {
-            if (Category != SmartCardDataItemCategory.Image || Data == null && Data.Length == 0)
+            if (Category != SmartCardDataItemCategory.Image || DataField == null && DataField.Data.Length == 0)
                 return null;
 
             BitmapImage image = new BitmapImage();
 
-            using (var mem = new MemoryStream(Data))
+            using (var mem = new MemoryStream(DataField.Data))
             {
                 mem.Position = 0;
                 image.BeginInit();
@@ -80,14 +77,14 @@ namespace DatabaseModel.Model
         /// <returns></returns>
         public Uri GetVideo()
         {
-            if (Category != SmartCardDataItemCategory.Video || Data == null || Data.Length == 0)
+            if (Category != SmartCardDataItemCategory.Video || DataField == null || DataField.Data.Length == 0)
                 return null;
 
             string path = @"c:\" + Name;
 
             try
             {
-                System.IO.File.WriteAllBytes(path, Data);
+                System.IO.File.WriteAllBytes(path, DataField.Data);
             }
             catch (Exception e)
             {
@@ -105,25 +102,25 @@ namespace DatabaseModel.Model
         /// <returns></returns>
         public List<BitmapImage> GetDocumentAsImageSources()
         {
-            if (Category != SmartCardDataItemCategory.Document || Data == null || Data.Length == 0)
+            if (Category != SmartCardDataItemCategory.Document || DataField == null || DataField.Data.Length == 0)
                 return null;
 
             List<BitmapImage> images = new List<BitmapImage>();
 
             int current = 0;
-            while (current < Data.Length)
+            while (current < DataField.Data.Length)
             {
                 BitmapImage newImage = new BitmapImage();
 
                 // Find size of next element
-                int elementSize = BitConverter.ToInt32(Data, current);
+                int elementSize = BitConverter.ToInt32(DataField.Data, current);
                 current += 4; // Skip 4 forward, since we read those already with ToInt32
 
                 byte[] imageBytes = new byte[elementSize];
                 for (int i = 0; i < elementSize; i++)
-                    imageBytes[i] = Data[current++]; // Transfer
+                    imageBytes[i] = DataField.Data[current++]; // Transfer
 
-                if (current == Data.Length) // This was the last element, which is the original pdf document. Ignore and break
+                if (current == DataField.Data.Length) // This was the last element, which is the original pdf document. Ignore and break
                     break;
 
                 // Else we have an image, convert the byte array
@@ -152,16 +149,16 @@ namespace DatabaseModel.Model
         /// <returns></returns>
         public byte[] GetOriginalDocument()
         {
-            if (Category != SmartCardDataItemCategory.Document || Data == null || Data.Length == 0)
+            if (Category != SmartCardDataItemCategory.Document || DataField == null || DataField.Data.Length == 0)
                 return null;
 
             byte[] document = null;
 
             int current = 0, startOfPrevious = 0;
-            while (current < Data.Length)
+            while (current < DataField.Data.Length)
             {
                 // Find size of next element
-                int elementSize = BitConverter.ToInt32(Data, current);
+                int elementSize = BitConverter.ToInt32(DataField.Data, current);
                 current += 4 + elementSize; // Skip 4 forward, since we read those already with ToInt32
                 startOfPrevious = current - elementSize;
             }
@@ -170,7 +167,7 @@ namespace DatabaseModel.Model
             document = new byte[documentLength];
 
             for (int i = 0; i < documentLength; i++)
-                document[i] = Data[startOfPrevious++];
+                document[i] = DataField.Data[startOfPrevious++];
 
             return document;
         }
@@ -238,14 +235,12 @@ namespace DatabaseModel.Model
         {
             Name = name;
             Category = category;
-            
+
             // Copy byte array, since it may come from HttpStream?
-            Data = new byte[data.Length];
-            for (int i = 0; i < Data.Length; i++)
-                Data[i] = data[i];
+            DataField = new SmartCardDataItemData(data);
 
             if (category == SmartCardDataItemCategory.Document) // If we have a document, split it up into images
-                Data = ConvertPDFToImageArray(Data);
+                DataField.SetData(ConvertPDFToImageArray(DataField.Data));
         }
 
         /// <summary>

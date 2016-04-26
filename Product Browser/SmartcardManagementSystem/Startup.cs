@@ -44,11 +44,6 @@ namespace SmartCardManagementSystem
                 .AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
 
-            services.AddEntityFramework()
-                .AddSqlServer()
-                .AddDbContext<ABBDataContext>(options =>
-                    options.UseSqlServer(Configuration["Data:ABBConnection:ConnectionString"]));
-
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();

@@ -14,9 +14,6 @@ namespace SmartCardManagementSystem.Controllers
 {
     public class HomeController : Controller
     {
-        [FromServices]
-        public Models.ABBDataContext context { get; set; }
-
         public IActionResult Index()
         {
             return View();
@@ -24,13 +21,14 @@ namespace SmartCardManagementSystem.Controllers
 
         //POST for deleting dataitem from a smartcard
         [HttpPost]
-        public async Task<IActionResult> OverviewDeleteDataitem(int tagID, int dataItemID)
+        public IActionResult OverviewDeleteDataitem(int tagID, int dataItemID)
         {
             System.Diagnostics.Debug.WriteLine("-------RUNNING POST----------");
 
-            var dataItemToRemove = await context.SmartCardDataItems.FirstAsync(a => a.Id == dataItemID);
+            ABBDataContext context = new ABBDataContext();
+            var dataItemToRemove = context.SmartCardDataItems.First(a => a.Id == dataItemID);
             context.SmartCardDataItems.Remove(dataItemToRemove);
-            await context.SaveChangesAsync();
+            context.SaveChanges();
 
             ViewData["tagID"] = tagID;
             ViewData["activePanel"] = "paneltitle_" + tagID;
@@ -40,14 +38,15 @@ namespace SmartCardManagementSystem.Controllers
 
         //POST for changing name of smartcard
         [HttpPost]
-        public async Task<IActionResult> OverviewSaveSmartcardName(string nameOfCard, int tagID)
+        public IActionResult OverviewSaveSmartcardName(string nameOfCard, int tagID)
         {
             System.Diagnostics.Debug.WriteLine("-------RUNNING POST----------");
 
-            var smartcard = await context.SmartCards.FirstAsync(s => s.TagId == tagID);
+            ABBDataContext context = new ABBDataContext();
+            var smartcard = context.SmartCards.First(s => s.TagId == tagID);
 
             smartcard.Name = nameOfCard;
-            await context.SaveChangesAsync();
+            context.SaveChanges();
 
             ViewData["tagID"] = tagID;
             ViewData["activePanel"] = "paneltitle_" + tagID;
@@ -57,7 +56,7 @@ namespace SmartCardManagementSystem.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> OverviewUploadDataitem(IFormFile uploadfile, int tagID)
+        public IActionResult OverviewUploadDataitem(IFormFile uploadfile, int tagID)
         {
 
             System.Diagnostics.Debug.WriteLine("-------RUNNING UPLOAD----------");
@@ -95,10 +94,11 @@ namespace SmartCardManagementSystem.Controllers
 
             //Add to smartcard based on tagID
 
-            var cardToUpdate = await context.SmartCards.Include(s => s.DataItems).FirstAsync(a => a.TagId == tagID);
+            ABBDataContext context = new ABBDataContext();
+            var cardToUpdate = context.SmartCards.First(a => a.TagId == tagID);
             cardToUpdate.DataItems.Add(item1);
 
-            await context.SaveChangesAsync();
+            context.SaveChanges();
 
             ViewData["tagID"] = tagID;
             ViewData["activePanel"] = "paneltitle_" + tagID;
@@ -108,7 +108,7 @@ namespace SmartCardManagementSystem.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> OverviewUploadDataitemDZ(ICollection<IFormFile> files, int tagID)
+        public IActionResult OverviewUploadDataitemDZ(ICollection<IFormFile> files, int tagID)
         {
 
 
@@ -147,18 +147,17 @@ namespace SmartCardManagementSystem.Controllers
                 item1 = new SmartCardDataItem(fileName, SmartCardDataItemCategory.Image, bytes);
             }
 
-            //Add to smartcard based on tagID
-            //ABBDataContext context = new ABBDataContext();
-            //var smartcardList = context.SmartCards.OrderBy(a => a.TagId).ToList();
-            var cardToUpdate = await context.SmartCards.Include(s => s.DataItems).FirstAsync(a => a.TagId == tagID);
+            ABBDataContext context = new ABBDataContext();
+            var cardToUpdate = context.SmartCards.First(a => a.TagId == tagID);
             cardToUpdate.DataItems.Add(item1);
 
-            await context.SaveChangesAsync();
+            context.SaveChanges();
 
             ViewData["tagID"] = tagID;
             ViewData["activePanel"] = "paneltitle_" + tagID;
 
-            return View("Overview", context.SmartCards.ToList());
+            //return View("Overview", context.SmartCards.Include(a => a.DataItems).ToList());
+            return new EmptyResult();
 
         }
 
@@ -187,9 +186,10 @@ namespace SmartCardManagementSystem.Controllers
         public IActionResult Overview(int tagID)
         {
             System.Diagnostics.Debug.WriteLine("-------RUNNING GET----------");
-            
-            var smartcardList = context.SmartCards.Include(s => s.DataItems).OrderBy(a => a.TagId).ToList();
-            
+
+            ABBDataContext context = new ABBDataContext();
+            var smartcardList = context.SmartCards.OrderBy(a => a.TagId).ToList();
+
             ViewData["tagID"] = tagID;
             ViewData["activePanel"] = "paneltitle_" + tagID;
 

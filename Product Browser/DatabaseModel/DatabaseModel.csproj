@@ -63,6 +63,7 @@
     <Compile Include="DevelopmentInitializer.cs" />
     <Compile Include="Model\SmartCard.cs" />
     <Compile Include="Model\SmartCardDataItem.cs" />
+    <Compile Include="Model\SmartCardDataItemData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
