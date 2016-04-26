@@ -29,6 +29,7 @@
 
     <script>
         Dropzone.options.mydropzone = {
+            maxFilesize: 500,
             init: function() {
                 this.on("queuecomplete", function(file) {
                     @*alert("Added file.");*@
