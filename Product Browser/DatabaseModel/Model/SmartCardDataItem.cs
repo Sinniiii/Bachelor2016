@@ -22,6 +22,9 @@ namespace DatabaseModel.Model
 
     /// <summary>
     /// A data item kept by Product. Could be an image, document(pdf) or video.
+    /// 
+    /// If the data is a video, it will be loaded from HDD instead of database, due to performance and memory constraints.
+    /// These files should be saved to VIDEO_FOLDER + SmartCard.TagId + videoname 
     /// </summary>
     public class SmartCardDataItem
     {
@@ -85,7 +88,10 @@ namespace DatabaseModel.Model
 
             string path = VIDEO_FOLDER + SmartCard.TagId + @"\" + Name;
 
-            return new Uri(path, UriKind.Absolute);
+            if (File.Exists(path))
+                return new Uri(path, UriKind.Absolute);
+            else
+                return null;
         }
 
         /// <summary>
