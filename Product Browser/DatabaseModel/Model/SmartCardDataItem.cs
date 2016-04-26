@@ -26,9 +26,7 @@ namespace DatabaseModel.Model
     public class SmartCardDataItem
     {
         public int Id { get; private set; }
-
-        [Column(TypeName = "char")]
-        [StringLength(50)]
+        
         public string Name { get; private set; }
 
         public SmartCardDataItemCategory Category { get; private set; }

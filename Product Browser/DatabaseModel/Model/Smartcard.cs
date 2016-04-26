@@ -15,9 +15,7 @@ namespace DatabaseModel.Model
     public class SmartCard
     {
         public int Id { get; set; }
-
-        [Column(TypeName = "char")]
-        [StringLength(50)]
+        
         public string Name { get; set; }
 
         public int TagId { get; set; }
