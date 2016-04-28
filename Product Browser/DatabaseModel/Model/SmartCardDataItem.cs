@@ -39,7 +39,7 @@ namespace DatabaseModel.Model
         
         public virtual SmartCardDataItemData DataField { get; private set; }
         
-        public virtual SmartCard SmartCard { get; private set; }
+        public SmartCard SmartCard { get; private set; }
 
         /// <summary>
         /// Retrieves the document from the Data array as an image source which can be used directly in

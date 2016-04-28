@@ -22,7 +22,7 @@ namespace DatabaseModel
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<SmartCardDataItem>().HasOptional(e => e.DataField).WithOptionalDependent().WillCascadeOnDelete(true);
+            modelBuilder.Entity<SmartCardDataItem>().HasOptional(e => e.DataField).WithOptionalPrincipal().WillCascadeOnDelete(true);
 
             modelBuilder.Entity<SmartCard>().HasMany(e => e.DataItems).WithRequired(d => d.SmartCard).WillCascadeOnDelete(true);
         }
@@ -30,5 +30,7 @@ namespace DatabaseModel
         public virtual DbSet<SmartCard> SmartCards { get; set; }
 
         public virtual DbSet<SmartCardDataItem> SmartCardDataItems { get; set; }
+
+        public virtual DbSet<SmartCardDataItemData> SmartCardDataItemData { get; set; }
     }
 }

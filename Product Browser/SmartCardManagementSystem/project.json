@@ -39,6 +39,9 @@
             "DatabaseModel": "1.0.0-*"
         },
         "frameworkAssemblies": {
+            "System.Data": "4.0.0.0",
+            "System.Data.Entity": "4.0.0.0",
+            "System.Data.Linq": "4.0.0.0"
         }
     }
   },
