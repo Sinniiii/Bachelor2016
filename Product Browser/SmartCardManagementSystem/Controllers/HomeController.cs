@@ -59,6 +59,25 @@ namespace SmartCardManagementSystem.Controllers
             return RedirectToAction("Overview", new { tagID = tagID });
         }
 
+        //POST for deleting all dataitems on card
+        [HttpPost]
+        public IActionResult OverviewDeleteAllDataitems(int tagID)
+        {
+            System.Diagnostics.Debug.WriteLine("-------RUNNING POST - delete all dataitems----------");
+
+            ABBDataContext context = new ABBDataContext();
+            var cardToUpdate = context.SmartCards.First(a => a.TagId == tagID);
+            //var cardToUpdate = context.SmartCards.Include(s => s.DataItems.Select(d => d.DataField)).FirstOrDefault(a => a.TagId == tagID);
+            cardToUpdate.DataItems.Clear();
+
+            context.SaveChanges();
+
+            ViewData["tagID"] = tagID;
+            ViewData["activePanel"] = "paneltitle_" + tagID;
+
+            return RedirectToAction("Overview", new { tagID = tagID });
+        }
+
 
         [HttpPost]
         public IActionResult OverviewUploadDataitem(IFormFile uploadfile, int tagID)

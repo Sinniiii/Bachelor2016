@@ -126,7 +126,17 @@
                 {
                             @* Make a top-panel for the data-items section*@
                             <div class="panel panel-default">
-                                <div class="panel-heading" data-toggle="tooltip" title="List of all media files on this card">Media Content</div>
+                                <div class="panel-heading" data-toggle="tooltip" title="List of all media files on this card">
+                                Media Content
+                                    <span class="pull-right">
+                                        <form class="form-inline" role="form" method="post" action="OverviewDeleteAllDataitems">
+                                            <div class="form-group">
+                                                <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
+                                                <button type="submit" class="btn btn-sm btn-warning btn-sm glyphicon glyphicon-trash" data-toggle="tooltip" title="Delete ALL media items from card"></button>
+                                            </div>
+                                        </form>
+                                    </span>
+                                </div>
 
                                 @* List all dataitems in this Smartcard*@
                                 @for (int j = 0; j < Model[i - 1].DataItems.Count; j++)
