@@ -48,8 +48,6 @@ namespace Product_Browser.ScatterItems
 
         public void Run(Point tagPosition, double tagRotation, double yPullOffset, double pullRadius)
         {
-            if (Item is ImageScatterItem)
-                Console.WriteLine("y");
             Point circlePosition = GetConvertedPosition(tagPosition, new Point(0d, yPullOffset), tagRotation);
 
             double distance = (Item.Center - circlePosition).Length;

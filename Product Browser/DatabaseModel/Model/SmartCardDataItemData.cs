@@ -21,5 +21,7 @@ namespace DatabaseModel.Model
         {
             Data = data;
         }
+
+        private SmartCardDataItemData() { }
     }
 }

@@ -32,18 +32,16 @@ namespace Product_Browser.ScatterItems
 
         #endregion
 
-        protected override void OnPreviewMouseDown(MouseButtonEventArgs e)
+        protected override void OnMouseDown(MouseButtonEventArgs e)
         {
             if (!container.IsMouseOver) // Else we capture with imagecontainer
-                base.OnPreviewMouseDown(e);
-            else
-                e.Handled = true;
+                base.OnMouseDown(e);
         }
 
-        protected override void OnPreviewTouchDown(TouchEventArgs e)
+        protected override void OnTouchDown(TouchEventArgs e)
         {
             if (!container.TouchesOver.Contains(e.TouchDevice)) // Else we capture with imagecontainer
-                base.OnPreviewTouchDown(e);
+                base.OnTouchDown(e);
             else
                 e.Handled = true;
         }

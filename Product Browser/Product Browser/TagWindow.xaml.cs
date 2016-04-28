@@ -7,6 +7,7 @@ using Microsoft.Surface.Presentation.Controls;
 using DatabaseModel;
 using DatabaseModel.Model;
 using System.Data.Entity;
+using System.Linq;
 using Product_Browser.ScatterItems;
 using System.Collections.ObjectModel;
 using System.Windows.Threading;
@@ -22,8 +23,8 @@ namespace Product_Browser
         const double
             CIRCLE_Y_OFFSET = -50d,
             CIRCLE_SIZE = 150d,
-            SCATTERITEM_STARTING_WIDTH = 100d,
-            SCATTERITEM_STARTING_HEIGHT = 200d;
+            SCATTERITEM_STARTING_WIDTH = 200d,
+            SCATTERITEM_STARTING_HEIGHT = 100d;
         
         #region PropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
@@ -239,9 +240,19 @@ namespace Product_Browser
                 double posYOffset = Math.Sin(positionRadians) * CIRCLE_SIZE + CIRCLE_Y_OFFSET;
 
                 items[i].OriginalPositionOffset = new Point(posXOffset, posYOffset);
-                items[i].OriginalOrientationOffset = positionRadians * 57.295d; // Convert to degrees
-                items[i].OriginalWidth = SCATTERITEM_STARTING_WIDTH;
-                items[i].OriginalHeight = SCATTERITEM_STARTING_HEIGHT;
+                
+                // Documents look better with reverse size, due to vertical rather than horizontal nature
+                if (items[i].Item is DocumentScatterItem)
+                {
+                    items[i].OriginalOrientationOffset = (positionRadians) * 57.295d; // Convert to degrees
+                    items[i].OriginalWidth = SCATTERITEM_STARTING_HEIGHT;
+                    items[i].OriginalHeight = SCATTERITEM_STARTING_WIDTH;
+                }
+                else {
+                    items[i].OriginalOrientationOffset = (positionRadians - Math.PI / 2d) * 57.295d; // Convert to degrees
+                    items[i].OriginalWidth = SCATTERITEM_STARTING_WIDTH;
+                    items[i].OriginalHeight = SCATTERITEM_STARTING_HEIGHT;
+                }
             }
         }
 
@@ -249,11 +260,13 @@ namespace Product_Browser
         {
             ABBDataContext context = new ABBDataContext();
             
-            smartCard = await context.SmartCards.FirstOrDefaultAsync(a => a.TagId == VisualizedTag.Value);
+            smartCard = await context.SmartCards
+                .Include(s => s.DataItems.Select(d => d.DataField))
+                .FirstOrDefaultAsync(a => a.TagId == VisualizedTag.Value);
             
             List<SmartCardDataItem> dataItems = null;
 
-            if (smartCard == null || (dataItems = smartCard.DataItems) == null || dataItems.Count == 0)
+            if (smartCard == null || (dataItems = smartCard.DataItems.ToList()) == null || dataItems.Count == 0)
             {
                 NotFoundSmartCard = true;
                 return;
@@ -264,7 +277,7 @@ namespace Product_Browser
             List<ScatterViewItem> scatterItems = new List<ScatterViewItem>();
 
             // Place all images inside one scatter item
-            dataItems = smartCard.DataItems.FindAll(a => a.Category == SmartCardDataItemCategory.Image);
+            dataItems = smartCard.DataItems.Where(a => a.Category == SmartCardDataItemCategory.Image).ToList();
             if(dataItems.Count != 0)
             {
                 ScatterViewItem item = new ImageScatterItem(dataItems);
@@ -272,7 +285,7 @@ namespace Product_Browser
             }
 
             // One scatter item each for everything else
-            dataItems = smartCard.DataItems.FindAll(a => a.Category != SmartCardDataItemCategory.Image);
+            dataItems = smartCard.DataItems.Where(a => a.Category != SmartCardDataItemCategory.Image).ToList();
             for (int i = 0; i < dataItems.Count; i++)
             {
                 ScatterViewItem item = null;

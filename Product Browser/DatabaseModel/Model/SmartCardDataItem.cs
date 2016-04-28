@@ -49,7 +49,7 @@ namespace DatabaseModel.Model
         /// <returns></returns>
         public BitmapImage GetImageSource()
         {
-            if (Category != SmartCardDataItemCategory.Image || DataField == null && DataField.Data.Length == 0)
+            if (Category != SmartCardDataItemCategory.Image || DataField == null || DataField.Data.Length == 0)
                 return null;
 
             BitmapImage image = new BitmapImage();
@@ -60,7 +60,6 @@ namespace DatabaseModel.Model
                 image.BeginInit();
                 image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
                 image.CacheOption = BitmapCacheOption.OnLoad;
-                image.Rotation = Rotation.Rotate90;
                 image.UriSource = null;
                 image.StreamSource = mem;
                 image.EndInit();
@@ -83,7 +82,7 @@ namespace DatabaseModel.Model
         /// <returns></returns>
         public Uri GetVideo()
         {
-            if (Category != SmartCardDataItemCategory.Video || DataField == null || DataField.Data.Length == 0)
+            if (Category != SmartCardDataItemCategory.Video)
                 return null;
 
             string path = VIDEO_FOLDER + SmartCard.TagId + @"\" + Name;

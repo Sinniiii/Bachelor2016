@@ -34,7 +34,7 @@ namespace SmartCardManagementSystem.Controllers
             {
                 System.IO.File.Delete(SmartCardDataItem.VIDEO_FOLDER + tagID + @"\" + dataItemToRemove.Name);
             }
-
+            
             ViewData["tagID"] = tagID;
             ViewData["activePanel"] = "paneltitle_" + tagID;
 

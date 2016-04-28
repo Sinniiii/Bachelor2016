@@ -13,7 +13,7 @@ namespace DatabaseModel
         public ABBDataContext()
             : base("name=ABBDataContext")
         {
-            Database.SetInitializer(new DevelopmentInitializer()); // This is only while developing, it drops database and reseeds it
+            //Database.SetInitializer(new DevelopmentInitializer()); // This is only while developing, it drops database and reseeds it
 
             Configuration.LazyLoadingEnabled = true;
         }

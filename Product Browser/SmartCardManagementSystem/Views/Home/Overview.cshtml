@@ -137,12 +137,12 @@
 
                                                 <button type="submit" class="btn btn-danger btn-xs glyphicon glyphicon-remove" data-toggle="tooltip" title="Delete this mediafile"></button>
                                                 <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
-                                                <input type="hidden" class="form-control" id="dataItemID" name="dataItemID" value="@Model[i - 1].DataItems[j].Id">
+                                                <input type="hidden" class="form-control" id="dataItemID" name="dataItemID" value="@Model[i - 1].DataItems.ElementAt(j).Id">
                                                 &emsp;&emsp;
                                                 <label for="mediaType">
-                                                    <span data-toggle="tooltip" title="Media type">@Model[i - 1].DataItems[j].Category</span>
+                                                    <span data-toggle="tooltip" title="Media type">@Model[i - 1].DataItems.ElementAt(j).Category</span>
                                                     &emsp; &emsp;
-                                                    <span data-toggle="tooltip" title="Filename">@Model[i - 1].DataItems[j].Name</span>
+                                                    <span data-toggle="tooltip" title="Filename">@Model[i - 1].DataItems.ElementAt(j).Name</span>
                                                 </label>
 
                                             </div>
