@@ -39,6 +39,7 @@ namespace DatabaseModel.Model
         
         public virtual SmartCardDataItemData DataField { get; private set; }
 
+        [Required]
         public virtual SmartCard SmartCard { get; private set; }
 
         /// <summary>
