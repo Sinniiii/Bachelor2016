@@ -13,9 +13,18 @@ namespace DatabaseModel
         public ABBDataContext()
             : base("name=ABBDataContext")
         {
-            //Database.SetInitializer(new DevelopmentInitializer()); // This is only while developing, it drops database and reseeds it
+            Database.SetInitializer(new DevelopmentInitializer()); // This is only while developing, it drops database and reseeds it
 
             Configuration.LazyLoadingEnabled = true;
+        }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<SmartCardDataItem>().HasOptional(e => e.DataField).WithOptionalDependent().WillCascadeOnDelete(true);
+
+            modelBuilder.Entity<SmartCard>().HasMany(e => e.DataItems).WithRequired(d => d.SmartCard).WillCascadeOnDelete(true);
         }
 
         public virtual DbSet<SmartCard> SmartCards { get; set; }

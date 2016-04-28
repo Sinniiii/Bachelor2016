@@ -13,9 +13,6 @@ namespace DatabaseModel.Model
 
         public byte[] Data { get; private set; }
 
-        [Required]
-        public SmartCardDataItem SmartCardDataItem {get; private set;}
-
         public void SetData(byte[] data)
         {
             Data = data;
