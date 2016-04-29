@@ -263,7 +263,6 @@ namespace SmartCardManagementSystem.Controllers
                 || extension == "jpg"
                 || extension == "tiff"
                 || extension == "ico"
-                || extension == "wmf"
                 )
                 {
                 var readstream = uploadfile.OpenReadStream();
