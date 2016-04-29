@@ -30,7 +30,7 @@
 
     <script>
 
-        var activetagID = 0;
+        var activetagID = null;
 
         Dropzone.options.mydropzone = {
             maxFilesize: 500,
@@ -42,7 +42,7 @@
                         window.location.href = 'Overview?tagID='+activetagID;
                     }
                     else {
-                        location.reload
+                        location.reload(true);
                     }
                     
                 });
