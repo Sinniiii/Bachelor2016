@@ -105,6 +105,7 @@ namespace SmartCardManagementSystem.Controllers
                 item1 = new SmartCardDataItem(fileName, SmartCardDataItemCategory.Document, bytes);
             }
 <<<<<<< HEAD
+<<<<<<< HEAD
             //3gp 3g2 asx avi mp4 mpeg avi mov uvu tts wtv dvr-ms wm wmv wmx 
             else if (extension == "3gp"
                 || extension == "3g2"
@@ -121,6 +122,9 @@ namespace SmartCardManagementSystem.Controllers
 =======
             else if (extension == "mp4")
 >>>>>>> parent of 89e7041... support for more filetypes in upload
+=======
+            else if (extension == "mp4")
+>>>>>>> parent of 89e7041... support for more filetypes in upload
             {
                 System.Diagnostics.Debug.WriteLine("-------Creating video category----------");
 
@@ -129,6 +133,7 @@ namespace SmartCardManagementSystem.Controllers
 
                 uploadfile.SaveAs(SmartCardDataItem.VIDEO_FOLDER + tagID + @"\" + fileName);
             }
+<<<<<<< HEAD
 <<<<<<< HEAD
             //bmp gif png jpg svg tiff dds wdp emf ico wmf
             else if (extension == "bmp"
@@ -140,6 +145,9 @@ namespace SmartCardManagementSystem.Controllers
                 || extension == "ico"
                 || extension == "wmf"
                 )
+=======
+            else
+>>>>>>> parent of 89e7041... support for more filetypes in upload
 =======
             else
 >>>>>>> parent of 89e7041... support for more filetypes in upload
