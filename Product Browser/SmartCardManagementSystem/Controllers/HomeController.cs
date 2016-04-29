@@ -91,107 +91,107 @@ namespace SmartCardManagementSystem.Controllers
         }
 
 
-        [HttpPost]
-        public IActionResult OverviewUploadDataitem(IFormFile uploadfile, int tagID)
-        {
+        //[HttpPost]
+        //public IActionResult OverviewUploadDataitem(IFormFile uploadfile, int tagID)
+        //{
 
-            System.Diagnostics.Debug.WriteLine("-------RUNNING UPLOAD----------");
+        //    System.Diagnostics.Debug.WriteLine("-------RUNNING UPLOAD----------");
 
             
             
 
-            var fileName = ContentDispositionHeaderValue.Parse(uploadfile.ContentDisposition).FileName.Trim('"');
-            int lastPeriod = fileName.LastIndexOf('.');
-            string extension = fileName.Substring(lastPeriod + 1);
-            //var extension = fileName.Substring(Math.Max(0, fileName.Length - 3));
+        //    var fileName = ContentDispositionHeaderValue.Parse(uploadfile.ContentDisposition).FileName.Trim('"');
+        //    int lastPeriod = fileName.LastIndexOf('.');
+        //    string extension = fileName.Substring(lastPeriod + 1);
+        //    //var extension = fileName.Substring(Math.Max(0, fileName.Length - 3));
             
-            System.Diagnostics.Debug.WriteLine("-------Extension was----------");
-            System.Diagnostics.Debug.WriteLine(extension);
+        //    System.Diagnostics.Debug.WriteLine("-------Extension was----------");
+        //    System.Diagnostics.Debug.WriteLine(extension);
 
-            SmartCardDataItem item1;
+        //    SmartCardDataItem item1;
 
-            //TODO PROPER INPUT CONTROL
-            //Create new dataitem
-            if (extension == "pdf")
-            {
-                var readstream = uploadfile.OpenReadStream();
-                byte[] bytes = new byte[readstream.Length];  //declare arraysize
-                readstream.Read(bytes, 0, bytes.Length); // read from stream to byte array
+        //    //TODO PROPER INPUT CONTROL
+        //    //Create new dataitem
+        //    if (extension == "pdf")
+        //    {
+        //        var readstream = uploadfile.OpenReadStream();
+        //        byte[] bytes = new byte[readstream.Length];  //declare arraysize
+        //        readstream.Read(bytes, 0, bytes.Length); // read from stream to byte array
 
-                System.Diagnostics.Debug.WriteLine("-------Creating document category----------");
-                item1 = new SmartCardDataItem(fileName, SmartCardDataItemCategory.Document, bytes);
+        //        System.Diagnostics.Debug.WriteLine("-------Creating document category----------");
+        //        item1 = new SmartCardDataItem(fileName, SmartCardDataItemCategory.Document, bytes);
 
-                //Add to smartcard based on tagID
-                ABBDataContext context = new ABBDataContext();
-                var cardToUpdate = context.SmartCards.First(a => a.TagId == tagID);
-                cardToUpdate.DataItems.Add(item1);
+        //        //Add to smartcard based on tagID
+        //        ABBDataContext context = new ABBDataContext();
+        //        var cardToUpdate = context.SmartCards.First(a => a.TagId == tagID);
+        //        cardToUpdate.DataItems.Add(item1);
 
-                context.SaveChanges();
-            }
-            //3gp 3g2 asx avi mp4 mpeg avi mov uvu tts wtv dvr-ms wm wmv wmx 
-            else if (extension == "3gp"
-                || extension == "3g2"
-                || extension == "avi"
-                || extension == "mp4"
-                || extension == "mpeg"
-                || extension == "mpg"
-                || extension == "avi"
-                || extension == "mov"
-                || extension == "wm"
-                || extension == "wmv"
-                || extension == "wmx"
-                )
-            {
-                System.Diagnostics.Debug.WriteLine("-------Creating video category----------");
+        //        context.SaveChanges();
+        //    }
+        //    //3gp 3g2 asx avi mp4 mpeg avi mov uvu tts wtv dvr-ms wm wmv wmx 
+        //    else if (extension == "3gp"
+        //        || extension == "3g2"
+        //        || extension == "avi"
+        //        || extension == "mp4"
+        //        || extension == "mpeg"
+        //        || extension == "mpg"
+        //        || extension == "avi"
+        //        || extension == "mov"
+        //        || extension == "wm"
+        //        || extension == "wmv"
+        //        || extension == "wmx"
+        //        )
+        //    {
+        //        System.Diagnostics.Debug.WriteLine("-------Creating video category----------");
 
-                // Special stuff for making video items
-                item1 = new SmartCardDataItem(fileName);
+        //        // Special stuff for making video items
+        //        item1 = new SmartCardDataItem(fileName);
 
-                //Add to smartcard based on tagID
-                ABBDataContext context = new ABBDataContext();
-                var cardToUpdate = context.SmartCards.First(a => a.TagId == tagID);
-                cardToUpdate.DataItems.Add(item1);
+        //        //Add to smartcard based on tagID
+        //        ABBDataContext context = new ABBDataContext();
+        //        var cardToUpdate = context.SmartCards.First(a => a.TagId == tagID);
+        //        cardToUpdate.DataItems.Add(item1);
 
-                context.SaveChanges();
+        //        context.SaveChanges();
 
-                uploadfile.SaveAs(SmartCardDataItem.VIDEO_FOLDER + tagID + @"\" + fileName);
-            }
-            //bmp gif png jpg svg tiff dds wdp emf ico wmf
-            else if (extension == "bmp"
-                || extension == "gif"
-                || extension == "png"
-                || extension == "jpg"
-                || extension == "svg"
-                || extension == "tiff"
-                || extension == "ico"
-                || extension == "wmf"
-                )
-            {
-                var readstream = uploadfile.OpenReadStream();
-                byte[] bytes = new byte[readstream.Length];  //declare arraysize
-                readstream.Read(bytes, 0, bytes.Length); // read from stream to byte array
+        //        uploadfile.SaveAs(SmartCardDataItem.VIDEO_FOLDER + tagID + @"\" + fileName);
+        //    }
+        //    //bmp gif png jpg svg tiff dds wdp emf ico wmf
+        //    else if (extension == "bmp"
+        //        || extension == "gif"
+        //        || extension == "png"
+        //        || extension == "jpg"
+        //        || extension == "svg"
+        //        || extension == "tiff"
+        //        || extension == "ico"
+        //        || extension == "wmf"
+        //        )
+        //    {
+        //        var readstream = uploadfile.OpenReadStream();
+        //        byte[] bytes = new byte[readstream.Length];  //declare arraysize
+        //        readstream.Read(bytes, 0, bytes.Length); // read from stream to byte array
 
-                System.Diagnostics.Debug.WriteLine("-------Creating image category----------");
-                item1 = new SmartCardDataItem(fileName, SmartCardDataItemCategory.Image, bytes);
+        //        System.Diagnostics.Debug.WriteLine("-------Creating image category----------");
+        //        item1 = new SmartCardDataItem(fileName, SmartCardDataItemCategory.Image, bytes);
 
-                //Add to smartcard based on tagID
-                ABBDataContext context = new ABBDataContext();
-                var cardToUpdate = context.SmartCards.First(a => a.TagId == tagID);
-                cardToUpdate.DataItems.Add(item1);
+        //        //Add to smartcard based on tagID
+        //        ABBDataContext context = new ABBDataContext();
+        //        var cardToUpdate = context.SmartCards.First(a => a.TagId == tagID);
+        //        cardToUpdate.DataItems.Add(item1);
 
-                context.SaveChanges();
-            }
-            else
-            {
-                System.Diagnostics.Debug.WriteLine("-------INVALID FILE TYPE, DO NOTHING----------");
-            }
+        //        context.SaveChanges();
+        //    }
+        //    else
+        //    {
+        //        System.Diagnostics.Debug.WriteLine("-------INVALID FILE TYPE, DO NOTHING----------");
+        //    }
 
-            ViewData["tagID"] = tagID;
-            ViewData["activePanel"] = "paneltitle_" + tagID;
+        //    ViewData["tagID"] = tagID;
+        //    ViewData["activePanel"] = "paneltitle_" + tagID;
 
-            return RedirectToAction("Overview", new { tagID = tagID });
+        //    return RedirectToAction("Overview", new { tagID = tagID });
 
-        }
+        //}
 
         [HttpPost]
         public IActionResult OverviewUploadDataitemDZ(ICollection<IFormFile> files, int tagID)
@@ -261,7 +261,6 @@ namespace SmartCardManagementSystem.Controllers
                 || extension == "gif"
                 || extension == "png"
                 || extension == "jpg"
-                || extension == "svg"
                 || extension == "tiff"
                 || extension == "ico"
                 || extension == "wmf"
