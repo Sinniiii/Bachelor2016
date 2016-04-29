@@ -54,21 +54,24 @@ namespace DatabaseModel.Model
 
             BitmapImage image = new BitmapImage();
 
-            using (var mem = new MemoryStream(DataField.Data))
-            {
-                mem.Position = 0;
-                image.BeginInit();
-                image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
-                image.CacheOption = BitmapCacheOption.OnLoad;
-                image.UriSource = null;
-                image.StreamSource = mem;
-                image.EndInit();
+            try {
+                using (var mem = new MemoryStream(DataField.Data))
+                {
+                    mem.Position = 0;
+                    image.BeginInit();
+                    image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
+                    image.CacheOption = BitmapCacheOption.OnLoad;
+                    image.UriSource = null;
+                    image.StreamSource = mem;
+                    image.EndInit();
+                }
             }
+            catch(Exception e)
+            {
+                Console.WriteLine(e);
 
-            // Rotate the image if necessary
-            //if (image.Width < image.Height)
-                
-
+                return null;
+            }
 
             image.Freeze();
 
