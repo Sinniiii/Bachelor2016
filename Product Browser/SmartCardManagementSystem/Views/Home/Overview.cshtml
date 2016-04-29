@@ -23,7 +23,7 @@
         }
 </style>
 
-<body onload="myFunction()">
+<body onload="scrollToActivePanel()">
 
     <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
     <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
@@ -35,7 +35,7 @@
             init: function() {
                 this.on("queuecomplete", function(file) {
                     @*alert("Added file.");*@
-                    location.reload();
+                    window.location.href = 'Overview?tagID='+activetagID;
                 });
             }
         };
@@ -50,7 +50,7 @@
 
 
     <script>
-        function myFunction() {
+        function scrollToActivePanel() {
 
             @*alert("@ViewData["activepanel"]");*@
             var el = document.getElementById('@ViewData["activepanel"]');
@@ -60,6 +60,10 @@
             @*$('html, body').animate({
                 scrollTop: $("#@ViewData["activepanel"]").offset().top
             }, 500);*@
+        }
+
+        function setactivetagID(newactivetagID) {
+            activetagID = newactivetagID;
         }
     </script>
 
@@ -94,7 +98,7 @@
         @* Smart-card panels - one pr card*@
         @for (int i = 1; i <= @Model.Count; i++)
         {
-            <div class="@(@Model[i - 1].DataItems.Count > 0 ? "panel panel-success" : "panel panel-default")">
+            <div onclick="setactivetagID(@( (int) Model[i - 1].TagId) )" class="@(@Model[i - 1].DataItems.Count > 0 ? "panel panel-success" : "panel panel-default")">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <span data-toggle="collapse" data-parent="#accordion" id="paneltitle_@i" href="#collapse_@i">

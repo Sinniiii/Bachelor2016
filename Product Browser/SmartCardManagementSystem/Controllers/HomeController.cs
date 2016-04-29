@@ -220,8 +220,26 @@ namespace SmartCardManagementSystem.Controllers
 
                 System.Diagnostics.Debug.WriteLine("-------Creating document category----------");
                 item1 = new SmartCardDataItem(fileName, SmartCardDataItemCategory.Document, bytes);
+
+                ABBDataContext context = new ABBDataContext();
+                var cardToUpdate = context.SmartCards.First(a => a.TagId == tagID);
+                cardToUpdate.DataItems.Add(item1);
+
+                context.SaveChanges();
             }
-            else if (extension == "mp4")
+            //3gp 3g2 asx avi mp4 mpeg avi mov uvu tts wtv dvr-ms wm wmv wmx 
+            else if (extension == "3gp"
+                || extension == "3g2"
+                || extension == "avi"
+                || extension == "mp4"
+                || extension == "mpeg"
+                || extension == "mpg"
+                || extension == "avi"
+                || extension == "mov"
+                || extension == "wm"
+                || extension == "wmv"
+                || extension == "wmx"
+                )
             {
                 System.Diagnostics.Debug.WriteLine("-------Creating video category----------");
 
@@ -230,22 +248,36 @@ namespace SmartCardManagementSystem.Controllers
 
                 System.IO.Directory.CreateDirectory(SmartCardDataItem.VIDEO_FOLDER + tagID);
                 uploadfile.SaveAs(SmartCardDataItem.VIDEO_FOLDER + tagID + @"\" + fileName);
+
+                ABBDataContext context = new ABBDataContext();
+                var cardToUpdate = context.SmartCards.First(a => a.TagId == tagID);
+                cardToUpdate.DataItems.Add(item1);
+
+                context.SaveChanges();
             }
-            else
-            {
+            else if (extension == "bmp"
+                || extension == "gif"
+                || extension == "png"
+                || extension == "jpg"
+                || extension == "svg"
+                || extension == "tiff"
+                || extension == "ico"
+                || extension == "wmf"
+                )
+                {
                 var readstream = uploadfile.OpenReadStream();
                 byte[] bytes = new byte[readstream.Length];  //declare arraysize
                 readstream.Read(bytes, 0, bytes.Length); // read from stream to byte array
 
                 System.Diagnostics.Debug.WriteLine("-------Creating image category----------");
                 item1 = new SmartCardDataItem(fileName, SmartCardDataItemCategory.Image, bytes);
+
+                ABBDataContext context = new ABBDataContext();
+                var cardToUpdate = context.SmartCards.First(a => a.TagId == tagID);
+                cardToUpdate.DataItems.Add(item1);
+
+                context.SaveChanges();
             }
-
-            ABBDataContext context = new ABBDataContext();
-            var cardToUpdate = context.SmartCards.First(a => a.TagId == tagID);
-            cardToUpdate.DataItems.Add(item1);
-
-            context.SaveChanges();
 
             ViewData["tagID"] = tagID;
             ViewData["activePanel"] = "paneltitle_" + tagID;
