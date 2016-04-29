@@ -33,7 +33,7 @@ namespace SmartCardManagementSystem.Controllers
             context.SmartCardDataItems.Remove(dataItemToRemove);
             context.SaveChanges();
 
-            if(dataItemToRemove.Category == SmartCardDataItemCategory.Video)
+            if(dataItemToRemove.Category == SmartCardDataItemCategory.Video && System.IO.File.Exists(SmartCardDataItem.VIDEO_FOLDER + tagID + @"\" + dataItemToRemove.Name) )
             {
                 System.IO.File.Delete(SmartCardDataItem.VIDEO_FOLDER + tagID + @"\" + dataItemToRemove.Name);
             }
@@ -78,7 +78,7 @@ namespace SmartCardManagementSystem.Controllers
             foreach (var v in list)
             {
                 context.Entry(v).Reference(a => a.DataField).Load();
-                if (v.Category == SmartCardDataItemCategory.Video)
+                if (v.Category == SmartCardDataItemCategory.Video && System.IO.File.Exists(SmartCardDataItem.VIDEO_FOLDER + tagID + @"\" + v.Name) )
                 {
                     System.IO.File.Delete(SmartCardDataItem.VIDEO_FOLDER + tagID + @"\" + v.Name);
                 }
