@@ -46,8 +46,6 @@ namespace Product_Browser.ScatterItems
 
         #region Fields
 
-        DisplayState displayState = DisplayState.Horizontal;
-
         List<BitmapSource> images;
 
         /// <summary>
@@ -242,7 +240,7 @@ namespace Product_Browser.ScatterItems
             {
                 Image child = new Image();
                 child.Source = s;
-                child.Stretch = Stretch.Uniform;
+                child.Stretch = Stretch.UniformToFill;
                 child.HorizontalAlignment = HorizontalAlignment.Stretch;
                 child.VerticalAlignment = VerticalAlignment.Stretch;
                 stackPanel.Children.Add(child);
@@ -256,9 +254,11 @@ namespace Product_Browser.ScatterItems
 
         #endregion
 
-        public ImageContainer()
+        public ImageContainer(Orientation alignment)
         {
             InitializeComponent();
+
+            stackPanel.Orientation = alignment;
 
             scrollTimer = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);
             scrollTimer.Interval = new TimeSpan(0, 0, 0, 0, 20);
