@@ -19,6 +19,12 @@ using Microsoft.Surface.Presentation.Controls;
 
 namespace Product_Browser.ScatterItems
 {
+    public enum DisplayState
+    {
+        Horizontal,
+        Vertical
+    }
+
     /// <summary>
     /// Interaction logic for ImageContainer.xaml
     /// </summary>
@@ -39,6 +45,8 @@ namespace Product_Browser.ScatterItems
         #endregion
 
         #region Fields
+
+        DisplayState displayState = DisplayState.Horizontal;
 
         List<BitmapSource> images;
 
