@@ -78,8 +78,12 @@ namespace SmartCardManagementSystem.Controllers
             foreach (var v in list)
             {
                 context.Entry(v).Reference(a => a.DataField).Load();
+                if (v.Category == SmartCardDataItemCategory.Video)
+                {
+                    System.IO.File.Delete(SmartCardDataItem.VIDEO_FOLDER + tagID + @"\" + v.Name);
+                }
             }
-                
+
             context.SmartCardDataItems.RemoveRange(list);
 
             context.SaveChanges();
@@ -286,26 +290,6 @@ namespace SmartCardManagementSystem.Controllers
             return new EmptyResult();
 
         }
-
-        ////General Overview GET
-        //[HttpGet]
-        //public IActionResult Overview()
-        //{
-        //    System.Diagnostics.Debug.WriteLine("-------RUNNING GET----------");
-
-        //    ABBDataContext context = new ABBDataContext();
-        //    var smartcardList = context.SmartCards.OrderBy(a => a.TagId).ToList();
-        //    var x = context.SmartCardDataItems;
-
-        //    //var firstname = smartcardList[0].Name;
-
-        //    //ViewData["SmartcardList"] = smartcardList.Count;
-
-        //    ViewData["tagID"] = -1;
-        //    ViewData["activePanel"] = "paneltitle_" + -1;
-
-        //    return View(smartcardList);
-        //}
 
         //General Overview GET, with tagID
         [HttpGet]
