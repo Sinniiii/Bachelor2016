@@ -27,6 +27,7 @@ namespace SmartCardManagementSystem.Controllers
 
             ABBDataContext context = new ABBDataContext();
             var dataItemToRemove = context.SmartCardDataItems.First(a => a.Id == dataItemID);
+            context.Entry(dataItemToRemove).Reference(a => a.DataField).Load();
             context.SmartCardDataItems.Remove(dataItemToRemove);
             context.SaveChanges();
 
@@ -66,9 +67,18 @@ namespace SmartCardManagementSystem.Controllers
             System.Diagnostics.Debug.WriteLine("-------RUNNING POST - delete all dataitems----------");
 
             ABBDataContext context = new ABBDataContext();
-            var cardToUpdate = context.SmartCards.First(a => a.TagId == tagID);
+            //var cardToUpdate = context.SmartCards.First(a => a.TagId == tagID);
             //var cardToUpdate = context.SmartCards.Include(s => s.DataItems.Select(d => d.DataField)).FirstOrDefault(a => a.TagId == tagID);
-            cardToUpdate.DataItems.Clear();
+            //cardToUpdate.DataItems.Clear();
+
+            var list = context.SmartCardDataItems.Where(a => a.SmartCard.TagId == tagID);
+
+            foreach (var v in list)
+            {
+                context.Entry(v).Reference(a => a.DataField).Load();
+            }
+                
+            context.SmartCardDataItems.RemoveRange(list);
 
             context.SaveChanges();
 
@@ -85,8 +95,13 @@ namespace SmartCardManagementSystem.Controllers
 
             System.Diagnostics.Debug.WriteLine("-------RUNNING UPLOAD----------");
 
+            
+            
+
             var fileName = ContentDispositionHeaderValue.Parse(uploadfile.ContentDisposition).FileName.Trim('"');
-            var extension = fileName.Substring(Math.Max(0, fileName.Length - 3));
+            int lastPeriod = fileName.LastIndexOf('.');
+            string extension = fileName.Substring(lastPeriod + 1);
+            //var extension = fileName.Substring(Math.Max(0, fileName.Length - 3));
             
             System.Diagnostics.Debug.WriteLine("-------Extension was----------");
             System.Diagnostics.Debug.WriteLine(extension);
@@ -103,17 +118,59 @@ namespace SmartCardManagementSystem.Controllers
 
                 System.Diagnostics.Debug.WriteLine("-------Creating document category----------");
                 item1 = new SmartCardDataItem(fileName, SmartCardDataItemCategory.Document, bytes);
+
+                //Add to smartcard based on tagID
+                ABBDataContext context = new ABBDataContext();
+                var cardToUpdate = context.SmartCards.First(a => a.TagId == tagID);
+                cardToUpdate.DataItems.Add(item1);
+
+                context.SaveChanges();
             }
-            else if (extension == "mp4")
+            //3gp 3g2 asx avi mp4 mpeg avi mov uvu tts wtv dvr-ms wm wmv wmx 
+            else if (extension == "3gp"
+                || extension == "3g2"
+                || extension == "asx"
+                || extension == "avi"
+                || extension == "mp4"
+                || extension == "mpeg"
+                || extension == "avi"
+                || extension == "mov"
+                || extension == "uvu"
+                || extension == "tts"
+                || extension == "wtv"
+                || extension == "dvr-ms"
+                || extension == "wm"
+                || extension == "wmv"
+                || extension == "wmx"
+                )
             {
                 System.Diagnostics.Debug.WriteLine("-------Creating video category----------");
 
                 // Special stuff for making video items
                 item1 = new SmartCardDataItem(fileName);
 
+                //Add to smartcard based on tagID
+                ABBDataContext context = new ABBDataContext();
+                var cardToUpdate = context.SmartCards.First(a => a.TagId == tagID);
+                cardToUpdate.DataItems.Add(item1);
+
+                context.SaveChanges();
+
                 uploadfile.SaveAs(SmartCardDataItem.VIDEO_FOLDER + tagID + @"\" + fileName);
             }
-            else
+            //bmp gif png jpg svg tiff dds wdp emf ico wmf
+            else if (extension == "bmp"
+                || extension == "gif"
+                || extension == "png"
+                || extension == "jpg"
+                || extension == "svg"
+                || extension == "tiff"
+                || extension == "dds"
+                || extension == "wdp"
+                || extension == "emf"
+                || extension == "ico"
+                || extension == "wmf"
+                )
             {
                 var readstream = uploadfile.OpenReadStream();
                 byte[] bytes = new byte[readstream.Length];  //declare arraysize
@@ -121,15 +178,18 @@ namespace SmartCardManagementSystem.Controllers
 
                 System.Diagnostics.Debug.WriteLine("-------Creating image category----------");
                 item1 = new SmartCardDataItem(fileName, SmartCardDataItemCategory.Image, bytes);
+
+                //Add to smartcard based on tagID
+                ABBDataContext context = new ABBDataContext();
+                var cardToUpdate = context.SmartCards.First(a => a.TagId == tagID);
+                cardToUpdate.DataItems.Add(item1);
+
+                context.SaveChanges();
             }
-
-            //Add to smartcard based on tagID
-
-            ABBDataContext context = new ABBDataContext();
-            var cardToUpdate = context.SmartCards.First(a => a.TagId == tagID);
-            cardToUpdate.DataItems.Add(item1);
-
-            context.SaveChanges();
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("-------INVALID FILE TYPE, DO NOTHING----------");
+            }
 
             ViewData["tagID"] = tagID;
             ViewData["activePanel"] = "paneltitle_" + tagID;
