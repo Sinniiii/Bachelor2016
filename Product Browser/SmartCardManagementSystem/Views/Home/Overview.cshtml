@@ -35,7 +35,13 @@
             init: function() {
                 this.on("queuecomplete", function(file) {
                     @*alert("Added file.");*@
-                    window.location.href = 'Overview?tagID='+activetagID;
+                    if (activetagID != null) {
+                        window.location.href = 'Overview?tagID='+activetagID;
+                    }
+                    else {
+                        location.reload
+                    }
+                    
                 });
             }
         };
