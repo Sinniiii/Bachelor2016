@@ -12,6 +12,7 @@ using Product_Browser.ScatterItems;
 using System.Collections.ObjectModel;
 using System.Windows.Threading;
 using Microsoft.Surface.Core;
+using System.Windows.Data;
 
 namespace Product_Browser
 {
@@ -139,10 +140,18 @@ namespace Product_Browser
         {
             base.OnMoved(args);
 
-            foreach (ScatterItemPhysics item in physicsItemsInactive)
-            {
-                item.ResetToDefault(Center, Orientation);
-            }
+            // Add all inactive to active
+            physicsItemsActive.AddRange(physicsItemsInactive);
+
+            // Clear inactive
+            physicsItemsInactive.Clear();
+
+            // Calculate new positions for all of them
+            CalculateNewPositions(physicsItemsActive);
+
+            // Start timer if not running
+            if (!physicsTimer.IsEnabled)
+                physicsTimer.Start();
         }
 
         private void ScatterViewItemMovedHandler(object sender, EventArgs args)
@@ -343,10 +352,15 @@ namespace Product_Browser
                 scatterItems[i].PreviewTouchDown += ScatterViewItemMovedHandler;
                 scatterItems[i].PreviewMouseDown += ScatterViewItemMovedHandler;
 
+                // Bind the scatterviewitem opacity to our parent's opacity, so that we can fade out along with it
+                Binding opacityBinding = new Binding("Opacity");
+                opacityBinding.Source = this.Parent;
+                scatterItems[i].SetBinding(ScatterViewItem.OpacityProperty, opacityBinding);
+                
                 physics.PositionLocked += ScatterViewItemLockedHandler;
                 physics.HighPriority += ScatterViewItemHighPriorityHandler;
                 physics.LowPriority += ScatterViewItemLowPriorityHandler;
-
+                
                 scatterItems[i].Center = this.Center;
                 scatterItems[i].Orientation = this.Orientation;
 
@@ -390,6 +404,7 @@ namespace Product_Browser
             physicsTimerLowPriority = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);
             physicsTimerLowPriority.Interval = new TimeSpan(0, 0, 0, 0, 200);
             physicsTimerLowPriority.Tick += PhysicsLowPriorityEventHandler;
+            
         }
     }
 }

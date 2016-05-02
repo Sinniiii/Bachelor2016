@@ -3,10 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:s="http://schemas.microsoft.com/surface/2008"
         xmlns:local="clr-namespace:Product_Browser"
-        Title="Product Browser" Height="700" Width="1200">
+        Title="Product Browser" Width="1200" Height="700">
     <Grid>
-        <s:TagVisualizer Name="tagVisualizer" HorizontalAlignment="Left" VerticalAlignment="Top" Width="1200" Height="700"/>
-        <s:ScatterView Name="scatterView" HorizontalAlignment="Left" VerticalAlignment="Top" Width="1200" Height="700"/>
+        <s:TagVisualizer Name="tagVisualizer" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" Height="Auto"/>
+        <s:ScatterView Name="scatterView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" Height="Auto"/>
 
     </Grid>
 </s:SurfaceWindow>
