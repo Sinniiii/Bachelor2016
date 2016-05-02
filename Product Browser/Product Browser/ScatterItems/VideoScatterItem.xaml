@@ -7,29 +7,31 @@
              xmlns:local="clr-namespace:Product_Browser.ScatterItems"
              mc:Ignorable="d" Width="200" Height="100"  BorderThickness="2" BorderBrush="Beige" Background="Black">
     <controls:ScatterViewItem.Resources>
-        <Image x:Key="playButtonImage" Source="/Resources/btnPlay.png"/>
+        <Image x:Key="playButtonImage" Source="/Resources/btnPlay.png" />
         <Image x:Key="pauseButtonImage" Source="/Resources/btnPause.png" />
     </controls:ScatterViewItem.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.7*"/>
-            <RowDefinition Height="0.3*"/>
+            <RowDefinition Height="0.8*"/>
+            <RowDefinition Height="0.2*" MaxHeight="50"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.2*" MaxWidth="50"/>
+            <ColumnDefinition Width="0.1*"/>
+            <ColumnDefinition Width="0.6*"/>
+            <ColumnDefinition Width="0.1*"/>
+        </Grid.ColumnDefinitions>
 
         <MediaElement x:Name="videoPlayer" HorizontalAlignment="Center" VerticalAlignment="Center" Height="Auto" Width="Auto"
-                      ScrubbingEnabled="True" Stretch="Uniform" IsMuted="True" Grid.Row="0"/>
+                      ScrubbingEnabled="True" Stretch="Uniform" IsMuted="True" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Grid.ColumnSpan="4"/>
 
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.3*"/>
-                <ColumnDefinition Width="0.3*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+        <controls:SurfaceButton Grid.Row="1" Content="{StaticResource playButtonImage}" Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ScatterViewItem}}, Path=IsPaused, Converter={StaticResource BoolToVisCon}}"
+                                Margin="0, 0, 0, 0" MinHeight="0" MinWidth="0" Width="Auto" Height="Auto" Padding="0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Click="PlayButtonClicked" Background="Transparent" />
+        <controls:SurfaceButton Grid.Row="1" Content="{StaticResource pauseButtonImage}" Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ScatterViewItem}}, Path=IsPlaying, Converter={StaticResource BoolToVisCon}}"
+                                Margin="0, 0, 0, 0" MinHeight="0" MinWidth="0" Width="Auto" Height="Auto" Padding="0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Click="PauseButtonClicked" Background="Transparent" />
+        <ProgressBar Name="progressBar" Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ScatterViewItem}}, Path=ControlsVisible, Converter={StaticResource BoolToVisCon}}"
+            Minimum="0" Maximum="100" Value="0" Grid.Column="2" Width="Auto" HorizontalAlignment="Stretch" Height="5" Grid.Row="1" VerticalAlignment="Center" Foreground="Blue" />
 
-            <controls:SurfaceButton Grid.Column="0" Grid.ColumnSpan="1" Content="{StaticResource playButtonImage}" Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ScatterViewItem}}, Path=IsPaused, Converter={StaticResource BoolToVisCon}}"
-                                    Margin="0, 0, 0, 0" MinHeight="0" MinWidth="0" Width="Auto" Height="Auto" Padding="0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Click="PlayButtonClicked"/>
-            <controls:SurfaceButton Grid.Column="0" Grid.ColumnSpan="1" Content="{StaticResource pauseButtonImage}" Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ScatterViewItem}}, Path=IsPlaying, Converter={StaticResource BoolToVisCon}}"
-                                    Margin="0, 0, 0, 0" MinHeight="0" MinWidth="0" Width="Auto" Height="Auto" Padding="0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Click="PauseButtonClicked" />
-        </Grid>
+
     </Grid>
 </controls:ScatterViewItem>

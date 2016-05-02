@@ -22,52 +22,11 @@ namespace Product_Browser.ScatterItems
     /// </summary>
     public partial class ImageScatterItem : ScatterViewItem
     {
-        #region Fields
-
-        List<BitmapImage> images;
-
-        #endregion
-
-        #region Members
-
-        #endregion
-
-        protected override void OnMouseDown(MouseButtonEventArgs e)
-        {
-            if (!container.IsMouseOver) // Else we capture with imagecontainer
-                base.OnMouseDown(e);
-        }
-
-        protected override void OnTouchDown(TouchEventArgs e)
-        {
-            if (!container.TouchesOver.Contains(e.TouchDevice)) // Else we capture with imagecontainer
-                base.OnTouchDown(e);
-            else
-                e.Handled = true;
-        }
-
-        public void OnBarLoaded(object obj, EventArgs args)
-        {
-            container.Populate(images, this);
-        }
-
-        public void OnNewMainImage(ImageSource source)
-        {
-            mainImage.Source = source;
-        }
-
-        public ImageScatterItem(List<SmartCardDataItem> imageItems)
+        public ImageScatterItem(SmartCardDataItem image)
         {
             InitializeComponent();
 
-            images = new List<BitmapImage>();
-            foreach (SmartCardDataItem item in imageItems)
-                images.Add(item.GetImageSource());
-
-            mainImage.Source = images[0];
-
-            container.Loaded += OnBarLoaded;
-            container.NewMainImage += OnNewMainImage;
+            mainImage.Source = image.GetImageSource();
         }
     }
 }

@@ -43,16 +43,29 @@ namespace Product_Browser.ScatterItems
 
         SmartCardDataItem video = null;
 
-        DispatcherTimer videoControlTimer;
+        DispatcherTimer videoControlTimer, controlsVisibleTimer;
 
         #endregion
 
         #region Properties
 
+        private bool _controlsVisible = false;
+        public bool ControlsVisible
+        {
+            get { return _controlsVisible; }
+            set
+            {
+                _controlsVisible = value;
+                NotifyPropertyChanged();
+                NotifyPropertyChanged("IsPlaying");
+                NotifyPropertyChanged("IsPaused");
+            }
+        }
+
         private bool _isPlaying = false;
         public bool IsPlaying
         {
-            get { return _isPlaying; }
+            get { return _isPlaying && ControlsVisible; }
             set {
                 _isPlaying = value;
                 _isPaused = !value;
@@ -64,7 +77,7 @@ namespace Product_Browser.ScatterItems
         private bool _isPaused = true;
         public bool IsPaused
         {
-            get { return _isPaused; }
+            get { return _isPaused && ControlsVisible; }
             set
             {
                 _isPaused = value;
@@ -76,16 +89,120 @@ namespace Product_Browser.ScatterItems
 
         #endregion
 
+        #region ButtonClickHandlers
+
+        private void PauseButtonClicked(object sender, RoutedEventArgs e)
+        {
+            PauseVideo();
+        }
+
+        private void PlayButtonClicked(object sender, RoutedEventArgs e)
+        {
+            IsPlaying = true;
+            videoPlayer.Play();
+        }
+
+        #endregion
+
         #region EventHandlers
+
+        protected void VideoPlayerLoadedHandler(object obj, EventArgs args)
+        {
+            videoPlayer.Play(); // Avoid black screen by starting video and triggering media load
+            videoPlayer.Stop();
+        }
+
+        protected void VideoPlayerMediaLoadedHandler(object obj, EventArgs args)
+        {            
+            if (videoPlayer.NaturalDuration.HasTimeSpan)
+            {
+                progressBar.Maximum = videoPlayer.NaturalDuration.TimeSpan.TotalSeconds;
+
+                progressBar.PreviewMouseDown += ProgressBarMouseDownHandler;
+                progressBar.PreviewTouchDown += ProgressBarTouchDownHandler;
+            }            
+        }
+
+        private void ProgressBarTouchDownHandler(object sender, System.Windows.Input.TouchEventArgs e)
+        {
+            var touchPoint = e.GetTouchPoint(progressBar).Position;
+
+            GoToVideoLocation(touchPoint.X);
+        }
+
+        protected void ProgressBarMouseDownHandler(object obj, MouseButtonEventArgs args)
+        {
+            var clickPoint = args.GetPosition(progressBar);
+
+            GoToVideoLocation(clickPoint.X);
+        }
 
         protected void VideoEndedHandler(object obj, RoutedEventArgs args)
         {
-            videoPlayer.Position = new TimeSpan(0, 0, 0);
+            videoPlayer.Position = new TimeSpan(0, 0, 0, 0, 100);
         }
 
         protected void VideoControlTick(object obj, EventArgs args)
         {
+            // Handle update of progress bar etc!
+            if(videoPlayer.NaturalDuration.HasTimeSpan)
+                progressBar.Value = videoPlayer.Position.TotalSeconds; 
+        }
 
+        protected void ControlsVisibleTick(object obj, EventArgs args)
+        {
+            ControlsVisible = false;
+
+            videoControlTimer.Stop();
+            controlsVisibleTimer.Stop();
+        }
+
+        protected override void OnPreviewMouseMove(MouseEventArgs e)
+        {
+            base.OnPreviewMouseMove(e);
+
+            ShowControls();
+        }
+
+        protected override void OnPreviewTouchMove(System.Windows.Input.TouchEventArgs e)
+        {
+            base.OnPreviewTouchMove(e);
+
+            ShowControls();
+        }
+
+        #endregion
+
+        #region Methods
+
+        private void GoToVideoLocation(double xInput)
+        {
+            double newPosition = xInput / progressBar.ActualWidth;
+
+            if (videoPlayer.NaturalDuration.HasTimeSpan)
+            {
+                int current = (int)(newPosition * progressBar.Maximum);
+
+                videoPlayer.Position = new TimeSpan(0, 0, current);
+            }
+        }
+
+        private void ShowControls()
+        {
+            ControlsVisible = true;
+
+            videoControlTimer.Start();
+            controlsVisibleTimer.Stop();
+            controlsVisibleTimer.Start();
+        }
+
+        public void PauseVideo()
+        {
+            if (videoPlayer.CanPause)
+            {
+                IsPaused = true;
+                videoPlayer.Pause();
+            }
         }
 
         #endregion
@@ -98,27 +215,20 @@ namespace Product_Browser.ScatterItems
 
             videoPlayer.LoadedBehavior = MediaState.Manual;
             videoPlayer.UnloadedBehavior = MediaState.Manual;
-            videoPlayer.MediaEnded += VideoEndedHandler;
             videoPlayer.Source = video.GetVideo();
 
+            videoPlayer.MediaEnded += VideoEndedHandler;
+            videoPlayer.Loaded += VideoPlayerLoadedHandler;
+            videoPlayer.MediaOpened += VideoPlayerMediaLoadedHandler;
+
             videoControlTimer = new DispatcherTimer(DispatcherPriority.Normal, this.Dispatcher);
-            videoControlTimer.Interval = new TimeSpan(0, 0, 1);
+            videoControlTimer.Interval = new TimeSpan(0, 0, 0, 0, 500);
             videoControlTimer.Tick += VideoControlTick;
-        }
 
-        private void PauseButtonClicked(object sender, RoutedEventArgs e)
-        {
-            if (videoPlayer.CanPause)
-            {
-                IsPaused = true;
-                videoPlayer.Pause();
-            }
+            controlsVisibleTimer = new DispatcherTimer(DispatcherPriority.Normal, this.Dispatcher);
+            controlsVisibleTimer.Interval = new TimeSpan(0, 0, 0, 0, 1500);
+            controlsVisibleTimer.Tick += ControlsVisibleTick;
         }
-
-        private void PlayButtonClicked(object sender, RoutedEventArgs e)
-        {
-            IsPlaying = true;
-            videoPlayer.Play();
-        }
+        
     }
 }

@@ -20,12 +20,36 @@ namespace Product_Browser
     /// </summary>
     public partial class TagWindow : TagVisualization, INotifyPropertyChanged
     {
-        const double
-            CIRCLE_Y_OFFSET = -50d,
-            CIRCLE_SIZE = 150d,
-            SCATTERITEM_STARTING_WIDTH = 200d,
-            SCATTERITEM_STARTING_HEIGHT = 100d;
-        
+
+        #region Physics and position constants
+
+        // Radius of gravity circle around tag visualization
+        readonly double
+            CIRCLE_SIZE = 200d;
+
+        readonly int MAX_IMAGES_BEFORE_CONTAINER = 4;
+
+        readonly Size
+            SCATTERITEM_DOCUMENT_STARTING_SIZE = new Size(190, 200),
+            SCATTERITEM_VIDEO_STARTING_SIZE = new Size(200, 125),
+            SCATTERITEM_IMAGE_STARTING_SIZE = new Size(200, 125);
+
+        readonly Vector
+            SCATTERITEM_DOCUMENT_STARTING_POSITION = new Vector(225, 0),
+            SCATTERITEM_VIDEO_STARTING_POSITION = new Vector(-225, 0),
+            SCATTERITEM_IMAGE_STARTING_POSITION = new Vector(0, -100),
+
+            SCATTERITEM_DOCUMENT_POSITION_OFFSET = new Vector(20, 0),
+            SCATTERITEM_VIDEO_POSITION_OFFSET = new Vector(-20, 0),
+            SCATTERITEM_IMAGE_POSITION_OFFSET = new Vector(0, -20);
+
+        readonly double
+            SCATTERITEM_DOCUMENT_STARTING_ROTATION = 90d,
+            SCATTERITEM_VIDEO_STARTING_ROTATION = 270d,
+            SCATTERITEM_IMAGE_STARTING_ROTATION = 0d;
+
+        #endregion
+
         #region PropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -42,9 +66,9 @@ namespace Product_Browser
 
         SmartCard smartCard = null;
 
-        List<ScatterItemPhysics> physicsItemsActive = new List<ScatterItemPhysics>();
-        List<ScatterItemPhysics> physicsItemsActiveLowPriority = new List<ScatterItemPhysics>();
-        List<ScatterItemPhysics> physicsItemsInactive = new List<ScatterItemPhysics>();
+        List<ScatterItemPhysics> physicsItemsActive = new List<ScatterItemPhysics>(10);
+        List<ScatterItemPhysics> physicsItemsActiveLowPriority = new List<ScatterItemPhysics>(10);
+        List<ScatterItemPhysics> physicsItemsInactive = new List<ScatterItemPhysics>(10);
 
         DispatcherTimer physicsTimer;
         DispatcherTimer physicsTimerLowPriority;
@@ -140,9 +164,10 @@ namespace Product_Browser
             if (phy != null) // If it's null, it already exists in the active container so no need to do anything
             {
                 physicsItemsInactive.Remove(phy);
-                
+
                 // Add all inactive to active
                 physicsItemsActive.AddRange(physicsItemsInactive);
+                
                 // Clear inactive
                 physicsItemsInactive.Clear();
 
@@ -158,7 +183,6 @@ namespace Product_Browser
         private void ScatterViewItemLockedHandler(ScatterItemPhysics e)
         {
             physicsItemsInactive.Add(e);
-            physicsItemsActive.Remove(e);
 
             if (physicsItemsActive.Count == 0)
                 physicsTimer.Stop();
@@ -170,7 +194,6 @@ namespace Product_Browser
                 physicsTimerLowPriority.Start();
 
             physicsItemsActiveLowPriority.Add(e);
-            physicsItemsActive.Remove(e);
         }
 
         private void ScatterViewItemHighPriorityHandler(ScatterItemPhysics e)
@@ -178,11 +201,9 @@ namespace Product_Browser
             if (!physicsTimer.IsEnabled)
                 physicsTimer.Start();
 
-            // Remove from low priority container
-            physicsItemsActiveLowPriority.Remove(e);
-
             // Add all inactive to active
             physicsItemsActive.AddRange(physicsItemsInactive);
+
             // And add this one
             physicsItemsActive.Add(e);
             // Then clear inactive
@@ -194,8 +215,13 @@ namespace Product_Browser
 
         private void PhysicsEventHandler(object sender, EventArgs args)
         {
-            for(int i = 0; i < physicsItemsActive.Count; i++)
-                physicsItemsActive[i].Run(Center, Orientation, -50d, 175d);
+            List<ScatterItemPhysics> toDiscard = new List<ScatterItemPhysics>(physicsItemsActive.Count);
+
+            for (int i = 0; i < physicsItemsActive.Count; i++)
+                if (physicsItemsActive[i].Run(Center, Orientation))
+                    toDiscard.Add(physicsItemsActive[i]);
+
+            physicsItemsActive.RemoveAll(a => toDiscard.Contains(a));
 
             if (physicsItemsActive.Count == 0)
                 physicsTimer.Stop();
@@ -203,8 +229,13 @@ namespace Product_Browser
 
         private void PhysicsLowPriorityEventHandler(object sender, EventArgs args)
         {
+            List<ScatterItemPhysics> toDiscard = new List<ScatterItemPhysics>(physicsItemsActive.Count);
+
             for (int i = 0; i < physicsItemsActiveLowPriority.Count; i++)
-                physicsItemsActiveLowPriority[i].RunLowPriority(Center, Orientation, -50d, 175d);
+                if (physicsItemsActiveLowPriority[i].RunLowPriority(Center, Orientation, -50d, 175d))
+                    toDiscard.Add(physicsItemsActiveLowPriority[i]);
+
+            physicsItemsActiveLowPriority.RemoveAll(a => toDiscard.Contains(a));
 
             if (physicsItemsActiveLowPriority.Count == 0)
                 physicsTimerLowPriority.Stop();
@@ -229,30 +260,26 @@ namespace Product_Browser
 
         private void CalculateNewPositions(List<ScatterItemPhysics> items)
         {
-            double radianMultiplier = Math.PI / (items.Count + 1); // Radians so PI = 180 degrees
+            var documents = items.Where(a => a.Item is DocumentScatterItem).ToList();
+            var images = items.Where(a => a.Item is ImageScatterItem || a.Item is ImageContainerScatterItem).ToList();
+            var videos = items.Where(a => a.Item is VideoScatterItem).ToList();
 
-            for (int i = 0; i < items.Count; i++)
+            for (int i = 0; i < documents.Count; i++)
             {
-                // Calculate position, place items on half circle
-                double positionRadians = radianMultiplier * (i + 1) + Math.PI;
+                documents[i].OriginalPositionOffset = (Point)(SCATTERITEM_DOCUMENT_STARTING_POSITION + SCATTERITEM_DOCUMENT_POSITION_OFFSET * i);
+                documents[i].Item.ZIndex = i;
+            }
 
-                double posXOffset = Math.Cos(positionRadians) * CIRCLE_SIZE;
-                double posYOffset = Math.Sin(positionRadians) * CIRCLE_SIZE + CIRCLE_Y_OFFSET;
+            for (int i = 0; i < images.Count; i++)
+            {
+                images[i].OriginalPositionOffset = (Point)(SCATTERITEM_IMAGE_STARTING_POSITION + SCATTERITEM_IMAGE_POSITION_OFFSET * i);
+                images[i].Item.ZIndex = i;
+            }
 
-                items[i].OriginalPositionOffset = new Point(posXOffset, posYOffset);
-                
-                // Documents look better with reverse size, due to vertical rather than horizontal nature
-                if (items[i].Item is DocumentScatterItem)
-                {
-                    items[i].OriginalOrientationOffset = (positionRadians) * 57.295d; // Convert to degrees
-                    items[i].OriginalWidth = SCATTERITEM_STARTING_HEIGHT;
-                    items[i].OriginalHeight = SCATTERITEM_STARTING_WIDTH;
-                }
-                else {
-                    items[i].OriginalOrientationOffset = (positionRadians - Math.PI / 2d) * 57.295d; // Convert to degrees
-                    items[i].OriginalWidth = SCATTERITEM_STARTING_WIDTH;
-                    items[i].OriginalHeight = SCATTERITEM_STARTING_HEIGHT;
-                }
+            for (int i = 0; i < videos.Count; i++)
+            {
+                videos[i].OriginalPositionOffset = (Point)(SCATTERITEM_VIDEO_STARTING_POSITION + SCATTERITEM_VIDEO_POSITION_OFFSET * i);
+                videos[i].Item.ZIndex = i;
             }
         }
 
@@ -276,12 +303,20 @@ namespace Product_Browser
 
             List<ScatterViewItem> scatterItems = new List<ScatterViewItem>();
 
-            // Place all images inside one scatter item
+            // Place all images inside one scatter item if > max images, else individual scatter items
             dataItems = smartCard.DataItems.Where(a => a.Category == SmartCardDataItemCategory.Image).ToList();
-            if(dataItems.Count != 0)
+            if(dataItems.Count > MAX_IMAGES_BEFORE_CONTAINER)
             {
-                ScatterViewItem item = new ImageScatterItem(dataItems);
+                ScatterViewItem item = new ImageContainerScatterItem(dataItems);
                 scatterItems.Add(item);
+            }
+            else
+            {
+                foreach(SmartCardDataItem dataItem in dataItems)
+                {
+                    ScatterViewItem item = new ImageScatterItem(dataItem);
+                    scatterItems.Add(item);
+                }
             }
 
             // One scatter item each for everything else
@@ -315,8 +350,24 @@ namespace Product_Browser
                 scatterItems[i].Center = this.Center;
                 scatterItems[i].Orientation = this.Orientation;
 
-                scatterItems[i].Width = SCATTERITEM_STARTING_WIDTH;
-                scatterItems[i].Height = SCATTERITEM_STARTING_HEIGHT;
+                if(scatterItems[i] is DocumentScatterItem)
+                {
+                    physics.OriginalOrientationOffset = SCATTERITEM_DOCUMENT_STARTING_ROTATION;
+                    physics.OriginalWidth = SCATTERITEM_DOCUMENT_STARTING_SIZE.Width;
+                    physics.OriginalHeight = SCATTERITEM_DOCUMENT_STARTING_SIZE.Height;
+                }
+                else if (scatterItems[i] is ImageContainerScatterItem || scatterItems[i] is ImageScatterItem)
+                {
+                    physics.OriginalOrientationOffset = SCATTERITEM_IMAGE_STARTING_ROTATION;
+                    physics.OriginalWidth = SCATTERITEM_IMAGE_STARTING_SIZE.Width;
+                    physics.OriginalHeight = SCATTERITEM_IMAGE_STARTING_SIZE.Height;
+                }
+                else
+                {
+                    physics.OriginalOrientationOffset = SCATTERITEM_VIDEO_STARTING_ROTATION;
+                    physics.OriginalWidth = SCATTERITEM_VIDEO_STARTING_SIZE.Width;
+                    physics.OriginalHeight = SCATTERITEM_VIDEO_STARTING_SIZE.Height;
+                }
 
                 view.Items.Add(scatterItems[i]);
                 physicsItemsActive.Add(physics);

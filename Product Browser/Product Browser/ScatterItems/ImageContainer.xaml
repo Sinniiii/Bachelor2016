@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Product_Browser.ScatterItems"
              mc:Ignorable="d" 
-             d:DesignHeight="200" d:DesignWidth="400">
+             d:DesignHeight="200" d:DesignWidth="400" VerticalAlignment="Center" HorizontalAlignment="Center">
     <ScrollViewer Name="scrollBar" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
         <StackPanel Name="stackPanel" ScrollViewer.HorizontalScrollBarVisibility="Visible" Orientation="Horizontal"
                     VirtualizingStackPanel.VirtualizationMode="Recycling">

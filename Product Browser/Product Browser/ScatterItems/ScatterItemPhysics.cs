@@ -15,9 +15,9 @@ namespace Product_Browser.ScatterItems
     {
         public const double
             ACCELERATION = 0.5d,
-            SPEED_ANGULAR = 2d,
+            SPEED_ANGULAR = 4d,
             SPEED_SIZE = 4d,
-            DEFAULT_ROTATION_OFFSET = 90d;
+            DEGREES_TO_RADIANS = (2 * Math.PI) / 360d;
 
         public ScatterViewItem Item { get; private set; }
 
@@ -46,39 +46,39 @@ namespace Product_Browser.ScatterItems
 
         #endregion
 
-        public void Run(Point tagPosition, double tagRotation, double yPullOffset, double pullRadius)
+        public bool Run(Point tagPosition, double tagRotation)
         {
-            Point circlePosition = GetConvertedPosition(tagPosition, new Point(0d, yPullOffset), tagRotation);
-
-            double distance = (Item.Center - circlePosition).Length;
-
-            if (distance >= pullRadius || Item.AreAnyTouchesCapturedWithin || Item.IsMouseCaptured)
+            if (Item.AreAnyTouchesCapturedWithin || Item.IsMouseCaptured)
             {
                 LowPriority(this);
-                return;
+                return true;
             }
-
-            Point targetPosition = GetConvertedPosition(tagPosition, OriginalPositionOffset, tagRotation);
             
-            if(!TryLockPosition(new Vector(targetPosition.X, targetPosition.Y),
-                (tagRotation + OriginalOrientationOffset + DEFAULT_ROTATION_OFFSET) % 360d))
-            {
-                Vector relativePosition = targetPosition - Item.Center;
-                CalculateSpeed(relativePosition);
-                Move(tagRotation);
-            }
+            Point targetPosition = GetConvertedPosition(tagPosition, OriginalPositionOffset, tagRotation);
+
+            if (TryLockPosition(new Vector(targetPosition.X, targetPosition.Y),
+                (tagRotation + OriginalOrientationOffset + 360d) % 360d)) // Add 360 and mod 360 to ensure target angle always positive
+                return true;
+
+            Vector relativePosition = targetPosition - Item.Center;
+            CalculateSpeed(relativePosition);
+            Move(tagRotation);
+
+            return false;
         }
 
-        public void RunLowPriority(Point tagPosition, double tagRotation, double yPullOffset, double pullRadius)
+        public bool RunLowPriority(Point tagPosition, double tagRotation, double yPullOffset, double pullRadius)
         {
             Point circlePosition = GetConvertedPosition(tagPosition, new Point(0d, yPullOffset), tagRotation);
 
             double distance = (Item.Center - circlePosition).Length;
 
             if (distance >= pullRadius || Item.AreAnyTouchesCapturedWithin || Item.IsMouseCaptured)
-                return;
+                return false;
 
             HighPriority(this);
+
+            return true;
         }
 
         private void CalculateSpeed(Vector relativePosition)
@@ -112,15 +112,17 @@ namespace Product_Browser.ScatterItems
         {
             Item.Center = new Point(Item.Center.X + SpeedX, Item.Center.Y + SpeedY);
 
-            double deltaAngle = (tagOrientation + OriginalOrientationOffset + DEFAULT_ROTATION_OFFSET) - Item.Orientation;
-            deltaAngle = (deltaAngle + 180) % 360 - 180;
+            double targetAngle = (tagOrientation + OriginalOrientationOffset) * DEGREES_TO_RADIANS;
+            double currentAngle = Item.Orientation * DEGREES_TO_RADIANS;
+
+            double deltaAngle = Math.Atan2(Math.Sin(targetAngle - currentAngle), Math.Cos(targetAngle - currentAngle)) / DEGREES_TO_RADIANS;
 
             if (deltaAngle > SPEED_ANGULAR)
                 deltaAngle = SPEED_ANGULAR;
             else if (deltaAngle < -SPEED_ANGULAR)
                 deltaAngle = -SPEED_ANGULAR;
 
-            Item.Orientation += deltaAngle;
+            Item.Orientation = (Item.Orientation + deltaAngle + 360d) % 360d;
 
             double deltaWidth = OriginalWidth - Item.Width;
 
@@ -176,13 +178,16 @@ namespace Product_Browser.ScatterItems
 
             PositionLocked(this);
 
+            if (Item is VideoScatterItem)
+                ((VideoScatterItem)Item).PauseVideo();
+
             return true;
         }
 
         public void ResetToDefault(Point visualizerPosition, double visualizerOrientation)
         {
             Item.Center = GetConvertedPosition(visualizerPosition, OriginalPositionOffset, visualizerOrientation);
-            Item.Orientation = OriginalOrientationOffset + visualizerOrientation + DEFAULT_ROTATION_OFFSET;
+            Item.Orientation = OriginalOrientationOffset + visualizerOrientation;
             Item.Width = OriginalWidth;
             Item.Height = OriginalHeight;
         }

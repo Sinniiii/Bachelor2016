@@ -5,15 +5,17 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:controls="http://schemas.microsoft.com/surface/2008"
              xmlns:local="clr-namespace:Product_Browser.ScatterItems"
-             mc:Ignorable="d" Height="100" Width="200" BorderThickness="2" BorderBrush="Beige" Background="Black">
+             mc:Ignorable="d" Height="200" Width="100" BorderThickness="2" BorderBrush="Beige" Background="Black">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="0.7*"/>
-            <RowDefinition Height="0.3*" MaxHeight="200"/>
-        </Grid.RowDefinitions>
-        
-        <Image x:Name="mainImage" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stretch="Uniform" Grid.Row="0"/>
-        <local:ImageContainer x:Name="container" HorizontalAlignment="Left" MinHeight="50" Grid.Row="1" VerticalAlignment="Top"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.7*"/>
+            <ColumnDefinition Width="0.3*" MaxWidth="100"/>
+        </Grid.ColumnDefinitions>
 
+        <Image x:Name="mainImage" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stretch="Uniform" Grid.Column="0"/>
+
+        <UserControl Name="imageContainerControl" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <local:ImageContainer x:Name="container" />
+        </UserControl>
     </Grid>
 </controls:ScatterViewItem>

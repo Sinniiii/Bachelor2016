@@ -16,18 +16,8 @@ namespace Product_Browser
     {
         public App()
         {
-            AppDomain.CurrentDomain.UnhandledException += OnDispatcherUnhandledException;
-            AppDomain.CurrentDomain.FirstChanceException += OnDispatcherUnhandledException;
-        }
-
-        void OnDispatcherUnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
-            Console.WriteLine(e.ExceptionObject);
-        }
-
-        void OnDispatcherUnhandledException(object sender,  FirstChanceExceptionEventArgs e)
-        {
-            Console.WriteLine(e.Exception);
+            DatabaseModel.ABBDataContext context = new DatabaseModel.ABBDataContext();
+            context.SmartCards.ToList();
         }
     }
 }

@@ -1,28 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Microsoft.Surface.Presentation.Controls;
 using DatabaseModel.Model;
 
 namespace Product_Browser.ScatterItems
 {
     /// <summary>
-    /// Interaction logic for DocumentScatterItem.xaml
+    /// Interaction logic for ImageScatterItem.xaml
     /// </summary>
-    public partial class DocumentScatterItem : ScatterViewItem
+    public partial class ImageContainerScatterItem : ScatterViewItem
     {
+        #region Fields
+
         List<BitmapImage> images;
+
+        #endregion
+
+        #region Members
+
+        #endregion
+
+        #region EventHandlers
 
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
@@ -38,26 +40,30 @@ namespace Product_Browser.ScatterItems
                 e.Handled = true;
         }
 
-        public void OnBarLoaded(object obj, EventArgs args)
+        public void BarLoadedHandler(object obj, EventArgs args)
         {
-            container.Populate(images, imageContainerControl, System.Windows.Controls.Orientation.Vertical, 5);
+            container.Populate(images, imageContainerControl, System.Windows.Controls.Orientation.Horizontal, 5);
         }
 
-        public void OnNewMainImage(ImageSource source)
+        public void NewMainImageHandler(ImageSource source)
         {
             mainImage.Source = source;
         }
 
-        public DocumentScatterItem(SmartCardDataItem document)
+        #endregion
+
+        public ImageContainerScatterItem(List<SmartCardDataItem> imageItems)
         {
             InitializeComponent();
 
-            images = document.GetDocumentAsImageSources();
+            images = new List<BitmapImage>();
+            foreach (SmartCardDataItem item in imageItems)
+                images.Add(item.GetImageSource());
 
             mainImage.Source = images[0];
 
-            container.Loaded += OnBarLoaded;
-            container.NewMainImage += OnNewMainImage;
+            container.Loaded += BarLoadedHandler;
+            container.NewMainImage += NewMainImageHandler;
         }
     }
 }
