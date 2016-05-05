@@ -205,12 +205,9 @@ namespace SmartCardManagementSystem.Controllers
 
             System.Diagnostics.Debug.WriteLine("-------RUNNING UPLOAD----------");
 
-            //var fileName = ContentDispositionHeaderValue.Parse(uploadfile.ContentDisposition).FileName.Trim('"');
-            //var extension = fileName.Substring(Math.Max(0, fileName.Length - 3));
-            //int lastPeriod = fileName.LastIndexOf('.');
-            //string extension = fileName.Substring(lastPeriod + 1);
-            var fileName = "test";
-            var extension = "mp4";
+            var fileName = ContentDispositionHeaderValue.Parse(uploadfile.ContentDisposition).FileName.Trim('"');
+            int lastPeriod = fileName.LastIndexOf('.');
+            string extension = fileName.Substring(lastPeriod + 1);
 
             System.Diagnostics.Debug.WriteLine("-------Extension was----------");
             System.Diagnostics.Debug.WriteLine(extension);
