@@ -198,9 +198,8 @@ namespace SmartCardManagementSystem.Controllers
         //}
 
         [HttpPost]
-        public IActionResult OverviewUploadDataitemDZ(ICollection<IFormFile> files, int tagID)
+        public IActionResult OverviewUploadDataitemDZ(int tagID)
         {
-
 
             var uploadfile = Request.Form.Files.FirstOrDefault();
 
@@ -223,6 +222,7 @@ namespace SmartCardManagementSystem.Controllers
                 var readstream = uploadfile.OpenReadStream();
                 byte[] bytes = new byte[readstream.Length];  //declare arraysize
                 readstream.Read(bytes, 0, bytes.Length); // read from stream to byte array
+                readstream.Close();
 
                 System.Diagnostics.Debug.WriteLine("-------Creating document category----------");
                 item1 = new SmartCardDataItem(fileName, SmartCardDataItemCategory.Document, bytes);
@@ -230,6 +230,8 @@ namespace SmartCardManagementSystem.Controllers
                 ABBDataContext context = new ABBDataContext();
                 var cardToUpdate = context.SmartCards.First(a => a.TagId == tagID);
                 cardToUpdate.DataItems.Add(item1);
+
+                
 
                 context.SaveChanges();
             }
@@ -272,6 +274,7 @@ namespace SmartCardManagementSystem.Controllers
                 var readstream = uploadfile.OpenReadStream();
                 byte[] bytes = new byte[readstream.Length];  //declare arraysize
                 readstream.Read(bytes, 0, bytes.Length); // read from stream to byte array
+                readstream.Close();
 
                 System.Diagnostics.Debug.WriteLine("-------Creating image category----------");
                 item1 = new SmartCardDataItem(fileName, SmartCardDataItemCategory.Image, bytes);

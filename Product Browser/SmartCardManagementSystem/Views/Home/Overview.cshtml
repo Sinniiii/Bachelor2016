@@ -25,8 +25,11 @@
 
 <body onload="scrollToActivePanel()">
 
-    <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
-    <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
+    @*<script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
+    <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">*@
+
+    <script src="/js/dropzone.js"></script>
+    <link rel="stylesheet" href="/css/dropzone.css">
 
     <script>
 
@@ -46,6 +49,16 @@
                     }
                     
                 });
+                this.on("error", function (file, errorMessage) {
+                    if (file.size > 104857600) {
+                        alert("A file did not upload correctly: \n" + file.name + "\n" + errorMessage +"\n Your file was large, and in case of an unexpected error you may need to just retry uploading it.");
+                        }
+                    else {
+                        alert("A file did not upload correctly: " + file.name + " "+errorMessage);
+                    }
+                    
+                });
+
             }
         };
 

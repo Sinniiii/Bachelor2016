@@ -1,5 +1,6 @@
 ﻿/// <autosync enabled="true" />
 /// <reference path="../gulpfile.js" />
+/// <reference path="js/dropzone.js" />
 /// <reference path="js/jquery-scrollto/lib/jquery-scrollto.js" />
 /// <reference path="js/jquery-scrollto/vendor/jquery.js" />
 /// <reference path="js/jquery-scrollto/vendor/modernizr.js" />
