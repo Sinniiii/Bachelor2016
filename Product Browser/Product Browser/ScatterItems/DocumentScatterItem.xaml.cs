@@ -40,7 +40,7 @@ namespace Product_Browser.ScatterItems
 
         public void OnBarLoaded(object obj, EventArgs args)
         {
-            container.Populate(images, imageContainerControl, System.Windows.Controls.Orientation.Vertical, 5);
+            container.Populate(images, imageContainerControl, System.Windows.Controls.Orientation.Vertical, 5, true);
         }
 
         public void OnNewMainImage(ImageSource source)

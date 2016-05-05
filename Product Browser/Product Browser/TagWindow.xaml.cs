@@ -26,28 +26,30 @@ namespace Product_Browser
 
         // Radius of gravity circle around tag visualization
         readonly double
-            CIRCLE_SIZE = 200d;
+            CIRCLE_SIZE = 150d;
 
         readonly int MAX_IMAGES_BEFORE_CONTAINER = 4;
 
         readonly Size
-            SCATTERITEM_DOCUMENT_STARTING_SIZE = new Size(190, 200),
+            SCATTERITEM_DOCUMENT_STARTING_SIZE = new Size(150, 200),
             SCATTERITEM_VIDEO_STARTING_SIZE = new Size(200, 125),
             SCATTERITEM_IMAGE_STARTING_SIZE = new Size(200, 125);
 
         readonly Vector
-            SCATTERITEM_DOCUMENT_STARTING_POSITION = new Vector(225, 0),
+            SCATTERITEM_DOCUMENT_STARTING_POSITION = new Vector(0, -150),
             SCATTERITEM_VIDEO_STARTING_POSITION = new Vector(-225, 0),
-            SCATTERITEM_IMAGE_STARTING_POSITION = new Vector(0, -100),
+            SCATTERITEM_IMAGE_STARTING_POSITION = new Vector(225, 0),
 
-            SCATTERITEM_DOCUMENT_POSITION_OFFSET = new Vector(20, 0),
+            SCATTERITEM_DOCUMENT_POSITION_OFFSET = new Vector(0, -20),
             SCATTERITEM_VIDEO_POSITION_OFFSET = new Vector(-20, 0),
-            SCATTERITEM_IMAGE_POSITION_OFFSET = new Vector(0, -20);
+            SCATTERITEM_IMAGE_POSITION_OFFSET = new Vector(20, 0);
 
         readonly double
-            SCATTERITEM_DOCUMENT_STARTING_ROTATION = 90d,
-            SCATTERITEM_VIDEO_STARTING_ROTATION = 270d,
+            SCATTERITEM_DOCUMENT_STARTING_ROTATION = 0d,
+            SCATTERITEM_VIDEO_STARTING_ROTATION = 0d,
             SCATTERITEM_IMAGE_STARTING_ROTATION = 0d;
+
+        
 
         #endregion
 
@@ -165,6 +167,7 @@ namespace Product_Browser
                 if (p.Item == sender as ScatterViewItem)
                 {
                     phy = p;
+                    p.Item.Deceleration = 0.001536d;
                     physicsItemsActiveLowPriority.Add(p);
                     break;
                 }
@@ -202,6 +205,8 @@ namespace Product_Browser
             if (!physicsTimerLowPriority.IsEnabled)
                 physicsTimerLowPriority.Start();
 
+            e.Item.Deceleration = 0.001536d;
+
             physicsItemsActiveLowPriority.Add(e);
         }
 
@@ -209,6 +214,8 @@ namespace Product_Browser
         {
             if (!physicsTimer.IsEnabled)
                 physicsTimer.Start();
+            
+            e.Item.Deceleration = double.NaN;
 
             // Add all inactive to active
             physicsItemsActive.AddRange(physicsItemsInactive);
@@ -225,7 +232,7 @@ namespace Product_Browser
         private void PhysicsEventHandler(object sender, EventArgs args)
         {
             List<ScatterItemPhysics> toDiscard = new List<ScatterItemPhysics>(physicsItemsActive.Count);
-
+            
             for (int i = 0; i < physicsItemsActive.Count; i++)
                 if (physicsItemsActive[i].Run(Center, Orientation))
                     toDiscard.Add(physicsItemsActive[i]);
@@ -241,7 +248,7 @@ namespace Product_Browser
             List<ScatterItemPhysics> toDiscard = new List<ScatterItemPhysics>(physicsItemsActive.Count);
 
             for (int i = 0; i < physicsItemsActiveLowPriority.Count; i++)
-                if (physicsItemsActiveLowPriority[i].RunLowPriority(Center, Orientation, -50d, 175d))
+                if (physicsItemsActiveLowPriority[i].RunLowPriority(Center, Orientation, CIRCLE_SIZE))
                     toDiscard.Add(physicsItemsActiveLowPriority[i]);
 
             physicsItemsActiveLowPriority.RemoveAll(a => toDiscard.Contains(a));
@@ -288,7 +295,7 @@ namespace Product_Browser
             for (int i = 0; i < videos.Count; i++)
             {
                 videos[i].OriginalPositionOffset = (Point)(SCATTERITEM_VIDEO_STARTING_POSITION + SCATTERITEM_VIDEO_POSITION_OFFSET * i);
-                videos[i].Item.ZIndex = i;
+                videos[i].Item.ZIndex = videos.Count - 1 - i;
             }
         }
 

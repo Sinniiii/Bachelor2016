@@ -22,9 +22,12 @@ namespace Product_Browser.ScatterItems
     /// </summary>
     public partial class ImageContainer : UserControl
     {
-        private const double SCROLL_SPEED = 10d;
+        private const double SCROLL_SPEED = 10d,
+                             PAGE_NUMBER_OPACITY = 0.15d;
         private double numberOfImages = 3d;
         private int placeholderImages = 2;
+
+        private bool populated = false;
 
         #region PropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
@@ -204,7 +207,7 @@ namespace Product_Browser.ScatterItems
                     }
 
                     // Send the event(add placeholderimages/2 to index, due to starting with empty images as space occupiers
-                    NewMainImage(((Image)((UserControl)stackPanel.Children[desiredImageIndex + (placeholderImages / 2)]).Content).Source);
+                    NewMainImage(((Image)((Grid)((UserControl)stackPanel.Children[desiredImageIndex + (placeholderImages / 2)]).Content).Children[0]).Source);
 
                     scrollTimer.Stop();
                 }
@@ -228,7 +231,7 @@ namespace Product_Browser.ScatterItems
                     }
 
                     // Send the event(add placeholderimages/2 to index, due to starting with empty images as space occupiers
-                    NewMainImage(((Image)((UserControl)stackPanel.Children[desiredImageIndex + (placeholderImages / 2)]).Content).Source);
+                    NewMainImage(((Image)((Grid)((UserControl)stackPanel.Children[desiredImageIndex + (placeholderImages / 2)]).Content).Children[0]).Source);
 
                     scrollTimer.Stop();
                 }
@@ -319,8 +322,13 @@ namespace Product_Browser.ScatterItems
             }
         }
 
-        public void Populate(List<BitmapImage> images, UserControl sizeItem, Orientation alignment, int numberOfImagesToDisplay)
+        public void Populate(List<BitmapImage> images, UserControl sizeItem, Orientation alignment, int numberOfImagesToDisplay, bool displayPage)
         {
+            if (populated) // Method can be called twice for some reason, make sure we don't reload
+                return;
+
+            populated = true;
+
             this.images = images;
             sizeItem.SizeChanged += OnParentSizeChanged; // Subscribe to parent size change event, need to adjust image sizes
             stackPanel.Orientation = alignment;
@@ -341,15 +349,35 @@ namespace Product_Browser.ScatterItems
             for(int i = 0; i < placeholderImages / 2; i++)
                 stackPanel.Children.Add(emptyImages[i]);
 
-            foreach (ImageSource s in images)
+            for(int i = 0; i < images.Count; i++)
             {
+                ImageSource s = images[i];
+
                 Image child = new Image();
                 child.Source = s;
                 child.Stretch = Stretch.Uniform;
 
                 UserControl u = new UserControl();
 
-                u.Content = child;
+                Grid g = new Grid();
+                u.Content = g;
+                
+                g.Children.Add(child);
+
+                if (displayPage)
+                {
+                    Viewbox box = new Viewbox();
+                    box.HorizontalAlignment = HorizontalAlignment.Center;
+                    box.VerticalAlignment = VerticalAlignment.Center;
+                    box.Stretch = Stretch.Uniform;
+                    box.Opacity = PAGE_NUMBER_OPACITY;
+
+                    TextBlock text = new TextBlock();
+                    text.Text = (i + 1).ToString();
+                    box.Child = text;
+
+                    g.Children.Add(box);
+                }
 
                 u.Padding = new Thickness(5d);
 

@@ -67,9 +67,9 @@ namespace Product_Browser.ScatterItems
             return false;
         }
 
-        public bool RunLowPriority(Point tagPosition, double tagRotation, double yPullOffset, double pullRadius)
+        public bool RunLowPriority(Point tagPosition, double tagRotation, double pullRadius)
         {
-            Point circlePosition = GetConvertedPosition(tagPosition, new Point(0d, yPullOffset), tagRotation);
+            Point circlePosition = GetConvertedPosition(tagPosition, new Point(0d, 0), tagRotation);
 
             double distance = (Item.Center - circlePosition).Length;
 

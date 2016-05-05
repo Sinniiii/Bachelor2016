@@ -5,11 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:controls="http://schemas.microsoft.com/surface/2008"
              xmlns:local="clr-namespace:Product_Browser.ScatterItems"
-             mc:Ignorable="d" Height="200" Width="100" BorderThickness="2" BorderBrush="Beige" Background="Black">
+             mc:Ignorable="d" Height="200" Width="100" BorderThickness="2" BorderBrush="Green" Background="Black">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.7*"/>
-            <ColumnDefinition Width="0.3*" MaxWidth="100"/>
+            <ColumnDefinition Width="0.2*" MaxWidth="100"/>
         </Grid.ColumnDefinitions>
 
         <Image x:Name="mainImage" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stretch="Uniform" Grid.Column="0"/>
