@@ -36,7 +36,7 @@ namespace Product_Browser
             SCATTERITEM_IMAGE_STARTING_SIZE = new Size(200, 125);
 
         readonly Vector
-            SCATTERITEM_DOCUMENT_STARTING_POSITION = new Vector(0, -150),
+            SCATTERITEM_DOCUMENT_STARTING_POSITION = new Vector(0, -180),
             SCATTERITEM_VIDEO_STARTING_POSITION = new Vector(-225, 0),
             SCATTERITEM_IMAGE_STARTING_POSITION = new Vector(225, 0),
 
@@ -73,8 +73,11 @@ namespace Product_Browser
         List<ScatterItemPhysics> physicsItemsActiveLowPriority = new List<ScatterItemPhysics>(10);
         List<ScatterItemPhysics> physicsItemsInactive = new List<ScatterItemPhysics>(10);
 
-        DispatcherTimer physicsTimer;
-        DispatcherTimer physicsTimerLowPriority;
+        DispatcherTimer physicsTimer,
+                        physicsTimerLowPriority,
+                        animationPulseTimer;
+
+        bool pulseUp = false;
 
         /// <summary>
         /// These are helpers to determine visibility of UI elements in TagWindow.xaml. Start by displaying loading
@@ -257,6 +260,25 @@ namespace Product_Browser
                 physicsTimerLowPriority.Stop();
         }
 
+        private void AnimationPulseHandler(object sender, EventArgs args)
+        {
+            if (pulseUp)
+            {
+                animationPulse.Opacity += 0.005;
+
+                if (animationPulse.Opacity >= 0.6d)
+                    pulseUp = false;
+            }
+            else
+            {
+                animationPulse.Opacity -= 0.005;
+
+                if (animationPulse.Opacity <= 0.15d)
+                    pulseUp = true;
+            }
+            
+        }
+
         #endregion
 
         #region Methods
@@ -411,7 +433,12 @@ namespace Product_Browser
             physicsTimerLowPriority = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);
             physicsTimerLowPriority.Interval = new TimeSpan(0, 0, 0, 0, 200);
             physicsTimerLowPriority.Tick += PhysicsLowPriorityEventHandler;
-            
+
+            animationPulseTimer = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);
+            animationPulseTimer.Interval = new TimeSpan(0, 0, 0, 0, 25);
+            animationPulseTimer.Tick += AnimationPulseHandler;
+            animationPulseTimer.Start();
+            animationPulse.Opacity = 0.6d;
         }
     }
 }

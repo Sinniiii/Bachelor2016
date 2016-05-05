@@ -47,7 +47,9 @@ namespace Product_Browser
                 tagDef.LostTagTimeout = 2000;
                 tagDef.TagRemovedBehavior = TagRemovedBehavior.Fade;
                 tagDef.Value = i;
-                
+                tagDef.OrientationOffsetFromTag = 270d;
+                tagDef.PhysicalCenterOffsetFromTag = new Vector(0.05d, 0.05d);
+
                 tagVisualizer.Definitions.Add(tagDef);
             }
 
