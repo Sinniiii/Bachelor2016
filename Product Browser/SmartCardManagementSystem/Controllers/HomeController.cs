@@ -300,7 +300,7 @@ namespace SmartCardManagementSystem.Controllers
             System.Diagnostics.Debug.WriteLine("-------RUNNING GET----------");
 
             ABBDataContext context = new ABBDataContext();
-            var smartcardList = context.SmartCards.OrderBy(a => a.TagId).ToList();
+            var smartcardList = context.SmartCards.OrderByDescending(a => a.DataItems.Count).ThenBy(a => a.TagId).ToList();
 
             ViewData["tagID"] = tagID;
             ViewData["activePanel"] = "paneltitle_" + tagID;

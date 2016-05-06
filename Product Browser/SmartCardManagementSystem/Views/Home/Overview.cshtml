@@ -1,6 +1,4 @@
-﻿@*asdsada*@
-
-<style>
+﻿<style>
     .btn-file {
         position: relative;
         overflow: hidden;
@@ -25,9 +23,6 @@
 
 <body onload="scrollToActivePanel()">
 
-    @*<script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
-    <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">*@
-
     <script src="/js/dropzone.js"></script>
     <link rel="stylesheet" href="/css/dropzone.css">
 
@@ -36,27 +31,22 @@
         var activetagID = null;
 
         Dropzone.options.mydropzone = {
-            maxFilesize: 500,
+            maxFilesize: 1000,
             acceptedFiles: ".3gp, .3g2, .avi, .mp4, .mpeg, .mpg, .avi, .mov, .wm, .wmv, .wmx, .bmp, .gif, .png, .jpg, .tiff, .ico, .pdf",
-            init: function() {
-                this.on("queuecomplete", function(file) {
+            parallelUploads: 1,
+            init: function () {
+                this.on("queuecomplete", function (file) {
                     @*alert("Added file.");*@
                     if (activetagID != null) {
-                        window.location.href = 'Overview?tagID='+activetagID;
+                        window.location.href = 'Overview?tagID=' + activetagID;
                     }
                     else {
                         location.reload(true);
                     }
-                    
+
                 });
                 this.on("error", function (file, errorMessage) {
-                    if (file.size > 104857600) {
-                        alert("A file did not upload correctly: \n" + file.name + "\n" + errorMessage +"\n Your file was large, and in case of an unexpected error you may need to just retry uploading it.");
-                        }
-                    else {
-                        alert("A file did not upload correctly: " + file.name + " "+errorMessage);
-                    }
-                    
+                    alert("A file did not upload correctly: " + file.name + "\n" + errorMessage);
                 });
 
             }
@@ -65,13 +55,16 @@
         function scrollToActivePanel() {
 
             @*alert("@ViewData["activepanel"]");*@
-            var el = document.getElementById('@ViewData["activepanel"]');
-            el.scrollIntoView(true);
-            window.scrollBy(0, -65);
+            @*var el = document.getElementById('@ViewData["activepanel"]');
+            el.scrollIntoView(true);*@
 
-            @*$('html, body').animate({
-                scrollTop: $("#@ViewData["activepanel"]").offset().top
-            }, 500);*@
+            @*window.scrollBy(0, -65);*@
+
+            $('html, body').animate({
+                scrollTop: $("#@ViewData["activepanel"]").offset().top-55
+            }, 700);
+
+
         }
 
         function setactivetagID(newactivetagID) {
@@ -79,30 +72,34 @@
         }
     </script>
 
-
-
     @model List<DatabaseModel.Model.SmartCard>
 
     <p> Debug data:</p>
-    <p> Number of cards in passed list: @Model.Count</p>
-    <h2>@ViewData["nameOfCard"]</h2>
-    <h2>@ViewData["tagID"]</h2>
-    <h2>@ViewData["activepanel"]</h2>
+        <p> Number of cards in passed list: @Model.Count</p>
+        <h2>@ViewData["nameOfCard"]</h2>
+        <h2>@ViewData["tagID"]</h2>
+        <h2>@ViewData["activepanel"]</h2>
+
+    @* top spacer *@
+    <p> </p>
 
     @* Top panel - information/description*@
     <div class="panel-group" id="accordion">
-        <div class="panel panel-primary">
+        <div class="panel panel-primary" data-toggle="collapse" data-parent="#accordion" id="paneltitle_-1" href="#collapse_-1">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" id="paneltitle_0" href="#collapse_0">
-                        # &nbsp; &emsp; &emsp; Status &emsp; &emsp; Cardname
-                        <span class="pull-right glyphicon glyphicon-menu-down"></span>
-                    </a>
+                    # &nbsp; &emsp; &emsp; Status &emsp; &emsp; Cardname
+                    <span class="pull-right glyphicon glyphicon-menu-down"></span>
                 </h4>
             </div>
-            <div id="collapse_0" class="panel-collapse collapse in">
+            <div id="collapse_-1" class="panel-collapse collapse in">
                 <div class="panel-body">
-                    Here you can edit your cards by connecting data to an empty card, or editing an existing card.
+                    Here you can edit your cards by connecting data to an empty card, or edit an existing cards.<br />
+                    Cards marked by green are active (have valid content on them).<br />
+                    You can hover over all buttons/fields to get tooltip information.<br />
+                    Accepted video formats: <b>.3gp, .3g2, .avi, .mp4, .mpeg, .mpg, .avi, .mov, .wm, .wmv, .wmx</b><br />
+                    Accepted image formats: <b>.bmp, .gif, .png, .jpg, .tiff, .ico, .pdf</b><br />
+                    Accepted document formats: <b>.pdf</b>
                 </div>
             </div>
         </div>
@@ -111,9 +108,9 @@
         @for (int i = 1; i <= @Model.Count; i++)
         {
             <div onclick="setactivetagID(@( (int) Model[i - 1].TagId) )" class="@(@Model[i - 1].DataItems.Count > 0 ? "panel panel-success" : "panel panel-default")">
-                <div class="panel-heading">
+                <div class="panel-heading" data-toggle="collapse" data-parent="#accordion" id="paneltitle_@Model[i-1].TagId" href="#collapse_@Model[i-1].TagId">
                     <h4 class="panel-title">
-                        <span data-toggle="collapse" data-parent="#accordion" id="paneltitle_@i" href="#collapse_@i">
+                        <span>
                             #@Model[i - 1].TagId &emsp; &emsp;
 
                             @*formating, not in use
@@ -125,7 +122,7 @@
                             <span class="pull-right glyphicon glyphicon-menu-down"></span>
                     </h4>
                 </div>
-                <div id="collapse_@i" class="@( (int) @ViewData["tagID"] == (i) ? "panel-collapse collapse in" : "panel-collapse collapse")">
+                <div id="collapse_@Model[i-1].TagId" class="@( (int) @ViewData["tagID"] == (@Model[i-1].TagId) ? "panel-collapse collapse in" : "panel-collapse collapse")">
                     <div class="panel-body">
 
                         <form class="form-inline" role="form" method="post" action="OverviewSaveSmartcardName">
@@ -145,7 +142,7 @@
                             @* Make a top-panel for the data-items section*@
                             <div class="panel panel-default">
                                 <div class="panel-heading" data-toggle="tooltip" title="List of all media files on this card">
-                                Media Content
+                                    Media Content
                                     <span class="pull-right">
                                         <form class="form-inline" role="form" method="post" action="OverviewDeleteAllDataitems">
                                             <div class="form-group">
@@ -182,55 +179,8 @@
                             </div>
                         }
                         <p></p>
-                        @*<form class="form-inline" role="form" method="post" action="OverviewUploadDataitem">
-                                <label class="btn btn-primary btn-sm glyphicon glyphicon-plus" for="my-file-selector" data-toggle="tooltip" title="Upoload new media file">
-                                    <input id="my-file-selector" type="file" style="display:none;">
-                                    Button Text Here
-                                </label>
-                            </form>*@
 
-                        @*<form class="form-inline" role="form" method="post" action="@Url.Content("OverviewUploadDataitem")" enctype="multipart/form-data">
-                                <label class="btn btn-default btn-sm" for="uploadfile" data-toggle="tooltip" title="Upload new media file">
-
-                                    <input type="file" name="uploadfile" class="" id="uploadfile" style="display:none;" accept="image/*,video/*,.pdf" />
-                                    <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
-
-
-
-                                    Click to add new file
-                                    <input type="submit" name="Submit" value="Upload" class="btn btn-primary btn-sm" />
-                                </label>
-                            </form>
-                        *@
-
-
-                        @*<form class="form-inline" method="post" action="@Url.Content("OverviewUploadDataitem")" enctype="multipart/form-data">
-
-                                <div class="field">
-                                    <input type="file" name="uploadfile" class="" id="uploadfile" style="display:inline-block;" accept="image/*,video/*,.pdf" />
-                                    <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
-
-                                    <input type="submit" name="Submit" value="Submit" class="btn btn-primary btn-sm" />
-                                </div>
-
-                            </form>*@
-
-                        @*<form class="form-inline" method="post" action="@Url.Content("OverviewUploadDataitem")" enctype="multipart/form-data">
-                                <div style="position:relative;">
-                                    <a class='btn btn-primary btn-sm' href='javascript:;'>
-                                        Select a new file...
-                                        <input type="file" name="uploadfile" accept="image/*,video/*,.pdf" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' name="file_source" size="40" onchange='$("#upload-file-info").html($(this).val());'>
-                                        <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
-                                    </a>
-                                    &nbsp;
-                                    <span class='label label-info' id="upload-file-info"></span>
-
-                                </div>
-                                <p></p>
-                                <input type="submit" name="Submit" value="Upload selected file" class="btn btn-primary btn-sm" />
-                            </form>*@
-
-
+                        @*OLD STYLE UPLOAD FORM NOT IN USE*@
                         @*<form class="form-inline" method="post" action="@Url.Content("OverviewUploadDataitemDZ")" enctype="multipart/form-data">
                                 <span class="btn btn-default btn-file">
                                     Select new file... <input type="file">
@@ -241,6 +191,7 @@
                                 <input type="submit" name="Submit" value="Upload selected" class="btn btn-primary" />
                             </form>*@
 
+                        @*DROPZONE STYLE OPLOAD FORM*@
                         <form asp-action="OverviewUploadDataitemDZ" asp-controller="Home" method="post" enctype="multipart/form-data" class="dropzone" id="mydropzone">
                             <div class="dz-message" data-dz-message><span>Drop files to upload, or click to browse</span></div>
                             <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
@@ -252,85 +203,3 @@
         }
 
     </div>
-
-
-
-    @*
-
-            POSSIBLE UPLOAD SOLUTION?
-
-
-                                <div style="position:relative;">
-                                <a class='btn btn-primary' href='javascript:;'>
-                                    Choose File...
-                                    <input type="file" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' name="file_source" size="40" onchange='$("#upload-file-info").html($(this).val());'>
-                                </a>
-                                &nbsp;
-                                <span class='label label-info' id="upload-file-info"></span>
-                            </div>
-        http://stackoverflow.com/questions/11235206/twitter-bootstrap-form-file-element-upload-button
-
-
-                                <div>
-                                    <label class="control-label">Select File</label>
-                                    <input id="input-1" type="file" class="file">
-                                </div>
-
-            @(i == 1 ? "panel-collapse collapse in" : "panel-collapse collapse")
-
-        <div class="panel-group" id="accordion">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
-                            Collapsible Group 1
-                        </a>
-                    </h4>
-                </div>
-                <div id="collapse1" class="panel-collapse collapse in">
-                    <div class="panel-body">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-                        minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                        commodo consequat.
-                    </div>
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">
-                            Collapsible Group 2
-                        </a>
-                    </h4>
-                </div>
-                <div id="collapse2" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-                        minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                        commodo consequat.
-                    </div>
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">
-                            Collapsible Group 3
-                        </a>
-                    </h4>
-                </div>
-                <div id="collapse3" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-                        minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                        commodo consequat.
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-    *@
