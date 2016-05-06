@@ -295,7 +295,7 @@ namespace SmartCardManagementSystem.Controllers
 
         //General Overview GET, with tagID
         [HttpGet]
-        public IActionResult Overview(int tagID)
+        public IActionResult Overview([FromQuery]int tagID = -1)
         {
             System.Diagnostics.Debug.WriteLine("-------RUNNING GET----------");
 
@@ -307,7 +307,6 @@ namespace SmartCardManagementSystem.Controllers
 
             return View(smartcardList);
         }
-
 
         public IActionResult About()
         {

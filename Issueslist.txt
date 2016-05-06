@@ -1,0 +1,19 @@
+APP:
+- Hadde vært greit med en skyggeslot for de virtuelle elementene, gjerne med collect funksjon
+- Mangler en indikator i PDF/IMAGE containerene som indikerer hvilket bilde som vises fra preview-scrolleren (tenkte da bare tynn rød outline)
+- Se på timouts for tag, hva er logisk workaround for dårlig tracking?
+- UNdersøke bakgrunn. (kontakt Bård for photoshopping)
+
+- deploye appen til surface greien
+
+SMS:
+- Panel_-1 bør ikke vises ved mindre det ikke brukes noen tagID (vises nå som open default ved hver sidelastning) - FIXED
+- Litt bedre posisjonering av fjern-alle knappen om mulig
+- Vis hexadecimal kode for kortene
+- Avklare om vi skal logge inn
+- Restyle hovedsiden (Help, About, Overview)
+- Gjennomgå kode for exceptions
+
+- Publishe webserver, sørge for automatisk oppstart av den.
+
+- Evt lage en instruksjonsvideo / samkjørt med manual senere

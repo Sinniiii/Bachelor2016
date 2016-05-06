@@ -61,7 +61,7 @@
             @*window.scrollBy(0, -65);*@
 
             $('html, body').animate({
-                scrollTop: $("#@ViewData["activepanel"]").offset().top-55
+                scrollTop: $("#@ViewData["activePanel"]").offset().top-55
             }, 700);
 
 
@@ -74,11 +74,11 @@
 
     @model List<DatabaseModel.Model.SmartCard>
 
-    <p> Debug data:</p>
-        <p> Number of cards in passed list: @Model.Count</p>
-        <h2>@ViewData["nameOfCard"]</h2>
-        <h2>@ViewData["tagID"]</h2>
-        <h2>@ViewData["activepanel"]</h2>
+    @*<p> Debug data:</p>
+    <p> Number of cards in passed list: @Model.Count</p>
+    <h2>@ViewData["nameOfCard"]</h2>
+    <h2>@ViewData["tagID"]</h2>
+    <h2>@ViewData["activepanel"]</h2>*@
 
     @* top spacer *@
     <p> </p>
@@ -92,7 +92,7 @@
                     <span class="pull-right glyphicon glyphicon-menu-down"></span>
                 </h4>
             </div>
-            <div id="collapse_-1" class="panel-collapse collapse in">
+            <div id="collapse_-1" class="@( (int) @ViewData["tagID"] == -1 ? "panel-collapse collapse in" : "panel-collapse collapse")">
                 <div class="panel-body">
                     Here you can edit your cards by connecting data to an empty card, or edit an existing cards.<br />
                     Cards marked by green are active (have valid content on them).<br />
