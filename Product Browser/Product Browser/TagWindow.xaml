@@ -8,8 +8,8 @@
         mc:Ignorable="d" Width="600" Height="600">
 
     <controls:TagVisualization.Resources>
-        <Image x:Key="gradientEffect" Source="/Resources/radial_gradient.png" />
-        <Image x:Key="pauseButtonImage" Source="/Resources/btnPause.png" />
+        <Image x:Key="gradientEffect1" Source="/Resources/radial_gradient_blue.png" />
+        <Image x:Key="gradientEffect2" Source="/Resources/radial_gradient_red.png" />
     </controls:TagVisualization.Resources>
 
     <Grid>
@@ -24,7 +24,8 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <UserControl Name="animationPulse" Content="{StaticResource gradientEffect}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="3"/>
+        <UserControl Name="animationPulse1" Content="{StaticResource gradientEffect1}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="3"/>
+        <UserControl Name="animationPulse2" Content="{StaticResource gradientEffect2}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="3"/>
         
         <TextBox Grid.Column="1" Grid.Row="1" BorderBrush="Red" BorderThickness="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent"/>
 

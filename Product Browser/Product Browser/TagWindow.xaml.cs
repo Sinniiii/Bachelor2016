@@ -77,7 +77,7 @@ namespace Product_Browser
                         physicsTimerLowPriority,
                         animationPulseTimer;
 
-        bool pulseUp = false;
+        bool pulseUp1 = true, pulseUp2 = true;
 
         /// <summary>
         /// These are helpers to determine visibility of UI elements in TagWindow.xaml. Start by displaying loading
@@ -262,21 +262,35 @@ namespace Product_Browser
 
         private void AnimationPulseHandler(object sender, EventArgs args)
         {
-            if (pulseUp)
+            if (pulseUp1)
             {
-                animationPulse.Opacity += 0.005;
+                animationPulse1.Opacity += 0.01;
 
-                if (animationPulse.Opacity >= 0.6d)
-                    pulseUp = false;
+                if (animationPulse1.Opacity >= 0.6d)
+                    pulseUp1 = false;
             }
             else
             {
-                animationPulse.Opacity -= 0.005;
+                animationPulse1.Opacity -= 0.01;
 
-                if (animationPulse.Opacity <= 0.15d)
-                    pulseUp = true;
+                if (animationPulse1.Opacity <= 0.05d)
+                    pulseUp1 = true;
             }
-            
+
+            if (pulseUp2)
+            {
+                animationPulse2.Opacity += 0.01;
+
+                if (animationPulse2.Opacity >= 0.6d)
+                    pulseUp2 = false;
+            }
+            else
+            {
+                animationPulse2.Opacity -= 0.01;
+
+                if (animationPulse2.Opacity <= 0.05d)
+                    pulseUp2 = true;
+            }
         }
 
         #endregion
@@ -438,7 +452,9 @@ namespace Product_Browser
             animationPulseTimer.Interval = new TimeSpan(0, 0, 0, 0, 25);
             animationPulseTimer.Tick += AnimationPulseHandler;
             animationPulseTimer.Start();
-            animationPulse.Opacity = 0.6d;
+
+            animationPulse1.Opacity = 0.05d;
+            animationPulse2.Opacity = 0.30d;
         }
     }
 }
