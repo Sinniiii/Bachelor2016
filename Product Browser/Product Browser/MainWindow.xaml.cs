@@ -14,6 +14,7 @@ using DatabaseModel;
 using DatabaseModel.Model;
 using TouchEventArgs = System.Windows.Input.TouchEventArgs;
 using Tesseract;
+using System.Windows.Input;
 
 //Baard was here
 

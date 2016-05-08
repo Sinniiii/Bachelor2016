@@ -6,7 +6,7 @@
         Title="Product Browser" Width="1200" Height="700">
     <Grid>
         <s:TagVisualizer Name="tagVisualizer" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" Height="Auto"/>
-        <s:ScatterView Name="scatterView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" Height="Auto"/>
+        <local:ScatterViewMod x:Name="scatterView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" Height="Auto"/>
 
     </Grid>
 </s:SurfaceWindow>

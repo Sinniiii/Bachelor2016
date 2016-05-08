@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Surface.Presentation.Controls;
 using DatabaseModel.Model;
+using Microsoft.Surface.Presentation.Input;
 
 namespace Product_Browser.ScatterItems
 {

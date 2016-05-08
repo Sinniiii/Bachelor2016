@@ -13,6 +13,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Threading;
 using Microsoft.Surface.Core;
 using System.Windows.Data;
+using System.IO;
 
 namespace Product_Browser
 {
@@ -22,7 +23,7 @@ namespace Product_Browser
     public partial class TagWindow : TagVisualization, INotifyPropertyChanged
     {
 
-        #region Physics and position constants
+        #region Physics, position and graphics constants
 
         // Radius of gravity circle around tag visualization
         readonly double
@@ -49,7 +50,17 @@ namespace Product_Browser
             SCATTERITEM_VIDEO_STARTING_ROTATION = 0d,
             SCATTERITEM_IMAGE_STARTING_ROTATION = 0d;
 
-        
+        readonly double
+            ANIMATION_PULSE_1_STARTING_OPACITY = 0.05d,
+            ANIMATION_PULSE_1_OPACITY_CHANGE = 0.01d,
+            ANIMATION_PULSE_1_MAX_OPACITY = 0.65,
+            ANIMATION_PULSE_1_MIN_OPACITY = 0.05d,
+
+            ANIMATION_PULSE_2_STARTING_OPACITY = 0.05d,
+            ANIMATION_PULSE_2_OPACITY_CHANGE = 0.01d,
+            ANIMATION_PULSE_2_MAX_OPACITY = 0.65,
+            ANIMATION_PULSE_2_MIN_OPACITY = 0.05d;
+
 
         #endregion
 
@@ -218,7 +229,7 @@ namespace Product_Browser
             if (!physicsTimer.IsEnabled)
                 physicsTimer.Start();
             
-            e.Item.Deceleration = double.NaN;
+            e.Item.Deceleration = double.NaN; // Prevent inertia
 
             // Add all inactive to active
             physicsItemsActive.AddRange(physicsItemsInactive);
@@ -264,31 +275,31 @@ namespace Product_Browser
         {
             if (pulseUp1)
             {
-                animationPulse1.Opacity += 0.01;
+                animationPulse1.Opacity += ANIMATION_PULSE_1_OPACITY_CHANGE;
 
-                if (animationPulse1.Opacity >= 0.6d)
+                if (animationPulse1.Opacity >= ANIMATION_PULSE_1_MAX_OPACITY)
                     pulseUp1 = false;
             }
             else
             {
-                animationPulse1.Opacity -= 0.01;
+                animationPulse1.Opacity -= ANIMATION_PULSE_1_OPACITY_CHANGE;
 
-                if (animationPulse1.Opacity <= 0.05d)
+                if (animationPulse1.Opacity <= ANIMATION_PULSE_1_MIN_OPACITY)
                     pulseUp1 = true;
             }
 
             if (pulseUp2)
             {
-                animationPulse2.Opacity += 0.01;
+                animationPulse2.Opacity += ANIMATION_PULSE_2_OPACITY_CHANGE;
 
-                if (animationPulse2.Opacity >= 0.6d)
+                if (animationPulse2.Opacity >= ANIMATION_PULSE_2_MAX_OPACITY)
                     pulseUp2 = false;
             }
             else
             {
-                animationPulse2.Opacity -= 0.01;
+                animationPulse2.Opacity -= ANIMATION_PULSE_2_OPACITY_CHANGE;
 
-                if (animationPulse2.Opacity <= 0.05d)
+                if (animationPulse2.Opacity <= ANIMATION_PULSE_2_MIN_OPACITY)
                     pulseUp2 = true;
             }
         }
@@ -382,10 +393,13 @@ namespace Product_Browser
                         item = new DocumentScatterItem(dataItems[i]);
                         break;
                     case SmartCardDataItemCategory.Video:
-                        item = new VideoScatterItem(dataItems[i]);
+                        if(File.Exists(SmartCardDataItem.VIDEO_FOLDER + dataItems[i].Name)) // Don't add if we cant find video
+                            item = new VideoScatterItem(dataItems[i]);
                         break;
                 }
-                scatterItems.Add(item);
+
+                if(item != null)
+                    scatterItems.Add(item);
             }
 
             for (int i = 0; i < scatterItems.Count; i++)
@@ -453,8 +467,8 @@ namespace Product_Browser
             animationPulseTimer.Tick += AnimationPulseHandler;
             animationPulseTimer.Start();
 
-            animationPulse1.Opacity = 0.05d;
-            animationPulse2.Opacity = 0.30d;
+            animationPulse1.Opacity = ANIMATION_PULSE_1_STARTING_OPACITY;
+            animationPulse2.Opacity = ANIMATION_PULSE_2_STARTING_OPACITY;
         }
     }
 }
