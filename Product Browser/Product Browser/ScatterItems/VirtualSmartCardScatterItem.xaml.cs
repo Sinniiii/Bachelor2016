@@ -8,19 +8,20 @@ using DatabaseModel;
 using DatabaseModel.Model;
 using System.Data.Entity;
 using System.Linq;
-using Product_Browser.ScatterItems;
 using System.Collections.ObjectModel;
 using System.Windows.Threading;
 using Microsoft.Surface.Core;
 using System.Windows.Data;
 using System.IO;
+using System.Windows.Input;
+using Microsoft.Surface.Presentation.Controls.TouchVisualizations;
 
-namespace Product_Browser
+namespace Product_Browser.ScatterItems
 {
     /// <summary>
     /// Interaction logic for TagWindow.xaml
     /// </summary>
-    public partial class TagWindow : TagVisualization, INotifyPropertyChanged
+    public partial class VirtualSmartCardScatterItem : ScatterViewItem, INotifyPropertyChanged
     {
 
         #region Physics, position and graphics constants
@@ -101,8 +102,10 @@ namespace Product_Browser
 
         #region Properties
 
+        public long TagId { get; private set; }
+
         /// <summary>
-        /// These are states, and should only ever be set true
+        /// These are states, setting one to true disables the others
         /// </summary>
         public bool FoundSmartCard { get { return foundSmartCard; }
             set
@@ -152,22 +155,34 @@ namespace Product_Browser
 
         #region Event Handlers
 
-        protected override void OnMoved(RoutedEventArgs args)
+        /// <summary>
+        /// Overwritten to ensure we do not capture touch with anything but center object
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnPreviewTouchDown(System.Windows.Input.TouchEventArgs e)
         {
-            base.OnMoved(args);
+            if (centerObject.TouchesOver.Contains(e.TouchDevice))
+                base.OnTouchDown(e);
+            else
+                e.Handled = true;
+        }
 
-            // Add all inactive to active
-            physicsItemsActive.AddRange(physicsItemsInactive);
+        /// <summary>
+        /// Overwritten to ensure we do not capture touch with anything but center object
+        /// </summary>
+        protected override void OnMouseDown(MouseButtonEventArgs e)
+        {
+            if (centerObject.IsMouseOver)
+                base.OnMouseDown(e);
+            else
+                e.Handled = true;
+        }
 
-            // Clear inactive
-            physicsItemsInactive.Clear();
+        protected override void OnManipulationDelta(ManipulationDeltaEventArgs e)
+        {
+            base.OnManipulationDelta(e);
 
-            // Calculate new positions for all of them
-            CalculateNewPositions(physicsItemsActive);
-
-            // Start timer if not running
-            if (!physicsTimer.IsEnabled)
-                physicsTimer.Start();
+            Moved();
         }
 
         private void ScatterViewItemMovedHandler(object sender, EventArgs args)
@@ -248,7 +263,7 @@ namespace Product_Browser
             List<ScatterItemPhysics> toDiscard = new List<ScatterItemPhysics>(physicsItemsActive.Count);
             
             for (int i = 0; i < physicsItemsActive.Count; i++)
-                if (physicsItemsActive[i].Run(Center, Orientation))
+                if (physicsItemsActive[i].Run(ActualCenter, ActualOrientation))
                     toDiscard.Add(physicsItemsActive[i]);
 
             physicsItemsActive.RemoveAll(a => toDiscard.Contains(a));
@@ -262,7 +277,7 @@ namespace Product_Browser
             List<ScatterItemPhysics> toDiscard = new List<ScatterItemPhysics>(physicsItemsActive.Count);
 
             for (int i = 0; i < physicsItemsActiveLowPriority.Count; i++)
-                if (physicsItemsActiveLowPriority[i].RunLowPriority(Center, Orientation, CIRCLE_SIZE))
+                if (physicsItemsActiveLowPriority[i].RunLowPriority(ActualCenter, ActualOrientation, CIRCLE_SIZE))
                     toDiscard.Add(physicsItemsActiveLowPriority[i]);
 
             physicsItemsActiveLowPriority.RemoveAll(a => toDiscard.Contains(a));
@@ -307,6 +322,23 @@ namespace Product_Browser
         #endregion
 
         #region Methods
+
+        public void Moved()
+        {
+            // Add all inactive to active
+            physicsItemsActive.AddRange(physicsItemsInactive);
+
+            // Clear inactive
+            physicsItemsInactive.Clear();
+
+            // Calculate new positions for all of them
+            CalculateNewPositions(physicsItemsActive);
+
+            // Start timer if not running
+            if (!physicsTimer.IsEnabled)
+                physicsTimer.Start();
+        }
+
         public void DestroySmartCard(ScatterView view)
         {
             for (int i = 0; i < physicsItemsInactive.Count; i++)
@@ -344,15 +376,18 @@ namespace Product_Browser
                 videos[i].OriginalPositionOffset = (Point)(SCATTERITEM_VIDEO_STARTING_POSITION + SCATTERITEM_VIDEO_POSITION_OFFSET * i);
                 videos[i].Item.ZIndex = videos.Count - 1 - i;
             }
+
+            // Ensure this is below the others
+            this.ZIndex = -1;
         }
 
-        public async void InitializeSmartCard(ScatterView view)
+        private async void InitializeVirtualSmartCard(ScatterView view)
         {
             ABBDataContext context = new ABBDataContext();
             
             smartCard = await context.SmartCards
                 .Include(s => s.DataItems.Select(d => d.DataField))
-                .FirstOrDefaultAsync(a => a.TagId == VisualizedTag.Value);
+                .FirstOrDefaultAsync(a => a.TagId == TagId);
             
             List<SmartCardDataItem> dataItems = null;
 
@@ -406,38 +441,42 @@ namespace Product_Browser
             {
                 ScatterItemPhysics physics = new ScatterItemPhysics(scatterItems[i]);
 
-                scatterItems[i].PreviewTouchDown += ScatterViewItemMovedHandler;
-                scatterItems[i].PreviewMouseDown += ScatterViewItemMovedHandler;
-
-                // Bind the scatterviewitem opacity to our parent's opacity, so that we can fade out along with it
-                Binding opacityBinding = new Binding("Opacity");
-                opacityBinding.Source = this.Parent;
-                scatterItems[i].SetBinding(ScatterViewItem.OpacityProperty, opacityBinding);
+                scatterItems[i].TouchDown += ScatterViewItemMovedHandler;
+                scatterItems[i].MouseDown += ScatterViewItemMovedHandler;
                 
                 physics.PositionLocked += ScatterViewItemLockedHandler;
                 physics.HighPriority += ScatterViewItemHighPriorityHandler;
                 physics.LowPriority += ScatterViewItemLowPriorityHandler;
-                
-                scatterItems[i].Center = this.Center;
-                scatterItems[i].Orientation = this.Orientation;
+
+                scatterItems[i].Center = this.ActualCenter;
+                scatterItems[i].Orientation = this.ActualOrientation;
 
                 if(scatterItems[i] is DocumentScatterItem)
                 {
                     physics.OriginalOrientationOffset = SCATTERITEM_DOCUMENT_STARTING_ROTATION;
                     physics.OriginalWidth = SCATTERITEM_DOCUMENT_STARTING_SIZE.Width;
                     physics.OriginalHeight = SCATTERITEM_DOCUMENT_STARTING_SIZE.Height;
+                    physics.PullOffset = (Point)SCATTERITEM_DOCUMENT_STARTING_POSITION;
+
+                    documentPlaceholder.Visibility = Visibility.Visible;
                 }
                 else if (scatterItems[i] is ImageContainerScatterItem || scatterItems[i] is ImageScatterItem)
                 {
                     physics.OriginalOrientationOffset = SCATTERITEM_IMAGE_STARTING_ROTATION;
                     physics.OriginalWidth = SCATTERITEM_IMAGE_STARTING_SIZE.Width;
                     physics.OriginalHeight = SCATTERITEM_IMAGE_STARTING_SIZE.Height;
+                    physics.PullOffset = (Point)SCATTERITEM_IMAGE_STARTING_POSITION;
+
+                    imagePlaceholder.Visibility = Visibility.Visible;
                 }
                 else
                 {
                     physics.OriginalOrientationOffset = SCATTERITEM_VIDEO_STARTING_ROTATION;
                     physics.OriginalWidth = SCATTERITEM_VIDEO_STARTING_SIZE.Width;
                     physics.OriginalHeight = SCATTERITEM_VIDEO_STARTING_SIZE.Height;
+                    physics.PullOffset = (Point)SCATTERITEM_VIDEO_STARTING_POSITION;
+
+                    videoPlaceholder.Visibility = Visibility.Visible;
                 }
 
                 view.Items.Add(scatterItems[i]);
@@ -450,9 +489,11 @@ namespace Product_Browser
 
         #endregion
 
-        public TagWindow()
+        public VirtualSmartCardScatterItem(ScatterView view, long tagId)
         {
             InitializeComponent();
+
+            TagId = tagId;
 
             physicsTimer = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);
             physicsTimer.Interval = new TimeSpan(0, 0, 0, 0, 5);
@@ -469,6 +510,13 @@ namespace Product_Browser
 
             animationPulse1.Opacity = ANIMATION_PULSE_1_STARTING_OPACITY;
             animationPulse2.Opacity = ANIMATION_PULSE_2_STARTING_OPACITY;
+
+            this.CanScale = false; // Disable resizing
+            
+            ShowsActivationEffects = false; // Disable flash when selected
+            IsTopmostOnActivation = false; // Prevent it from showing over the other elements
+
+            InitializeVirtualSmartCard(view);
         }
     }
 }

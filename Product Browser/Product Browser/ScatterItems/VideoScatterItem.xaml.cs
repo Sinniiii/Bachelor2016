@@ -82,17 +82,33 @@ namespace Product_Browser.ScatterItems
         private void PauseButtonClicked(object sender, RoutedEventArgs e)
         {
             PauseVideo();
+
+            e.Handled = true;
         }
 
         private void PlayButtonClicked(object sender, RoutedEventArgs e)
         {
             IsPlaying = true;
             videoPlayer.Play();
+
+            e.Handled = true;
         }
 
         #endregion
 
         #region EventHandlers
+
+        protected override void OnMouseDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseDown(e);
+            e.Handled = false; // Continue upwards, to notify tagWindow of movement
+        }
+
+        protected override void OnTouchDown(TouchEventArgs e)
+        {
+            base.OnTouchDown(e);
+            e.Handled = false; // Continue upwards, to notify tagWindow of movement
+        }
 
         protected void VideoPlayerLoadedHandler(object obj, EventArgs args)
         {

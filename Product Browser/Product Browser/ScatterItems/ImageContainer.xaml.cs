@@ -24,10 +24,13 @@ namespace Product_Browser.ScatterItems
     {
         private const double SCROLL_SPEED = 10d,
                              PAGE_NUMBER_OPACITY = 0.15d;
+
         private double numberOfImages = 3d;
         private int placeholderImages = 2;
 
         private bool populated = false;
+
+        UserControl selectedImage;
 
         #region PropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
@@ -75,9 +78,9 @@ namespace Product_Browser.ScatterItems
 
         #region EventHandlers
 
-        protected override void OnPreviewMouseDown(MouseButtonEventArgs e)
+        protected override void OnMouseDown(MouseButtonEventArgs e)
         {
-            base.OnPreviewMouseDown(e);
+            base.OnMouseDown(e);
 
             if (stackPanel.Orientation == Orientation.Horizontal)
             {
@@ -89,13 +92,20 @@ namespace Product_Browser.ScatterItems
                 scrollStartPoint = e.GetPosition(this).Y;
                 scrollStartOffset = scrollBar.VerticalOffset;
             }
+
+            if(selectedImage != null)
+            {
+                selectedImage.BorderThickness = new Thickness(0d);
+                selectedImage = null;
+            }
             
             CaptureMouse();
+            e.Handled = true;
         }
 
-        protected override void OnPreviewTouchDown(TouchEventArgs e)
+        protected override void OnTouchDown(TouchEventArgs e)
         {
-            base.OnPreviewTouchDown(e);
+            base.OnTouchDown(e);
 
             if (stackPanel.Orientation == Orientation.Horizontal)
             {
@@ -108,12 +118,19 @@ namespace Product_Browser.ScatterItems
                 scrollStartOffset = scrollBar.VerticalOffset;
             }
 
+            if (selectedImage != null)
+            {
+                selectedImage.BorderThickness = new Thickness(0d);
+                selectedImage = null;
+            }
+
             e.TouchDevice.Capture(this);
+            e.Handled = true;
         }
 
-        protected override void OnPreviewMouseMove(MouseEventArgs e)
+        protected override void OnMouseMove(MouseEventArgs e)
         {
-            base.OnPreviewMouseMove(e);
+            base.OnMouseMove(e);
 
             if (IsMouseCaptured)
             {
@@ -134,9 +151,9 @@ namespace Product_Browser.ScatterItems
             }
         }
 
-        protected override void OnPreviewTouchMove(TouchEventArgs e)
+        protected override void OnTouchMove(TouchEventArgs e)
         {
-            base.OnPreviewTouchMove(e);
+            base.OnTouchMove(e);
 
             if (e.TouchDevice.Captured == this)
             {
@@ -157,16 +174,20 @@ namespace Product_Browser.ScatterItems
             }
         }
 
-        protected override void OnPreviewMouseUp(MouseButtonEventArgs e)
+        protected override void OnMouseUp(MouseButtonEventArgs e)
         {
+            base.OnMouseUp(e);
+
             if (IsMouseCaptured)
                 ReleaseMouseCapture();
 
             StartAutoScroll();
         }
 
-        protected override void OnPreviewTouchUp(TouchEventArgs e)
+        protected override void OnTouchUp(TouchEventArgs e)
         {
+            base.OnTouchUp(e);
+
             if (e.TouchDevice.Captured == this)
                 ReleaseTouchCapture(e.TouchDevice);
 
@@ -209,6 +230,10 @@ namespace Product_Browser.ScatterItems
                     // Send the event(add placeholderimages/2 to index, due to starting with empty images as space occupiers
                     NewMainImage(((Image)((Grid)((UserControl)stackPanel.Children[desiredImageIndex + (placeholderImages / 2)]).Content).Children[0]).Source);
 
+                    // Add highlight
+                    selectedImage = stackPanel.Children[desiredImageIndex + (placeholderImages / 2)] as UserControl;
+                    selectedImage.BorderThickness = new Thickness(1d);
+
                     scrollTimer.Stop();
                 }
             }
@@ -232,6 +257,10 @@ namespace Product_Browser.ScatterItems
 
                     // Send the event(add placeholderimages/2 to index, due to starting with empty images as space occupiers
                     NewMainImage(((Image)((Grid)((UserControl)stackPanel.Children[desiredImageIndex + (placeholderImages / 2)]).Content).Children[0]).Source);
+
+                    // Add highlight
+                    selectedImage = stackPanel.Children[desiredImageIndex + (placeholderImages / 2)] as UserControl;
+                    selectedImage.BorderThickness = new Thickness(1d);
 
                     scrollTimer.Stop();
                 }
@@ -356,7 +385,7 @@ namespace Product_Browser.ScatterItems
                 Image child = new Image();
                 child.Source = s;
                 child.Stretch = Stretch.Uniform;
-
+                
                 UserControl u = new UserControl();
 
                 Grid g = new Grid();
@@ -380,6 +409,13 @@ namespace Product_Browser.ScatterItems
                 }
 
                 u.Padding = new Thickness(5d);
+                u.BorderBrush = new SolidColorBrush(Colors.Red);
+
+                if (i == 0)
+                {
+                    u.BorderThickness = new Thickness(1);
+                    selectedImage = u;
+                }
 
                 stackPanel.Children.Add(u);
             }

@@ -19,6 +19,8 @@ namespace Product_Browser.ScatterItems
             SPEED_SIZE = 4d,
             DEGREES_TO_RADIANS = (2 * Math.PI) / 360d;
 
+        public Point PullOffset { get; set; }
+
         public ScatterViewItem Item { get; private set; }
 
         #region Events
@@ -69,7 +71,7 @@ namespace Product_Browser.ScatterItems
 
         public bool RunLowPriority(Point tagPosition, double tagRotation, double pullRadius)
         {
-            Point circlePosition = GetConvertedPosition(tagPosition, new Point(0d, 0), tagRotation);
+            Point circlePosition = GetConvertedPosition(tagPosition, PullOffset, tagRotation);
 
             double distance = (Item.Center - circlePosition).Length;
 

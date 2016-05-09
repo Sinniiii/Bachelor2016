@@ -27,16 +27,14 @@ namespace Product_Browser.ScatterItems
 
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
-            if (!container.IsMouseOver) // Else we capture with imagecontainer
-                base.OnMouseDown(e);
+            base.OnMouseDown(e);
+            e.Handled = false; // Continue upwards, to notify tagWindow of movement
         }
 
         protected override void OnTouchDown(TouchEventArgs e)
         {
-            if (!container.TouchesOver.Contains(e.TouchDevice)) // Else we capture with imagecontainer
-                base.OnTouchDown(e);
-            else
-                e.Handled = true;
+            base.OnTouchDown(e);
+            e.Handled = false; // Continue upwards, to notify tagWindow of movement
         }
 
         public void OnBarLoaded(object obj, EventArgs args)

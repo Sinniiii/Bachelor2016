@@ -1,7 +1,7 @@
 APP:
-- Hadde vært greit med en skyggeslot for de virtuelle elementene, gjerne med collect funksjon
-- Mangler en indikator i PDF/IMAGE containerene som indikerer hvilket bilde som vises fra preview-scrolleren (tenkte da bare tynn rød outline)
-- Se på timouts for tag, hva er logisk workaround for dårlig tracking?
+- Hadde vært greit med en skyggeslot for de virtuelle elementene, gjerne med collect funksjon // Done, kanskje fikse litt på grafikken
+- Mangler en indikator i PDF/IMAGE containerene som indikerer hvilket bilde som vises fra preview-scrolleren (tenkte da bare tynn rød outline) // Done, stygt
+- Se på timouts for tag, hva er logisk workaround for dårlig tracking? // Endret hele systemet
 - UNdersøke bakgrunn. (kontakt Bård for photoshopping)
 
 - deploye appen til surface greien

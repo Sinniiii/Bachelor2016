@@ -22,10 +22,22 @@ namespace Product_Browser.ScatterItems
     /// </summary>
     public partial class ImageScatterItem : ScatterViewItem
     {
+        protected override void OnMouseDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseDown(e);
+            e.Handled = false; // Continue upwards, to notify tagWindow of movement
+        }
+
+        protected override void OnTouchDown(TouchEventArgs e)
+        {
+            base.OnTouchDown(e);
+            e.Handled = false; // Continue upwards, to notify tagWindow of movement
+        }
+
         public ImageScatterItem(SmartCardDataItem image)
         {
             InitializeComponent();
-
+            
             mainImage.Source = image.GetImageSource();
         }
     }

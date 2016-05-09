@@ -1,0 +1,58 @@
+﻿<controls:ScatterViewItem x:Class="Product_Browser.ScatterItems.VirtualSmartCardScatterItem"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Product_Browser"
+        xmlns:controls="http://schemas.microsoft.com/surface/2008"
+        mc:Ignorable="d" Background="Transparent">
+
+    <controls:ScatterViewItem.Resources>
+        <Image x:Key="gradientEffect1" Source="/Resources/radial_gradient_blue.png" />
+        <Image x:Key="gradientEffect2" Source="/Resources/radial_gradient_red.png" />
+    </controls:ScatterViewItem.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="200"/>
+            <RowDefinition Height="18"/>
+            <RowDefinition Height="125"/>
+            <RowDefinition Height="18"/>
+            <RowDefinition Height="200"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="28"/>
+            <ColumnDefinition Width="21.5"/>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="21.5"/>
+            <ColumnDefinition Width="28"/>
+            <ColumnDefinition Width="200"/>
+        </Grid.ColumnDefinitions>
+
+        <UserControl Name="animationPulse1" Content="{StaticResource gradientEffect1}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="7" Grid.RowSpan="5"/>
+        <UserControl Name="animationPulse2" Content="{StaticResource gradientEffect2}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="7" Grid.RowSpan="5"/>
+        
+        <UserControl Name="centerObject" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="3" BorderBrush="Red" BorderThickness="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent"/>
+
+        <UserControl Name="imagePlaceholder" Visibility="Hidden" Grid.Column="6" Grid.Row="2" BorderBrush="Gray" BorderThickness="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent"/>
+        <UserControl Name="videoPlaceholder" Visibility="Hidden" Grid.Column="0" Grid.Row="2" BorderBrush="Gray" BorderThickness="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent"/>
+        <UserControl Name="documentPlaceholder" Visibility="Hidden" Grid.Column="3" Grid.Row="0" BorderBrush="Gray" BorderThickness="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent"/>
+        
+        <ContentControl Name="loadingControl"
+                        IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ScatterViewItem}}, Path=LoadingSmartCard, FallbackValue=True}"
+                        Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ScatterViewItem}}, Path=LoadingSmartCard, Converter={StaticResource BoolToVisCon}, FallbackValue=Visible}"
+                        Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="3">
+
+            <controls:SurfaceTextBox x:Name="loadingText" Text="Loading Smart Card" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </ContentControl>
+
+        <ContentControl Name="notFoundControl"
+                        IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ScatterViewItem}}, Path=NotFoundSmartCard, FallbackValue=False}"
+                        Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ScatterViewItem}}, Path=NotFoundSmartCard, Converter={StaticResource BoolToVisCon}, FallbackValue=Hidden}"
+                        Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="3">
+
+            <controls:SurfaceTextBox x:Name="notFoundText" Text="Smart Card does not contain data" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </ContentControl>
+    </Grid>
+</controls:ScatterViewItem>

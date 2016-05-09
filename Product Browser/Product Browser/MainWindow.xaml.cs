@@ -13,8 +13,8 @@ using Microsoft.Surface.Presentation.Input;
 using DatabaseModel;
 using DatabaseModel.Model;
 using TouchEventArgs = System.Windows.Input.TouchEventArgs;
-using Tesseract;
 using System.Windows.Input;
+using Product_Browser.ScatterItems;
 
 //Baard was here
 
@@ -43,7 +43,7 @@ namespace Product_Browser
             {
                 TagVisualizationDefinition tagDef = new TagVisualizationDefinition();
 
-                tagDef.Source = new Uri("TagWindow.xaml", UriKind.Relative);
+                tagDef.Source = new Uri("TagVisualizationMod.xaml", UriKind.Relative);
                 tagDef.MaxCount = 1;
                 tagDef.LostTagTimeout = 2000;
                 tagDef.TagRemovedBehavior = TagRemovedBehavior.Fade;
@@ -54,19 +54,33 @@ namespace Product_Browser
                 tagVisualizer.Definitions.Add(tagDef);
             }
 
-            // Subscribe to add/remove events, since we need to handle those
-            tagVisualizer.VisualizationInitialized += VisualizationAdded;
-            tagVisualizer.VisualizationRemoved += VisualizationRemoved;
+            // Subscribe to add event, since we need to handle that one
+            tagVisualizer.VisualizationAdded += VisualizationAdded;
         }
 
         private void VisualizationAdded(object sender, TagVisualizerEventArgs args)
         {
-            (args.TagVisualization as TagWindow).InitializeSmartCard(scatterView);
-        }
+            TagVisualizationMod tagVis = args.TagVisualization as TagVisualizationMod;
 
-        private void VisualizationRemoved(object sender, TagVisualizerEventArgs args)
-        {
-            (args.TagVisualization as TagWindow).DestroySmartCard(scatterView);
+            VirtualSmartCardScatterItem item = null;
+
+            foreach(ScatterViewItem it in scatterView.Items) // Find out if we already have virtual version of this card placed
+            {
+                if(it is VirtualSmartCardScatterItem)
+                {
+                    if ((it as VirtualSmartCardScatterItem).TagId == tagVis.VisualizedTag.Value)
+                        item = it as VirtualSmartCardScatterItem;
+                }
+            }
+
+            if(item == null)
+            {
+                item = new VirtualSmartCardScatterItem(scatterView, tagVis.VisualizedTag.Value);
+
+                scatterView.Items.Add(item);
+            }
+
+            (args.TagVisualization as TagVisualizationMod).InitializeSmartCard(item);
         }
     }
 }

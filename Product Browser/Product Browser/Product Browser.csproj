@@ -102,8 +102,11 @@
     <Compile Include="ScatterViewMod.xaml.cs">
       <DependentUpon>ScatterViewMod.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TagWindow.xaml.cs">
-      <DependentUpon>TagWindow.xaml</DependentUpon>
+    <Compile Include="ScatterItems\VirtualSmartCardScatterItem.xaml.cs">
+      <DependentUpon>VirtualSmartCardScatterItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TagVisualizationMod.xaml.cs">
+      <DependentUpon>TagVisualizationMod.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -141,7 +144,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TagWindow.xaml">
+    <Page Include="ScatterItems\VirtualSmartCardScatterItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TagVisualizationMod.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
