@@ -3,6 +3,8 @@ APP:
 - Mangler en indikator i PDF/IMAGE containerene som indikerer hvilket bilde som vises fra preview-scrolleren (tenkte da bare tynn rød outline) // Done, stygt
 - Se på timouts for tag, hva er logisk workaround for dårlig tracking? // Endret hele systemet
 - UNdersøke bakgrunn. (kontakt Bård for photoshopping)
+- Killzone, grålig område til høyre når toucher virtuelle smartcards?
+- Navn på midten av virtuelt smartcard, kanskje tagId i et hjørne
 
 - deploye appen til surface greien
 

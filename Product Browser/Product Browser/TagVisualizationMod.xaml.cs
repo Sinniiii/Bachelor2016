@@ -18,7 +18,7 @@ namespace Product_Browser
             if(connectedItem != null)
             {
                 connectedItem.Center = this.Center;
-                connectedItem.Orientation = this.Orientation - this.OrientationOffsetFromTag;
+                connectedItem.Orientation = this.Orientation;
 
                 connectedItem.Moved();
             }
@@ -29,7 +29,7 @@ namespace Product_Browser
             this.connectedItem = connectedItem;
 
             connectedItem.Center = this.Center;
-            connectedItem.Orientation = this.Orientation - this.OrientationOffsetFromTag;
+            connectedItem.Orientation = this.Orientation;
 
             connectedItem.Moved();
         }
