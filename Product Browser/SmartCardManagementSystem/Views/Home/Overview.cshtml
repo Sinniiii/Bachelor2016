@@ -90,7 +90,7 @@
         <div class="panel panel-primary" data-toggle="collapse" data-parent="#accordion" id="paneltitle_-1" href="#collapse_-1">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    # &nbsp; &emsp; &emsp; Status &emsp; &emsp; Cardname (ID)&emsp; &emsp; (Active cards)
+                    # &nbsp; &nbsp; &nbsp; &emsp; &emsp; Status &emsp; &emsp; Cardname (ID)&emsp; &emsp; (Active cards)
                     <span class="pull-right glyphicon glyphicon-menu-down"></span>
                 </h4>
             </div>
@@ -125,11 +125,15 @@
                         <span>
                             #@Model[i - 1].TagId &emsp; &emsp;
 
-                            @*formating, not in use
-                                @(@Model[i - 1].TagId < 10 ? "yes" : "no")
-                                @(@Model[i - 1].TagId < 100 ? "" : "")
-                            *@
-
+                            @if (@Model[i - 1].TagId < 10)
+                            {
+                                <span>&nbsp;</span>
+                            }
+                            @if (@Model[i - 1].TagId < 100)
+                            {
+                                <span>&nbsp;</span>
+                            }
+                            
                             @(@Model[i - 1].DataItems.Count > 0 ? "Active" : "Empty") &emsp; &emsp; @Model[i - 1].Name (@hexValue)
                             <span class="pull-right glyphicon glyphicon-menu-down"></span>
                     </h4>
@@ -237,7 +241,7 @@
                         <div class="panel panel-primary" data-toggle="collapse" data-parent="#accordion" id="paneltitle_-2" href="#collapse_-2">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
-                                    # &nbsp; &emsp; &emsp; Status &emsp; &emsp; Cardname (ID)&emsp; &emsp; (Empty Cards)
+                                    # &nbsp; &nbsp; &nbsp; &emsp; &emsp; Status &emsp; &emsp; Cardname (ID)&emsp; &emsp; (Empty Cards)
                                     <span class="pull-right glyphicon glyphicon-menu-down"></span>
                                 </h4>
                             </div>
@@ -261,10 +265,14 @@
                                         <span>
                                             #@Model[i - 1].TagId &emsp; &emsp;
 
-                                            @*formating, not in use
-                                    @(@Model[i - 1].TagId < 10 ? "yes" : "no")
-                                    @(@Model[i - 1].TagId < 100 ? "" : "")
-                                            *@
+                                            @if (@Model[i - 1].TagId < 10)
+                                            {
+                                                <span>&nbsp;</span>
+                                            }
+                                            @if (@Model[i - 1].TagId < 100)
+                                            {
+                                                <span>&nbsp;</span>
+                                            }
 
                                             @(@Model[i - 1].DataItems.Count > 0 ? "Active" : "Empty") &emsp; &emsp; @Model[i - 1].Name (@hexValue)
                                             <span class="pull-right glyphicon glyphicon-menu-down"></span>
