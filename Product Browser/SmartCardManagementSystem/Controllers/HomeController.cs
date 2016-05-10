@@ -302,8 +302,35 @@ namespace SmartCardManagementSystem.Controllers
             ABBDataContext context = new ABBDataContext();
             var smartcardList = context.SmartCards.OrderByDescending(a => a.DataItems.Count).ThenBy(a => a.TagId).ToList();
 
+            var firstEmptyIndex = -1;
+            var tagIsActive = false;
+
+            //Find the first empty card (by index)
+            for (int i = 0; i <= smartcardList.Count; i++)
+            {
+                var count = smartcardList.ElementAt(i).DataItems.Count;
+                var currenttagID = smartcardList.ElementAt(i).TagId;
+                if (tagID == currenttagID)
+                {
+                    tagIsActive = true;
+                }
+
+                if (count == 0)
+                {
+                    firstEmptyIndex = i;
+
+                    break;
+                }
+            }
+
+            if (tagID < 0) { tagIsActive = true; }
+
+            //Set viewdata
             ViewData["tagID"] = tagID;
+            ViewData["tagIsActive"] = tagIsActive;
             ViewData["activePanel"] = "paneltitle_" + tagID;
+            ViewData["firstEmptyIndex"] = firstEmptyIndex;
+
 
             return View(smartcardList);
         }
