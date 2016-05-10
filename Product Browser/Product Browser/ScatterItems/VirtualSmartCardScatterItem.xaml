@@ -33,7 +33,22 @@
         <UserControl Name="animationPulse1" Content="{StaticResource gradientEffect1}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="7" Grid.RowSpan="5"/>
         <UserControl Name="animationPulse2" Content="{StaticResource gradientEffect2}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="7" Grid.RowSpan="5"/>
 
-        <UserControl Name="centerObject" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="3" BorderBrush="Red" BorderThickness="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="#4C000000"/>
+        <UserControl Name="centerObject" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="3" BorderThickness="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="#4C000000">
+            <UserControl.BorderBrush>
+                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                    <LinearGradientBrush.RelativeTransform>
+                        <TransformGroup>
+                            <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                            <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                            <RotateTransform CenterY="0.5" CenterX="0.5" Angle="180"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </LinearGradientBrush.RelativeTransform>
+                    <GradientStop Color="Black"/>
+                    <GradientStop Offset="1" Color="#FF6C0000"/>
+                </LinearGradientBrush>
+            </UserControl.BorderBrush>
+        </UserControl>
 
         <UserControl Name="imagePlaceholder" Visibility="Hidden" Grid.Column="6" Grid.Row="2" BorderBrush="Gray" BorderThickness="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent"/>
         <UserControl Name="videoPlaceholder" Visibility="Hidden" Grid.Column="0" Grid.Row="2" BorderBrush="Gray" BorderThickness="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent"/>
