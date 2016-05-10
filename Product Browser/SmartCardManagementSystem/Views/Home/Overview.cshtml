@@ -147,6 +147,53 @@
                         </form>
 
                         <p></p>
+
+                        @* Does the card have no dataitems? Then we can skip this, otherwise...*@
+                        @if (Model[i - 1].DataItems.Count > 0)
+                {
+                            @* Make a top-panel for the data-items section*@
+                            <div class="panel panel-default">
+                                <div class="panel-heading" data-toggle="tooltip" title="List of all media files on this card">
+                                    <h1 class="panel-title pull-left" STYLE="padding-top: 8px;">Media Content</h1>
+                                        <span class="pull-right">
+                                            <form class="form-inline" role="form" method="post" action="OverviewDeleteAllDataitems">
+                                                <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
+                                                <button type="submit" class="btn btn-sm btn-warning btn-sm glyphicon glyphicon-trash" data-toggle="tooltip" title="Delete ALL media items from card"></button>
+                                            </form>
+                                        </span>
+                                        <div class="clearfix"></div>
+</div>
+
+                                                                @*
+                                    <button class="btn btn-default pull-right">asdadsad</button>
+                                    <div class="clearfix"></div>
+                                                                *@
+
+                                @* List all dataitems in this Smartcard*@
+                                @for (int j = 0; j < Model[i - 1].DataItems.Count; j++)
+                                {
+                                    <div class="panel-body">
+                                        <form class="form-inline" role="form" method="post" action="OverviewDeleteDataitem">
+                                            <div class="form-group">
+
+                                                <button type="submit" class="btn btn-danger btn-xs glyphicon glyphicon-remove" data-toggle="tooltip" title="Delete this mediafile"></button>
+                                                <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
+                                                <input type="hidden" class="form-control" id="dataItemID" name="dataItemID" value="@Model[i - 1].DataItems.ElementAt(j).Id">
+                                                &emsp;&emsp;
+                                                <label for="mediaType">
+                                                    <span data-toggle="tooltip" title="Media type">@Model[i - 1].DataItems.ElementAt(j).Category</span>
+                                                    &emsp; &emsp;
+                                                    <span data-toggle="tooltip" title="Filename">@Model[i - 1].DataItems.ElementAt(j).Name</span>
+                                                </label>
+
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                }
+
+                            </div>
+                        }
                         <p></p>
 
                         @*OLD STYLE UPLOAD FORM NOT IN USE*@
