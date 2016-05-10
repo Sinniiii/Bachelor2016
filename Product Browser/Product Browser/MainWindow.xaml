@@ -5,7 +5,7 @@
         xmlns:local="clr-namespace:Product_Browser"
         Title="Product Browser" Width="1200" Height="700">
     <Grid>
-        <Image Source="/Resources/ABB Product Browser BG.jpg" />
+        <Image Source="/Resources/ABB Product Browser BG.jpg" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" />
 
         <s:TagVisualizer Name="tagVisualizer" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" Height="Auto"/>
         <local:ScatterViewMod x:Name="scatterView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" Height="Auto"/>

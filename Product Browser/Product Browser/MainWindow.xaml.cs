@@ -78,6 +78,7 @@ namespace Product_Browser
                 item = new VirtualSmartCardScatterItem(scatterView, tagVis.VisualizedTag.Value);
 
                 scatterView.Items.Add(item);
+                scatterView.Activate(item);
             }
 
             (args.TagVisualization as TagVisualizationMod).InitializeSmartCard(item);

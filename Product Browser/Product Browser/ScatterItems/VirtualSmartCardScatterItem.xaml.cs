@@ -327,7 +327,7 @@ namespace Product_Browser.ScatterItems
         {
             // Add all inactive to active
             physicsItemsActive.AddRange(physicsItemsInactive);
-
+            this.Opacity = 1d;
             // Clear inactive
             physicsItemsInactive.Clear();
 
@@ -383,6 +383,11 @@ namespace Product_Browser.ScatterItems
 
         private async void InitializeVirtualSmartCard(ScatterView view)
         {
+            // Remove shadow effect ?
+            this.LogicalChildren.MoveNext();
+            var ssc = this.LogicalChildren.Current as Microsoft.Surface.Presentation.Generic.SurfaceShadowChrome;
+            ssc.Visibility = Visibility.Hidden;
+
             ABBDataContext context = new ABBDataContext();
             
             smartCard = await context.SmartCards
@@ -515,7 +520,7 @@ namespace Product_Browser.ScatterItems
             
             ShowsActivationEffects = false; // Disable flash when selected
             IsTopmostOnActivation = false; // Prevent it from showing over the other elements
-
+            
             InitializeVirtualSmartCard(view);
         }
     }
