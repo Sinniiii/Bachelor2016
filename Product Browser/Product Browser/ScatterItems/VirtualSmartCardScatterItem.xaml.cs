@@ -15,6 +15,7 @@ using System.Windows.Data;
 using System.IO;
 using System.Windows.Input;
 using Microsoft.Surface.Presentation.Controls.TouchVisualizations;
+using System.Windows.Controls;
 
 namespace Product_Browser.ScatterItems
 {
@@ -381,11 +382,15 @@ namespace Product_Browser.ScatterItems
             this.ZIndex = -1;
         }
 
-        private async void InitializeVirtualSmartCard(ScatterView view)
+        /// <summary>
+        /// Initializes this SmartCard by getting data from database and creating child elements. Should only be called
+        /// after this SmartCardScatterViewItem has been added to the ScattterView visual tree(use UpdateLayout on scatterview)
+        /// </summary>
+        /// <param name="view"></param>
+        public async void InitializeVirtualSmartCard(ScatterView view)
         {
-            // Remove shadow effect ?
-            this.LogicalChildren.MoveNext();
-            var ssc = this.LogicalChildren.Current as Microsoft.Surface.Presentation.Generic.SurfaceShadowChrome;
+            // Remove shadow effect
+            var ssc = this.GetTemplateChild("shadow") as Microsoft.Surface.Presentation.Generic.SurfaceShadowChrome;
             ssc.Visibility = Visibility.Hidden;
 
             ABBDataContext context = new ABBDataContext();
@@ -521,7 +526,7 @@ namespace Product_Browser.ScatterItems
             ShowsActivationEffects = false; // Disable flash when selected
             IsTopmostOnActivation = false; // Prevent it from showing over the other elements
             
-            InitializeVirtualSmartCard(view);
+            //InitializeVirtualSmartCard(view);
         }
     }
 }
