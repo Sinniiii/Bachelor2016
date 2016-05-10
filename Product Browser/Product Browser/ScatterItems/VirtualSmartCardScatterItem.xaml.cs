@@ -105,6 +105,17 @@ namespace Product_Browser.ScatterItems
 
         public long TagId { get; private set; }
 
+        private string _smartCardName = "";
+        public string SmartCardName
+        {
+            get { return _smartCardName; }
+            set
+            {
+                _smartCardName = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         /// <summary>
         /// These are states, setting one to true disables the others
         /// </summary>
@@ -116,7 +127,7 @@ namespace Product_Browser.ScatterItems
 
                 foundSmartCard = value;
                 loadingSmartCard = !value;
-                foundSmartCard = !value;
+                notFoundSmartCard = !value;
                 NotifyPropertyChanged();
                 NotifyPropertyChanged("NotFoundSmartCard");
                 NotifyPropertyChanged("LoadingSmartCard");
@@ -328,7 +339,7 @@ namespace Product_Browser.ScatterItems
         {
             // Add all inactive to active
             physicsItemsActive.AddRange(physicsItemsInactive);
-            this.Opacity = 1d;
+            
             // Clear inactive
             physicsItemsInactive.Clear();
 
@@ -408,6 +419,8 @@ namespace Product_Browser.ScatterItems
             }
 
             FoundSmartCard = true;
+
+            SmartCardName = smartCard.Name;
 
             List<ScatterViewItem> scatterItems = new List<ScatterViewItem>();
 

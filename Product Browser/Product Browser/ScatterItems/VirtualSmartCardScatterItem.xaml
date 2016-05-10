@@ -33,27 +33,34 @@
         <UserControl Name="animationPulse1" Content="{StaticResource gradientEffect1}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="7" Grid.RowSpan="5"/>
         <UserControl Name="animationPulse2" Content="{StaticResource gradientEffect2}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="7" Grid.RowSpan="5"/>
 
-        <UserControl Name="centerObject" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="3" BorderBrush="Red" BorderThickness="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent"/>
+        <UserControl Name="centerObject" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="3" BorderBrush="Red" BorderThickness="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="#4C000000"/>
 
         <UserControl Name="imagePlaceholder" Visibility="Hidden" Grid.Column="6" Grid.Row="2" BorderBrush="Gray" BorderThickness="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent"/>
         <UserControl Name="videoPlaceholder" Visibility="Hidden" Grid.Column="0" Grid.Row="2" BorderBrush="Gray" BorderThickness="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent"/>
         <UserControl Name="documentPlaceholder" Visibility="Hidden" Grid.Column="3" Grid.Row="0" BorderBrush="Gray" BorderThickness="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent"/>
 
         <ContentControl Name="loadingControl"
-                        IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ScatterViewItem}}, Path=LoadingSmartCard, FallbackValue=True}"
                         Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ScatterViewItem}}, Path=LoadingSmartCard, Converter={StaticResource BoolToVisCon}, FallbackValue=Visible}"
-                        Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="3">
+                        Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="3">
 
-            <controls:SurfaceTextBox x:Name="loadingText" Text="Loading Smart Card" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <controls:SurfaceTextBox Background="Transparent" BorderThickness="0" x:Name="loadingText" Text="Loading Smart Card" HorizontalAlignment="Center" VerticalAlignment="Center" />
         </ContentControl>
 
         <ContentControl Name="notFoundControl"
-                        IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ScatterViewItem}}, Path=NotFoundSmartCard, FallbackValue=False}"
                         Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ScatterViewItem}}, Path=NotFoundSmartCard, Converter={StaticResource BoolToVisCon}, FallbackValue=Hidden}"
-                        Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="3">
+                        Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="3">
 
-            <controls:SurfaceTextBox x:Name="notFoundText" Text="Smart Card does not contain data" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <controls:SurfaceTextBox Background="Transparent" BorderThickness="0" x:Name="notFoundText" Text="Empty SmartCard" HorizontalAlignment="Center" VerticalAlignment="Center" />
         </ContentControl>
+
+        <ContentControl Name="foundControl"
+                        Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ScatterViewItem}}, Path=FoundSmartCard, Converter={StaticResource BoolToVisCon}, FallbackValue=Hidden}"
+                        Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="3">
+
+            <controls:SurfaceTextBox Background="Transparent" BorderThickness="0" x:Name="FoundText" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                     Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ScatterViewItem}}, Path=SmartCardName}"/>
+        </ContentControl>
+
     </Grid>
 
 </controls:ScatterViewItem>
