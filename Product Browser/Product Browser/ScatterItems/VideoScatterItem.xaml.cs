@@ -13,7 +13,7 @@ namespace Product_Browser.ScatterItems
     /// <summary>
     /// Interaction logic for VideoScatterItem.xaml
     /// </summary>
-    public partial class VideoScatterItem : ScatterViewItem, INotifyPropertyChanged
+    public partial class VideoScatterItem : ABBScatterItem, INotifyPropertyChanged
     {
         #region PropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
@@ -98,16 +98,9 @@ namespace Product_Browser.ScatterItems
 
         #region EventHandlers
 
-        protected override void OnMouseDown(MouseButtonEventArgs e)
+        public override void AnimationPulseHandler(object sender, EventArgs args)
         {
-            base.OnMouseDown(e);
-            e.Handled = false; // Continue upwards, to notify tagWindow of movement
-        }
-
-        protected override void OnTouchDown(TouchEventArgs e)
-        {
-            base.OnTouchDown(e);
-            e.Handled = false; // Continue upwards, to notify tagWindow of movement
+            grad.Angle = (grad.Angle + 2d) % 360d;
         }
 
         protected void VideoPlayerLoadedHandler(object obj, EventArgs args)

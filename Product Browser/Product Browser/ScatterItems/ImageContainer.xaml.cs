@@ -22,15 +22,6 @@ namespace Product_Browser.ScatterItems
     /// </summary>
     public partial class ImageContainer : UserControl
     {
-        private const double SCROLL_SPEED = 10d,
-                             PAGE_NUMBER_OPACITY = 0.15d;
-
-        private double numberOfImages = 3d;
-        private int placeholderImages = 2;
-
-        private bool populated = false;
-
-        UserControl selectedImage;
 
         #region PropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
@@ -45,6 +36,16 @@ namespace Product_Browser.ScatterItems
         #endregion
 
         #region Fields
+
+        private const double SCROLL_SPEED = 10d,
+                             PAGE_NUMBER_OPACITY = 0.15d;
+
+        private double numberOfImages = 3d;
+        private int placeholderImages = 2;
+
+        private bool populated = false;
+
+        UserControl selectedImage;
 
         List<BitmapImage> images;
 
@@ -232,7 +233,7 @@ namespace Product_Browser.ScatterItems
 
                     // Add highlight
                     selectedImage = stackPanel.Children[desiredImageIndex + (placeholderImages / 2)] as UserControl;
-                    selectedImage.BorderThickness = new Thickness(1d);
+                    selectedImage.BorderThickness = new Thickness(1d, 0d, 1d, 0d);
 
                     scrollTimer.Stop();
                 }
@@ -260,7 +261,7 @@ namespace Product_Browser.ScatterItems
 
                     // Add highlight
                     selectedImage = stackPanel.Children[desiredImageIndex + (placeholderImages / 2)] as UserControl;
-                    selectedImage.BorderThickness = new Thickness(1d);
+                    selectedImage.BorderThickness = new Thickness(0d, 1d, 0d, 1d);
 
                     scrollTimer.Stop();
                 }
@@ -361,6 +362,7 @@ namespace Product_Browser.ScatterItems
             this.images = images;
             sizeItem.SizeChanged += OnParentSizeChanged; // Subscribe to parent size change event, need to adjust image sizes
             stackPanel.Orientation = alignment;
+
             // Only odd number of images
             numberOfImages = numberOfImagesToDisplay % 2 == 0 ? numberOfImagesToDisplay + 1 : numberOfImagesToDisplay;
 
@@ -413,7 +415,11 @@ namespace Product_Browser.ScatterItems
 
                 if (i == 0)
                 {
-                    u.BorderThickness = new Thickness(1);
+                    if (alignment == Orientation.Horizontal)
+                        u.BorderThickness = new Thickness(1d, 0d, 1d, 0d);
+                    else
+                        u.BorderThickness = new Thickness(0d, 1d, 0d, 1d);
+
                     selectedImage = u;
                 }
 

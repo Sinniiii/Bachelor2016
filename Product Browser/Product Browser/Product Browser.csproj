@@ -83,6 +83,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ScatterItems\ABBScatterItem.cs" />
     <Compile Include="ScatterItems\DocumentScatterItem.xaml.cs">
       <DependentUpon>DocumentScatterItem.xaml</DependentUpon>
     </Compile>
@@ -95,7 +96,6 @@
     <Compile Include="ScatterItems\ImageScatterItem.xaml.cs">
       <DependentUpon>ImageScatterItem.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ScatterItems\ScatterItemPhysics.cs" />
     <Compile Include="ScatterItems\VideoScatterItem.xaml.cs">
       <DependentUpon>VideoScatterItem.xaml</DependentUpon>
     </Compile>

@@ -12,7 +12,7 @@ namespace Product_Browser.ScatterItems
     /// <summary>
     /// Interaction logic for ImageScatterItem.xaml
     /// </summary>
-    public partial class ImageContainerScatterItem : ScatterViewItem
+    public partial class ImageContainerScatterItem : ABBScatterItem
     {
         #region Fields
 
@@ -26,16 +26,9 @@ namespace Product_Browser.ScatterItems
 
         #region EventHandlers
 
-        protected override void OnMouseDown(MouseButtonEventArgs e)
+        public override void AnimationPulseHandler(object sender, EventArgs args)
         {
-            base.OnMouseDown(e);
-            e.Handled = false; // Continue upwards, to notify tagWindow of movement
-        }
-
-        protected override void OnTouchDown(TouchEventArgs e)
-        {
-            base.OnTouchDown(e);
-            e.Handled = false; // Continue upwards, to notify tagWindow of movement
+            grad.Angle = (grad.Angle + 2d) % 360d;
         }
 
         public void BarLoadedHandler(object obj, EventArgs args)

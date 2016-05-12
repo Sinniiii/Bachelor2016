@@ -21,20 +21,13 @@ namespace Product_Browser.ScatterItems
     /// <summary>
     /// Interaction logic for DocumentScatterItem.xaml
     /// </summary>
-    public partial class DocumentScatterItem : ScatterViewItem
+    public partial class DocumentScatterItem : ABBScatterItem
     {
         List<BitmapImage> images;
 
-        protected override void OnMouseDown(MouseButtonEventArgs e)
+        public override void AnimationPulseHandler(object sender, EventArgs args)
         {
-            base.OnMouseDown(e);
-            e.Handled = false; // Continue upwards, to notify tagWindow of movement
-        }
-
-        protected override void OnTouchDown(TouchEventArgs e)
-        {
-            base.OnTouchDown(e);
-            e.Handled = false; // Continue upwards, to notify tagWindow of movement
+            grad.Angle = (grad.Angle + 2d) % 360d;
         }
 
         public void OnBarLoaded(object obj, EventArgs args)

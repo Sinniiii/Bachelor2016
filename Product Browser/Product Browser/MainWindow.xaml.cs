@@ -15,6 +15,7 @@ using DatabaseModel.Model;
 using TouchEventArgs = System.Windows.Input.TouchEventArgs;
 using System.Windows.Input;
 using Product_Browser.ScatterItems;
+using System.Windows.Threading;
 
 //Baard was here
 
@@ -25,13 +26,62 @@ namespace Product_Browser
     /// </summary>
     public partial class MainWindow : SurfaceWindow
     {
-        
-        public MainWindow()
-        {
-            InitializeComponent();
 
-            InitializeTagVisualizer();
+        #region Fields
+
+        static double MAX_REMOVE_AREA_SIZE = Microsoft.Surface.Core.InteractiveSurface.PrimarySurfaceDevice.Height * 0.10d;
+
+        DispatcherTimer removeAreaAnimationTimer;
+
+        int manipulatedSmartCards = 0;
+
+        #endregion
+
+        #region EventHandlers
+
+        private void RemoveAreaAnimationHandler(object sender, EventArgs args)
+        {
+            if (manipulatedSmartCards > 0)
+            {
+                if (removeArea1.Height.Value >= MAX_REMOVE_AREA_SIZE)
+                    return;
+
+                removeArea1.Height = new GridLength(removeArea1.Height.Value + 5d);
+                removeArea2.Height = new GridLength(removeArea2.Height.Value + 5d);
+            }
+            else
+            {
+                if (removeArea1.Height.Value == 0)
+                    removeAreaAnimationTimer.Stop();
+                else
+                {
+                    double newValue = removeArea1.Height.Value - 5d;
+
+                    if (newValue < 0)
+                        newValue = 0d;
+
+                    removeArea1.Height = new GridLength(newValue);
+                    removeArea2.Height = new GridLength(newValue);
+                }
+            }
         }
+
+        private void SmartCardManipulationStarted(object sender, EventArgs args)
+        {
+            manipulatedSmartCards++;
+
+            if (!removeAreaAnimationTimer.IsEnabled)
+                removeAreaAnimationTimer.Start();
+        }
+
+        private void SmartCardManipulationEnded(object sender, EventArgs args)
+        {
+            manipulatedSmartCards--;
+        }
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Adds definitions for the Tag Visualizer item, which makes it be on the lookout for those tags being
@@ -64,25 +114,44 @@ namespace Product_Browser
 
             VirtualSmartCardScatterItem item = null;
 
-            foreach(ScatterViewItem it in scatterView.Items) // Find out if we already have virtual version of this card placed
+            foreach (ScatterViewItem it in scatterView.Items) // Find out if we already have virtual version of this card placed
             {
-                if(it is VirtualSmartCardScatterItem)
+                if (it is VirtualSmartCardScatterItem)
                 {
                     if ((it as VirtualSmartCardScatterItem).TagId == tagVis.VisualizedTag.Value)
                         item = it as VirtualSmartCardScatterItem;
                 }
             }
 
-            if(item == null)
+            if (item == null)
             {
                 item = new VirtualSmartCardScatterItem(scatterView, tagVis.VisualizedTag.Value);
 
                 scatterView.Items.Add(item);
                 scatterView.UpdateLayout(); // Force an immediate update
+
                 item.InitializeVirtualSmartCard(scatterView);
+
+                // Assign our event handlers to input, so we can show the removal area
+                item.ContainerManipulationStarted += SmartCardManipulationStarted;
+                item.ContainerManipulationCompleted += SmartCardManipulationEnded;
             }
 
             (args.TagVisualization as TagVisualizationMod).InitializeSmartCard(item);
+        }
+
+        #endregion
+
+
+        public MainWindow()
+        {
+            InitializeComponent();
+
+            InitializeTagVisualizer();
+
+            removeAreaAnimationTimer = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);
+            removeAreaAnimationTimer.Interval = new TimeSpan(0, 0, 0, 0, 30);
+            removeAreaAnimationTimer.Tick += RemoveAreaAnimationHandler;
         }
     }
 }
