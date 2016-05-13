@@ -152,6 +152,11 @@ namespace Product_Browser
             removeAreaAnimationTimer = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);
             removeAreaAnimationTimer.Interval = new TimeSpan(0, 0, 0, 0, 30);
             removeAreaAnimationTimer.Tick += RemoveAreaAnimationHandler;
+
+            //VirtualSmartCardScatterItem x = new VirtualSmartCardScatterItem(scatterView, 1);
+            //scatterView.Items.Add(x);
+            //scatterView.UpdateLayout();
+            //x.InitializeVirtualSmartCard(scatterView);
         }
     }
 }

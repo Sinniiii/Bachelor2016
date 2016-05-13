@@ -33,9 +33,9 @@
         <UserControl Name="animationPulse1" Content="{StaticResource gradientEffect1}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="7" Grid.RowSpan="5" IsHitTestVisible="False"/>
         <UserControl Name="animationPulse2" Content="{StaticResource gradientEffect2}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="7" Grid.RowSpan="5" IsHitTestVisible="False"/>
 
-        <UserControl Name="centerObject" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="3" BorderThickness="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="#4C000000">
+        <UserControl Name="centerObject" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="3" BorderThickness="7" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="#4C000000">
             <UserControl.BorderBrush>
-                <LinearGradientBrush StartPoint="0.0, 0" EndPoint="1, 1" MappingMode="RelativeToBoundingBox">
+                <LinearGradientBrush EndPoint="1,1" MappingMode="RelativeToBoundingBox" StartPoint="0.0,0">
                     <LinearGradientBrush.RelativeTransform>
                         <TransformGroup>
                             <RotateTransform x:Name="grad" CenterY="0.5" CenterX="0.5"/>
@@ -43,10 +43,10 @@
                         </TransformGroup>
                     </LinearGradientBrush.RelativeTransform>
                     <GradientStop Color="Black"/>
-                    <GradientStop Color="#FF6C0000" Offset="0.25"/>
-                    <GradientStop Color="Black" Offset="0.5" />
-                    <GradientStop Color="#FF6C0000" Offset="0.75"/>
-                    <GradientStop Color="Black" Offset="1" />
+                    <GradientStop Color="#0179bc" Offset="0.25"/>
+                    <GradientStop Color="Black" Offset="0.50"/>
+                    <GradientStop Color="#2a5f6f" Offset="0.75"/>
+                    <GradientStop Color="Black" Offset="1"/>
                 </LinearGradientBrush>
             </UserControl.BorderBrush>
         </UserControl>

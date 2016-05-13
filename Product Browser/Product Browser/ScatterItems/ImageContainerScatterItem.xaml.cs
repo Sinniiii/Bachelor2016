@@ -28,7 +28,7 @@ namespace Product_Browser.ScatterItems
 
         public override void AnimationPulseHandler(object sender, EventArgs args)
         {
-            grad.Angle = (grad.Angle + 2d) % 360d;
+            grad.Angle = (grad.Angle + 0.5d) % 360d;
         }
 
         public void BarLoadedHandler(object obj, EventArgs args)

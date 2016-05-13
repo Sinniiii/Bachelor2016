@@ -373,7 +373,7 @@ namespace Product_Browser.ScatterItems
             for(int i = 0; i < placeholderImages; i++)
             {
                 UserControl b = new UserControl();
-                b.Padding = new Thickness(5d);
+                b.Margin = new Thickness(2.5d, 0d, 2.5d, 0d);
                 emptyImages.Add(b);
             }
             
@@ -386,7 +386,7 @@ namespace Product_Browser.ScatterItems
 
                 Image child = new Image();
                 child.Source = s;
-                child.Stretch = Stretch.Uniform;
+                child.Stretch = Stretch.Fill;
                 
                 UserControl u = new UserControl();
 
@@ -410,7 +410,7 @@ namespace Product_Browser.ScatterItems
                     g.Children.Add(box);
                 }
 
-                u.Padding = new Thickness(5d);
+                u.Margin = new Thickness(2.5d, 0d, 2.5d, 0d);
                 u.BorderBrush = new SolidColorBrush(Colors.Red);
 
                 if (i == 0)
