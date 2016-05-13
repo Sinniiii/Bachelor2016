@@ -209,8 +209,8 @@ namespace Product_Browser.ScatterItems
         {
             base.OnManipulationCompleted(e);
             
-            if (ActualCenter.Y < Microsoft.Surface.Core.InteractiveSurface.PrimarySurfaceDevice.Height * 0.10d
-                || ActualCenter.Y > Microsoft.Surface.Core.InteractiveSurface.PrimarySurfaceDevice.Height * 0.90d)
+            if (ActualCenter.Y < Microsoft.Surface.Core.InteractiveSurface.PrimarySurfaceDevice.Height * 0.05d
+                || ActualCenter.Y > Microsoft.Surface.Core.InteractiveSurface.PrimarySurfaceDevice.Height * 0.95d)
                 Die();
         }
 

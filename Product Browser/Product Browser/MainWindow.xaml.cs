@@ -29,7 +29,7 @@ namespace Product_Browser
 
         #region Fields
 
-        static double MAX_REMOVE_AREA_SIZE = Microsoft.Surface.Core.InteractiveSurface.PrimarySurfaceDevice.Height * 0.10d;
+        static double MAX_REMOVE_AREA_SIZE = Microsoft.Surface.Core.InteractiveSurface.PrimarySurfaceDevice.Height * 0.05d;
 
         DispatcherTimer removeAreaAnimationTimer;
 
