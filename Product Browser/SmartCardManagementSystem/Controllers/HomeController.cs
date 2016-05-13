@@ -18,7 +18,8 @@ namespace SmartCardManagementSystem.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            //return View();
+            return RedirectToAction("Overview");
         }
 
         //POST for deleting dataitem from a smartcard
@@ -342,7 +343,7 @@ namespace SmartCardManagementSystem.Controllers
             return View();
         }
 
-        public IActionResult Contact()
+        public IActionResult Help()
         {
             ViewData["Message"] = "Your contact page.";
 
