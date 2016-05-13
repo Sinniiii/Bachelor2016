@@ -143,6 +143,15 @@ namespace Product_Browser.ScatterItems
             return RunState.HighPriority;
         }
 
+        public void MoveToOriginalPosition(Point tagPosition, double tagRotation)
+        {
+            Vector screenTargetPosition = GetConvertedPosition(tagPosition, OriginalPositionOffset, tagRotation);
+            double screenTargetOrientation = (tagRotation + OriginalOrientationOffset + 360d) % 360d; // Add 360 and mod 360 to ensure target angle always positive
+
+            Center = (Point)screenTargetPosition;
+            Orientation = screenTargetOrientation;
+        }
+
         /// <summary>
         /// Calculates new speed based on max acceleration and relative position
         /// </summary>

@@ -32,10 +32,10 @@ namespace Product_Browser.ScatterItems
         readonly double
             CIRCLE_SIZE = 150d;
 
-        readonly int MAX_IMAGES_BEFORE_CONTAINER = 4;
+        readonly int MAX_IMAGES_BEFORE_CONTAINER = 8;
 
         readonly Size
-            SCATTERITEM_DOCUMENT_STARTING_SIZE = new Size(150, 200),
+            SCATTERITEM_DOCUMENT_STARTING_SIZE = new Size(150, 175),
             SCATTERITEM_VIDEO_STARTING_SIZE = new Size(200, 125),
             SCATTERITEM_IMAGE_STARTING_SIZE = new Size(200, 125);
 
@@ -347,18 +347,24 @@ namespace Product_Browser.ScatterItems
 
         public void Moved()
         {
-            // Add all inactive to active
-            physicsItemsActive.AddRange(physicsItemsInactive);
-            
-            // Clear inactive
-            physicsItemsInactive.Clear();
+            // Physics based, catch-up
 
-            // Calculate new positions for all of them
-            CalculateNewPositions(physicsItemsActive);
+            //// Add all inactive to active
+            //physicsItemsActive.AddRange(physicsItemsInactive);
 
-            // Start timer if not running
-            if (!physicsTimer.IsEnabled)
-                physicsTimer.Start();
+            //// Clear inactive
+            //physicsItemsInactive.Clear();
+
+            //// Calculate new positions for all of them
+            //CalculateNewPositions(physicsItemsActive);
+
+            //// Start timer if not running
+            //if (!physicsTimer.IsEnabled)
+            //    physicsTimer.Start();
+
+            // Instant
+            foreach (ABBScatterItem item in physicsItemsInactive)
+                item.MoveToOriginalPosition(ActualCenter, ActualOrientation);
         }
 
         private void Die()
@@ -516,7 +522,7 @@ namespace Product_Browser.ScatterItems
                         item = new DocumentScatterItem(dataItems[i]);
                         break;
                     case SmartCardDataItemCategory.Video:
-                        if(File.Exists(SmartCardDataItem.VIDEO_FOLDER + dataItems[i].Name)) // Don't add if we cant find video
+                        if(File.Exists(SmartCardDataItem.VIDEO_FOLDER + smartCard.TagId + @"\" + dataItems[i].Name)) // Don't add if we cant find video
                             item = new VideoScatterItem(dataItems[i]);
                         break;
                 }
