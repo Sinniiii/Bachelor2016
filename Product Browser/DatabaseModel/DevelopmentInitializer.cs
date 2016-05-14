@@ -51,15 +51,15 @@ namespace DatabaseModel
             smartcard.DataItems.Add(item2);
             smartcard.DataItems.Add(item3);
             smartcard.DataItems.Add(item4);
+            smartcard.DataItems.Add(item6);
+            smartcard.DataItems.Add(item7);
             smartcard.CardImage = item5;
 
             var smartcard2 = new SmartCard();
             smartcard2.Name = "Test card 2";
             smartcard2.TagId = 2;
             smartcard2.DataItems = new List<SmartCardDataItem>();
-
-            smartcard2.DataItems.Add(item6);
-            smartcard2.DataItems.Add(item7);
+            
             smartcard2.DataItems.Add(item8);
 
             context.SmartCards.Add(smartcard);

@@ -379,6 +379,9 @@ namespace Product_Browser.ScatterItems
                 
                 UserControl u = new UserControl();
 
+                u.BorderBrush = new SolidColorBrush(new Color() { R = 42, G = 95, B = 111, A = 255});
+                u.BorderThickness = new Thickness(1d);
+
                 Grid g = new Grid();
                 u.Content = g;
                 

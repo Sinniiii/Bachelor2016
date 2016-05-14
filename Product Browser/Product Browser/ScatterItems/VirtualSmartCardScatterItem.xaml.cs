@@ -558,6 +558,9 @@ namespace Product_Browser.ScatterItems
                     physics.OriginalSize = SCATTERITEM_DOCUMENT_STARTING_SIZE;
                     physics.PullOffset = (Point)SCATTERITEM_DOCUMENT_STARTING_POSITION;
 
+                    physics.Width = SCATTERITEM_DOCUMENT_STARTING_SIZE.Width;
+                    physics.Height = SCATTERITEM_DOCUMENT_STARTING_SIZE.Height;
+
                     documentPlaceholder.Visibility = Visibility.Visible;
                 }
                 else if (scatterItems[i] is ImageContainerScatterItem || scatterItems[i] is ImageScatterItem)
@@ -566,6 +569,9 @@ namespace Product_Browser.ScatterItems
                     physics.OriginalSize = SCATTERITEM_IMAGE_STARTING_SIZE;
                     physics.PullOffset = (Point)SCATTERITEM_IMAGE_STARTING_POSITION;
 
+                    physics.Width = SCATTERITEM_IMAGE_STARTING_SIZE.Width;
+                    physics.Height = SCATTERITEM_IMAGE_STARTING_SIZE.Height;
+
                     imagePlaceholder.Visibility = Visibility.Visible;
                 }
                 else
@@ -573,6 +579,9 @@ namespace Product_Browser.ScatterItems
                     physics.OriginalOrientationOffset = SCATTERITEM_VIDEO_STARTING_ROTATION;
                     physics.OriginalSize = SCATTERITEM_VIDEO_STARTING_SIZE;
                     physics.PullOffset = (Point)SCATTERITEM_VIDEO_STARTING_POSITION;
+
+                    physics.Width = SCATTERITEM_VIDEO_STARTING_SIZE.Width;
+                    physics.Height = SCATTERITEM_VIDEO_STARTING_SIZE.Height;
 
                     videoPlaceholder.Visibility = Visibility.Visible;
                 }

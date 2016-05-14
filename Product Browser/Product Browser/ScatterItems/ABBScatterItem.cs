@@ -211,13 +211,9 @@ namespace Product_Browser.ScatterItems
                 deltaWidth = -SPEED_SIZE;
 
             Width += deltaWidth;
-
-            double deltaHeight = OriginalSize.Height - Height;
-
-            if (deltaHeight > SPEED_SIZE)
-                deltaHeight = SPEED_SIZE;
-            else if (deltaHeight < -SPEED_SIZE)
-                deltaHeight = -SPEED_SIZE;
+            
+            // Keep aspect ratio constant throughout size change
+            double deltaHeight = deltaWidth * (OriginalSize.Height / OriginalSize.Width);
 
             Height += deltaHeight;
         }

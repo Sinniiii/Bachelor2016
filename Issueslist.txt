@@ -1,8 +1,5 @@
 APP:
-- Hadde vært greit med en skyggeslot for de virtuelle elementene, gjerne med collect funksjon
-- Mangler en indikator i PDF/IMAGE containerene som indikerer hvilket bilde som vises fra preview-scrolleren (tenkte da bare tynn rød outline)
-- Se på timouts for tag, hva er logisk workaround for dårlig tracking?
-- UNdersøke bakgrunn. (kontakt Bård for photoshopping)
+- Kanskje automatisk resize til aspekt ratio på image?
 
 - deploye appen til surface greien
 
