@@ -37,28 +37,24 @@ namespace Product_Browser.ScatterItems
 
         #region Fields
 
-        private const double SCROLL_SPEED = 10d,
-                             PAGE_NUMBER_OPACITY = 0.15d;
+        private const double
+            SCROLL_SPEED = 10d,
+            PAGE_NUMBER_OPACITY = 0.15d,
+            INACTIVE_OPACITY = 0.4d;
 
         private double numberOfImages = 3d;
         private int placeholderImages = 2;
 
-        private bool populated = false;
-
         UserControl selectedImage;
 
         List<BitmapImage> images;
-
-        /// <summary>
-        /// For automatically scrolling to closest item point
-        /// </summary>
+        
+        // For automatically scrolling to closest item point
         double[] stopOffsetPoints;
         double currentOffsetTarget;
         DispatcherTimer scrollTimer;
-
-        /// <summary>
-        /// Used by mouse/touch scrolling
-        /// </summary>
+        
+        // Used by mouse/touch scrolling
         double  scrollStartPoint,
                 scrollStartOffset;
 
@@ -96,7 +92,7 @@ namespace Product_Browser.ScatterItems
 
             if(selectedImage != null)
             {
-                selectedImage.BorderThickness = new Thickness(0d);
+                selectedImage.Opacity = INACTIVE_OPACITY;
                 selectedImage = null;
             }
             
@@ -121,7 +117,7 @@ namespace Product_Browser.ScatterItems
 
             if (selectedImage != null)
             {
-                selectedImage.BorderThickness = new Thickness(0d);
+                selectedImage.Opacity = INACTIVE_OPACITY;
                 selectedImage = null;
             }
 
@@ -195,6 +191,11 @@ namespace Product_Browser.ScatterItems
             StartAutoScroll();
         }
 
+        protected void OnSizeChanged(object obj, SizeChangedEventArgs args)
+        {
+            RecalculateSize(args.PreviousSize, args.NewSize);
+        }
+
         protected void OnScrollTimer(object obj, EventArgs args)
         {
             double delta = 0d;
@@ -210,7 +211,9 @@ namespace Product_Browser.ScatterItems
             if (Math.Abs(speed) > Math.Abs(delta))
                 speed = delta;
 
-            if (stackPanel.Orientation == Orientation.Horizontal) // TODO: Wasteful, fix
+            int desiredImageIndex = -1;
+
+            if (stackPanel.Orientation == Orientation.Horizontal)
             {
                 scrollBar.ScrollToHorizontalOffset(scrollBar.HorizontalOffset + speed);
 
@@ -218,7 +221,6 @@ namespace Product_Browser.ScatterItems
                 if (scrollBar.HorizontalOffset > currentOffsetTarget - 0.1d && scrollBar.HorizontalOffset < currentOffsetTarget + 0.1d)
                 {
                     // Find the correct image
-                    int desiredImageIndex = 0;
                     for (int i = 0; i < stopOffsetPoints.Length; i++)
                     {
                         if (stopOffsetPoints[i] > scrollBar.HorizontalOffset - 0.1d && stopOffsetPoints[i] < scrollBar.HorizontalOffset + 0.1d)
@@ -227,15 +229,6 @@ namespace Product_Browser.ScatterItems
                             break;
                         }
                     }
-
-                    // Send the event(add placeholderimages/2 to index, due to starting with empty images as space occupiers
-                    NewMainImage(((Image)((Grid)((UserControl)stackPanel.Children[desiredImageIndex + (placeholderImages / 2)]).Content).Children[0]).Source);
-
-                    // Add highlight
-                    selectedImage = stackPanel.Children[desiredImageIndex + (placeholderImages / 2)] as UserControl;
-                    selectedImage.BorderThickness = new Thickness(1d, 0d, 1d, 0d);
-
-                    scrollTimer.Stop();
                 }
             }
             else
@@ -246,7 +239,6 @@ namespace Product_Browser.ScatterItems
                 if (scrollBar.VerticalOffset > currentOffsetTarget - 0.1d && scrollBar.VerticalOffset < currentOffsetTarget + 0.1d)
                 {
                     // Find the correct image
-                    int desiredImageIndex = 0;
                     for (int i = 0; i < stopOffsetPoints.Length; i++)
                     {
                         if (stopOffsetPoints[i] > scrollBar.VerticalOffset - 0.1d && stopOffsetPoints[i] < scrollBar.VerticalOffset + 0.1d)
@@ -255,23 +247,20 @@ namespace Product_Browser.ScatterItems
                             break;
                         }
                     }
-
-                    // Send the event(add placeholderimages/2 to index, due to starting with empty images as space occupiers
-                    NewMainImage(((Image)((Grid)((UserControl)stackPanel.Children[desiredImageIndex + (placeholderImages / 2)]).Content).Children[0]).Source);
-
-                    // Add highlight
-                    selectedImage = stackPanel.Children[desiredImageIndex + (placeholderImages / 2)] as UserControl;
-                    selectedImage.BorderThickness = new Thickness(0d, 1d, 0d, 1d);
-
-                    scrollTimer.Stop();
                 }
             }
-        }
+            
+            if(desiredImageIndex != -1) // We have arrived, check the new image
+            {
+                // Send the event(add placeholderimages/2 to index, due to starting with empty images as space occupiers
+                NewMainImage(((Image)((Grid)((UserControl)stackPanel.Children[desiredImageIndex + (placeholderImages / 2)]).Content).Children[0]).Source);
+                // Add highlight
+                selectedImage = stackPanel.Children[desiredImageIndex + (placeholderImages / 2)] as UserControl;
+                selectedImage.Opacity = 1d;
 
-        protected void OnParentSizeChanged(object obj, SizeChangedEventArgs args)
-        {
-            RecalculateSize(args.PreviousSize, args.NewSize);
-        }
+                scrollTimer.Stop();
+            }
+        }   
 
         #endregion
 
@@ -282,8 +271,8 @@ namespace Product_Browser.ScatterItems
             // Calculate closest stop point
             double closestDistance = 999999999d;
             int closestIndex = -1;
-            
-            for(int i = 0; i < stopOffsetPoints.Length; i++)
+
+            for (int i = 0; i < stopOffsetPoints.Length; i++)
             {
                 double distance = 0d;
 
@@ -306,6 +295,9 @@ namespace Product_Browser.ScatterItems
 
         private void RecalculateSize(Size oldSize, Size newSize)
         {
+            if (images == null) // Can be called before we've received images, on initial placement, so jump out early
+                return;
+
             int childrenCount = stackPanel.Children.Count;
 
             stopOffsetPoints = new double[images.Count];
@@ -316,6 +308,8 @@ namespace Product_Browser.ScatterItems
                 scrollSize = newSize.Width / numberOfImages;
             else
                 scrollSize = newSize.Height / numberOfImages;
+
+            double offset = numberOfImages % 2 == 0 ? 0.5 * scrollSize : scrollSize;
 
             for(int i = 0; i < childrenCount; i++)
             {
@@ -334,7 +328,7 @@ namespace Product_Browser.ScatterItems
 
                 // For the others, populate the stop points
                 int newIndex = i - (placeholderImages / 2);
-                stopOffsetPoints[newIndex] = newIndex * scrollSize;
+                stopOffsetPoints[newIndex] = newIndex * scrollSize + offset;
             }
 
             // Keep scroll position with resize
@@ -352,40 +346,35 @@ namespace Product_Browser.ScatterItems
             }
         }
 
-        public void Populate(List<BitmapImage> images, UserControl sizeItem, Orientation alignment, int numberOfImagesToDisplay, bool displayPage)
+        public void Populate(List<BitmapImage> images, Orientation alignment, int numberOfImagesToDisplay, bool displayNumber)
         {
-            if (populated) // Method can be called twice for some reason, make sure we don't reload
-                return;
-
-            populated = true;
-
             this.images = images;
-            sizeItem.SizeChanged += OnParentSizeChanged; // Subscribe to parent size change event, need to adjust image sizes
             stackPanel.Orientation = alignment;
+            this.numberOfImages = numberOfImagesToDisplay;
 
-            // Only odd number of images
-            numberOfImages = numberOfImagesToDisplay % 2 == 0 ? numberOfImagesToDisplay + 1 : numberOfImagesToDisplay;
+            if (stackPanel.Children.Count > 0) // Re-initialization ?
+                stackPanel.Children.Clear();
+            
+            // Need even number of placeholders
+            placeholderImages = numberOfImagesToDisplay % 2 == 0 ? numberOfImagesToDisplay : numberOfImagesToDisplay + 1;
 
-            placeholderImages = numberOfImagesToDisplay - 1;
-
-            List<UserControl> emptyImages = new List<UserControl>(placeholderImages);
-
+            // Create placeholder images for beginning and end so we can center first and last images
+            List<UserControl> placeholders = new List<UserControl>(placeholderImages);
             for(int i = 0; i < placeholderImages; i++)
             {
                 UserControl b = new UserControl();
-                b.Margin = new Thickness(2.5d, 0d, 2.5d, 0d);
-                emptyImages.Add(b);
+                placeholders.Add(b);
             }
             
+            // Add half the placeholders
             for(int i = 0; i < placeholderImages / 2; i++)
-                stackPanel.Children.Add(emptyImages[i]);
+                stackPanel.Children.Add(placeholders[i]);
 
+            // Add all images
             for(int i = 0; i < images.Count; i++)
             {
-                ImageSource s = images[i];
-
                 Image child = new Image();
-                child.Source = s;
+                child.Source = images[i];
                 child.Stretch = Stretch.Fill;
                 
                 UserControl u = new UserControl();
@@ -395,7 +384,7 @@ namespace Product_Browser.ScatterItems
                 
                 g.Children.Add(child);
 
-                if (displayPage)
+                if (displayNumber)
                 {
                     Viewbox box = new Viewbox();
                     box.HorizontalAlignment = HorizontalAlignment.Center;
@@ -410,26 +399,26 @@ namespace Product_Browser.ScatterItems
                     g.Children.Add(box);
                 }
 
-                u.Margin = new Thickness(2.5d, 0d, 2.5d, 0d);
-                u.BorderBrush = new SolidColorBrush(Colors.Red);
-
                 if (i == 0)
-                {
-                    if (alignment == Orientation.Horizontal)
-                        u.BorderThickness = new Thickness(1d, 0d, 1d, 0d);
-                    else
-                        u.BorderThickness = new Thickness(0d, 1d, 0d, 1d);
-
                     selectedImage = u;
-                }
+                else
+                    u.Opacity = INACTIVE_OPACITY;
 
                 stackPanel.Children.Add(u);
             }
 
+            // Add remanining images
             for (int i = placeholderImages / 2; i < placeholderImages; i++)
-                stackPanel.Children.Add(emptyImages[i]);
+                stackPanel.Children.Add(placeholders[i]);
 
-            RecalculateSize(new Size(), new Size(sizeItem.ActualWidth, sizeItem.ActualHeight));
+            // Now that we have all elements, recalculate container size
+            RecalculateSize(new Size(), scrollBar.RenderSize);
+
+            // And scroll to first element
+            if(alignment == Orientation.Vertical)
+                scrollBar.ScrollToVerticalOffset(stopOffsetPoints[0]);
+            else
+                scrollBar.ScrollToHorizontalOffset(stopOffsetPoints[0]);
         }
 
         #endregion
@@ -441,6 +430,9 @@ namespace Product_Browser.ScatterItems
             scrollTimer = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);
             scrollTimer.Interval = new TimeSpan(0, 0, 0, 0, 20);
             scrollTimer.Tick += OnScrollTimer;
+
+            // Need to know when the scrollbar control changes size, so we can reshape elements to fit
+            scrollBar.SizeChanged += OnSizeChanged;
         }
     }
 }

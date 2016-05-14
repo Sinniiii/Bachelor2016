@@ -42,7 +42,7 @@ namespace DatabaseModel.Model
         public SmartCard SmartCard { get; private set; }
 
         /// <summary>
-        /// Retrieves the document from the Data array as an image source which can be used directly in
+        /// Retrieves the image from the Data array as an image source which can be used directly in
         /// an Image WPF element.
         /// Returns null if Data is null or if Category does not match "document".
         /// </summary>
@@ -247,9 +247,7 @@ namespace DatabaseModel.Model
             Category = SmartCardDataItemCategory.Video;
         }
 
-        /// <summary>
-        /// Private constructor for Entity Framework?
-        /// </summary>
+        // For Entity framework
         private SmartCardDataItem() { }
     }
 }

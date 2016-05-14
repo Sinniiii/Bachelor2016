@@ -79,6 +79,16 @@ namespace Product_Browser
             manipulatedSmartCards--;
         }
 
+        private void OnScatterViewLoaded(object sender, EventArgs args)
+        {
+            VirtualSmartCardScatterItem x = new VirtualSmartCardScatterItem(scatterView, 1);
+            scatterView.Items.Add(x);
+            scatterView.UpdateLayout();
+            x.InitializeVirtualSmartCard(scatterView);
+            x.ContainerManipulationStarted += SmartCardManipulationStarted;
+            x.ContainerManipulationCompleted += SmartCardManipulationEnded;
+        }
+
         #endregion
 
         #region Methods
@@ -153,10 +163,7 @@ namespace Product_Browser
             removeAreaAnimationTimer.Interval = new TimeSpan(0, 0, 0, 0, 30);
             removeAreaAnimationTimer.Tick += RemoveAreaAnimationHandler;
 
-            //VirtualSmartCardScatterItem x = new VirtualSmartCardScatterItem(scatterView, 1);
-            //scatterView.Items.Add(x);
-            //scatterView.UpdateLayout();
-            //x.InitializeVirtualSmartCard(scatterView);
+            scatterView.Loaded += OnScatterViewLoaded;
         }
     }
 }

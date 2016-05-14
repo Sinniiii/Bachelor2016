@@ -64,6 +64,8 @@
     <Compile Include="Model\SmartCard.cs" />
     <Compile Include="Model\SmartCardDataItem.cs" />
     <Compile Include="Model\SmartCardDataItemData.cs" />
+    <Compile Include="Model\SmartCardImage.cs" />
+    <Compile Include="Model\SmartCardImageData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

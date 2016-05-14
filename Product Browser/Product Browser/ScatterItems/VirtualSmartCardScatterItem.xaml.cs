@@ -8,15 +8,10 @@ using DatabaseModel;
 using DatabaseModel.Model;
 using System.Data.Entity;
 using System.Linq;
-using System.Collections.ObjectModel;
 using System.Windows.Threading;
-using Microsoft.Surface.Core;
-using System.Windows.Data;
 using System.IO;
 using System.Windows.Input;
-using Microsoft.Surface.Presentation.Controls.TouchVisualizations;
 using System.Windows.Controls;
-using Microsoft.Surface.Presentation.Input;
 
 namespace Product_Browser.ScatterItems
 {
@@ -32,7 +27,7 @@ namespace Product_Browser.ScatterItems
         readonly double
             CIRCLE_SIZE = 150d;
 
-        readonly int MAX_IMAGES_BEFORE_CONTAINER = 8;
+        readonly int MAX_IMAGES_BEFORE_CONTAINER = 3;
 
         readonly Size
             SCATTERITEM_DOCUMENT_STARTING_SIZE = new Size(150, 175),
@@ -210,7 +205,9 @@ namespace Product_Browser.ScatterItems
             base.OnManipulationCompleted(e);
             
             if (ActualCenter.Y < Microsoft.Surface.Core.InteractiveSurface.PrimarySurfaceDevice.Height * 0.05d
-                || ActualCenter.Y > Microsoft.Surface.Core.InteractiveSurface.PrimarySurfaceDevice.Height * 0.95d)
+                || ActualCenter.Y > Microsoft.Surface.Core.InteractiveSurface.PrimarySurfaceDevice.Height * 0.95d
+                || ActualCenter.X < 0
+                || ActualCenter.X > Microsoft.Surface.Core.InteractiveSurface.PrimarySurfaceDevice.Width)
                 Die();
         }
 
@@ -479,7 +476,7 @@ namespace Product_Browser.ScatterItems
             ABBDataContext context = new ABBDataContext();
             
             smartCard = await context.SmartCards
-                .Include(s => s.DataItems.Select(d => d.DataField))
+                .Include(s => s.DataItems.Select(d => d.DataField)).Include(s => s.CardImage.DataField)
                 .FirstOrDefaultAsync(a => a.TagId == TagId);
             
             List<SmartCardDataItem> dataItems = null;
@@ -492,6 +489,17 @@ namespace Product_Browser.ScatterItems
 
             FoundSmartCard = true;
             SmartCardName = smartCard.Name;
+
+            // If we have a card image, use that for the center object
+            if(smartCard.CardImage != null)
+            {
+                Image cardImage = new Image();
+                cardImage.Source = smartCard.CardImage.GetImageSource();
+                cardImage.Stretch = System.Windows.Media.Stretch.Fill;
+                centerObject.Content = cardImage;
+
+                foundControl.Visibility = Visibility.Hidden;
+            }
 
             List<ABBScatterItem> scatterItems = new List<ABBScatterItem>();
 

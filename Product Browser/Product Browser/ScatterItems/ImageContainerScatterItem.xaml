@@ -31,9 +31,7 @@
 
         <Image x:Name="mainImage" HorizontalAlignment="Center" VerticalAlignment="Center" Height="Auto" Width="Auto" Stretch="Uniform" Grid.Row="0"/>
 
-        <UserControl Name="imageContainerControl" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <local:ImageContainer x:Name="container" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        </UserControl>
+        <local:ImageContainer BorderBrush="#2a5f6f" BorderThickness="0, 2, 0, 0" Grid.Row="1" x:Name="container" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
     </Grid>
 </local:ABBScatterItem>

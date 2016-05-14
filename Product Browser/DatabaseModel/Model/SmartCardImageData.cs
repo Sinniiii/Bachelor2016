@@ -1,6 +1,6 @@
 ﻿namespace DatabaseModel.Model
 {
-    public class SmartCardDataItemData
+    public class SmartCardImageData
     {
         public int Id { get; private set; }
 
@@ -11,12 +11,12 @@
             Data = data;
         }
 
-        public SmartCardDataItemData(byte[] data)
+        public SmartCardImageData(byte[] data)
         {
             Data = data;
         }
 
         // For Entity framework
-        private SmartCardDataItemData() { }
+        private SmartCardImageData() { }
     }
 }

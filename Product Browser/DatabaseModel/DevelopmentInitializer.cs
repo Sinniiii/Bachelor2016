@@ -29,8 +29,9 @@ namespace DatabaseModel
             bytes = File.ReadAllBytes("TestData\\arkema-st-auban.png");
             var item4 = new SmartCardDataItem("Test4", SmartCardDataItemCategory.Image, bytes);
 
+            // Different class for smartcard.cardimage
             bytes = File.ReadAllBytes("TestData\\arkema-st-auban.png");
-            var item5 = new SmartCardDataItem("Test5", SmartCardDataItemCategory.Image, bytes);
+            var item5 = new SmartCardImage("Test5", bytes);
 
             bytes = File.ReadAllBytes("TestData\\arkema-st-auban.png");
             var item6 = new SmartCardDataItem("Test6", SmartCardDataItemCategory.Image, bytes);
@@ -50,7 +51,7 @@ namespace DatabaseModel
             smartcard.DataItems.Add(item2);
             smartcard.DataItems.Add(item3);
             smartcard.DataItems.Add(item4);
-            smartcard.DataItems.Add(item5);
+            smartcard.CardImage = item5;
 
             var smartcard2 = new SmartCard();
             smartcard2.Name = "Test card 2";
@@ -74,7 +75,12 @@ namespace DatabaseModel
                 context.SmartCards.Add(temp);
             }
 
-            context.SaveChanges();
+            try {
+                context.SaveChanges();
+            }catch(Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
     }
 }
