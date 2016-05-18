@@ -1,19 +1,9 @@
 ﻿using System;
-using System.Data.Entity;
 using System.Windows;
-using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using Microsoft.Surface.Core;
 using Microsoft.Surface.Presentation.Controls;
-using Microsoft.Surface.Presentation.Input;
 using DatabaseModel;
 using DatabaseModel.Model;
-using TouchEventArgs = System.Windows.Input.TouchEventArgs;
-using System.Windows.Input;
 using Product_Browser.ScatterItems;
 using System.Windows.Threading;
 using System.Collections.Generic;
@@ -88,6 +78,9 @@ namespace Product_Browser
             x.InitializeVirtualSmartCard(scatterView);
             x.ContainerManipulationStarted += SmartCardManipulationStarted;
             x.ContainerManipulationCompleted += SmartCardManipulationEnded;
+
+            x.Center = new Point(Microsoft.Surface.Core.InteractiveSurface.PrimarySurfaceDevice.Width / 2d, Microsoft.Surface.Core.InteractiveSurface.PrimarySurfaceDevice.Height / 2d);
+            x.Orientation = 0d;
         }
 
         private void OnSmartCardContainerLoaded(object sender, EventArgs args)
