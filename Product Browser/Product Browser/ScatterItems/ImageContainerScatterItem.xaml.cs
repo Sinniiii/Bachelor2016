@@ -33,7 +33,7 @@ namespace Product_Browser.ScatterItems
 
         public void BarLoadedHandler(object obj, EventArgs args)
         {
-            container.Populate(images, System.Windows.Controls.Orientation.Horizontal, 4, false);
+            container.Populate(images, System.Windows.Controls.Orientation.Horizontal, 4, false, false);
         }
 
         public void NewMainImageHandler(ImageSource source)

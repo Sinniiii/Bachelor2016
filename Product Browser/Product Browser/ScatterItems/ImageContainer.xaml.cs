@@ -11,12 +11,6 @@ using System.Windows.Threading;
 
 namespace Product_Browser.ScatterItems
 {
-    public enum DisplayState
-    {
-        Horizontal,
-        Vertical
-    }
-
     /// <summary>
     /// Interaction logic for ImageContainer.xaml
     /// </summary>
@@ -75,63 +69,44 @@ namespace Product_Browser.ScatterItems
 
         #region EventHandlers
 
-        protected override void OnMouseDown(MouseButtonEventArgs e)
+        protected void OnScrollBarMouseDown(object obj, MouseButtonEventArgs e)
         {
-            base.OnMouseDown(e);
-
             if (stackPanel.Orientation == Orientation.Horizontal)
             {
-                scrollStartPoint = e.GetPosition(this).X;
+                scrollStartPoint = e.GetPosition(scrollBar).X;
                 scrollStartOffset = scrollBar.HorizontalOffset;
             }
             else
             {
-                scrollStartPoint = e.GetPosition(this).Y;
+                scrollStartPoint = e.GetPosition(scrollBar).Y;
                 scrollStartOffset = scrollBar.VerticalOffset;
             }
-
-            if(selectedImage != null)
-            {
-                selectedImage.Opacity = INACTIVE_OPACITY;
-                selectedImage = null;
-            }
-            
-            CaptureMouse();
+            scrollBar.CaptureMouse();
             e.Handled = true;
         }
 
-        protected override void OnTouchDown(TouchEventArgs e)
+        protected void OnScrollBarTouchDown(object obj, TouchEventArgs e)
         {
-            base.OnTouchDown(e);
-
             if (stackPanel.Orientation == Orientation.Horizontal)
             {
-                scrollStartPoint = e.GetTouchPoint(this).Position.X;
+                scrollStartPoint = e.GetTouchPoint(scrollBar).Position.X;
                 scrollStartOffset = scrollBar.HorizontalOffset;
             }
             else
             {
-                scrollStartPoint = e.GetTouchPoint(this).Position.Y;
+                scrollStartPoint = e.GetTouchPoint(scrollBar).Position.Y;
                 scrollStartOffset = scrollBar.VerticalOffset;
             }
 
-            if (selectedImage != null)
-            {
-                selectedImage.Opacity = INACTIVE_OPACITY;
-                selectedImage = null;
-            }
-
-            e.TouchDevice.Capture(this);
+            e.TouchDevice.Capture(scrollBar);
             e.Handled = true;
         }
 
-        protected override void OnMouseMove(MouseEventArgs e)
+        protected void OnScrollBarMouseMove(object obj, MouseEventArgs e)
         {
-            base.OnMouseMove(e);
-
-            if (IsMouseCaptured)
+            if (scrollBar.IsMouseCaptured)
             {
-                Point point = e.GetPosition(this);
+                Point point = e.GetPosition(scrollBar);
                 
                 if (stackPanel.Orientation == Orientation.Horizontal)
                 {
@@ -148,13 +123,11 @@ namespace Product_Browser.ScatterItems
             }
         }
 
-        protected override void OnTouchMove(TouchEventArgs e)
+        protected void OnScrollBarTouchMove(object obj, TouchEventArgs e)
         {
-            base.OnTouchMove(e);
-
-            if (e.TouchDevice.Captured == this)
+            if (e.TouchDevice.Captured == scrollBar)
             {
-                Point point = e.GetTouchPoint(this).Position;
+                Point point = e.GetTouchPoint(scrollBar).Position;
 
                 if (stackPanel.Orientation == Orientation.Horizontal)
                 {
@@ -171,27 +144,23 @@ namespace Product_Browser.ScatterItems
             }
         }
 
-        protected override void OnMouseUp(MouseButtonEventArgs e)
+        protected void OnScrollBarMouseUp(object obj, MouseButtonEventArgs e)
         {
-            base.OnMouseUp(e);
+            if (scrollBar.IsMouseCaptured)
+                scrollBar.ReleaseMouseCapture();
 
-            if (IsMouseCaptured)
-                ReleaseMouseCapture();
-
-            StartAutoScroll();
+            StartAutoScroll(-1);
         }
 
-        protected override void OnTouchUp(TouchEventArgs e)
+        protected void OnScrollBarTouchUp(object obj, TouchEventArgs e)
         {
-            base.OnTouchUp(e);
+            if (e.TouchDevice.Captured == scrollBar)
+                scrollBar.ReleaseTouchCapture(e.TouchDevice);
 
-            if (e.TouchDevice.Captured == this)
-                ReleaseTouchCapture(e.TouchDevice);
-
-            StartAutoScroll();
+            StartAutoScroll(-1);
         }
 
-        protected void OnSizeChanged(object obj, SizeChangedEventArgs args)
+        protected void OnScrollBarSizeChanged(object obj, SizeChangedEventArgs args)
         {
             RecalculateSize(args.PreviousSize, args.NewSize);
         }
@@ -254,6 +223,11 @@ namespace Product_Browser.ScatterItems
             {
                 // Send the event(add placeholderimages/2 to index, due to starting with empty images as space occupiers
                 NewMainImage(((Image)((Grid)((UserControl)stackPanel.Children[desiredImageIndex + (placeholderImages / 2)]).Content).Children[0]).Source);
+
+                // Remove old highlight, if any
+                if (selectedImage != null)
+                    selectedImage.Opacity = INACTIVE_OPACITY;
+
                 // Add highlight
                 selectedImage = stackPanel.Children[desiredImageIndex + (placeholderImages / 2)] as UserControl;
                 selectedImage.Opacity = 1d;
@@ -266,31 +240,52 @@ namespace Product_Browser.ScatterItems
 
         #region Methods
 
-        protected void StartAutoScroll()
+        /// <summary>
+        /// Auto-scrolls to desired index. An input outside the valid container range will auto scroll to closest index.
+        /// </summary>
+        /// <param name="desiredIndex"></param>
+        protected void StartAutoScroll(int desiredIndex)
         {
             // Calculate closest stop point
             double closestDistance = 999999999d;
             int closestIndex = -1;
 
-            for (int i = 0; i < stopOffsetPoints.Length; i++)
-            {
-                double distance = 0d;
-
-                if (stackPanel.Orientation == Orientation.Horizontal)
-                    distance = stopOffsetPoints[i] - scrollBar.HorizontalOffset;
-                else
-                    distance = stopOffsetPoints[i] - scrollBar.VerticalOffset;
-
-                if (Math.Abs(distance) < Math.Abs(closestDistance))
+            if (desiredIndex >= 0 && desiredIndex < stopOffsetPoints.Length)
+                closestIndex = desiredIndex;
+            else
+                for (int i = 0; i < stopOffsetPoints.Length; i++)
                 {
-                    closestDistance = distance;
-                    closestIndex = i;
+                    double distance = 0d;
+
+                    if (stackPanel.Orientation == Orientation.Horizontal)
+                        distance = stopOffsetPoints[i] - scrollBar.HorizontalOffset;
+                    else
+                        distance = stopOffsetPoints[i] - scrollBar.VerticalOffset;
+
+                    if (Math.Abs(distance) < Math.Abs(closestDistance))
+                    {
+                        closestDistance = distance;
+                        closestIndex = i;
+                    }
                 }
-            }
 
             currentOffsetTarget = stopOffsetPoints[closestIndex];
 
             scrollTimer.Start();
+        }
+
+        private void toFirst_Click(object sender, RoutedEventArgs e)
+        {
+            StartAutoScroll(0);
+
+            e.Handled = true;
+        }
+
+        private void toLast_Click(object sender, RoutedEventArgs e)
+        {
+            StartAutoScroll(stopOffsetPoints.Length - 1);
+
+            e.Handled = true;
         }
 
         private void RecalculateSize(Size oldSize, Size newSize)
@@ -346,7 +341,7 @@ namespace Product_Browser.ScatterItems
             }
         }
 
-        public void Populate(List<BitmapImage> images, Orientation alignment, int numberOfImagesToDisplay, bool displayNumber)
+        public void Populate(List<BitmapImage> images, Orientation alignment, int numberOfImagesToDisplay, bool displayNavButtons, bool displayNumber)
         {
             this.images = images;
             stackPanel.Orientation = alignment;
@@ -363,6 +358,7 @@ namespace Product_Browser.ScatterItems
             for(int i = 0; i < placeholderImages; i++)
             {
                 UserControl b = new UserControl();
+                b.IsHitTestVisible = false;
                 placeholders.Add(b);
             }
             
@@ -376,11 +372,13 @@ namespace Product_Browser.ScatterItems
                 Image child = new Image();
                 child.Source = images[i];
                 child.Stretch = Stretch.Fill;
-                
+                child.IsHitTestVisible = false;
+
                 UserControl u = new UserControl();
 
                 u.BorderBrush = new SolidColorBrush(new Color() { R = 42, G = 95, B = 111, A = 255});
                 u.BorderThickness = new Thickness(1d);
+                u.IsHitTestVisible = false;
 
                 Grid g = new Grid();
                 u.Content = g;
@@ -414,14 +412,27 @@ namespace Product_Browser.ScatterItems
             for (int i = placeholderImages / 2; i < placeholderImages; i++)
                 stackPanel.Children.Add(placeholders[i]);
 
+            
+            if (!displayNavButtons)
+            {
+                leftButton.Visibility = rightButton.Visibility = upButton.Visibility = downButton.Visibility = Visibility.Hidden;
+                col0.Width = col2.Width = row0.Height = row2.Height = new GridLength(0);
+            }
+            else if (alignment == Orientation.Vertical)
+            {
+                leftButton.Visibility = rightButton.Visibility = Visibility.Hidden;
+                col0.Width = col2.Width = new GridLength(0);
+            }
+            else {
+                upButton.Visibility = downButton.Visibility = Visibility.Hidden;
+                row0.Height = row2.Height = new GridLength(0);
+            }
+
             // Now that we have all elements, recalculate container size
             RecalculateSize(new Size(), scrollBar.RenderSize);
 
-            // And scroll to first element
-            if(alignment == Orientation.Vertical)
-                scrollBar.ScrollToVerticalOffset(stopOffsetPoints[0]);
-            else
-                scrollBar.ScrollToHorizontalOffset(stopOffsetPoints[0]);
+            // Scroll to first element
+            StartAutoScroll(0);
         }
 
         #endregion
@@ -434,8 +445,15 @@ namespace Product_Browser.ScatterItems
             scrollTimer.Interval = new TimeSpan(0, 0, 0, 0, 20);
             scrollTimer.Tick += OnScrollTimer;
 
+            scrollBar.MouseDown += OnScrollBarMouseDown;
+            scrollBar.TouchDown += OnScrollBarTouchDown;
+            scrollBar.MouseMove += OnScrollBarMouseMove;
+            scrollBar.TouchMove += OnScrollBarTouchMove;
+            scrollBar.MouseUp += OnScrollBarMouseUp;
+            scrollBar.TouchUp += OnScrollBarTouchUp;
+
             // Need to know when the scrollbar control changes size, so we can reshape elements to fit
-            scrollBar.SizeChanged += OnSizeChanged;
+            scrollBar.SizeChanged += OnScrollBarSizeChanged;
         }
     }
 }

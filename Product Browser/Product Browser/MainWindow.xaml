@@ -31,5 +31,7 @@
         <TextBox Grid.Row="2" Background="White" Opacity="0.05" Text="Remove" TextAlignment="Center" FontSize="30" FontWeight="Bold"
                           HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsEnabled="False" />
 
+        <local:SmartCardContainer x:Name="smartCardContainer" Grid.Row="0" Grid.RowSpan="3" HorizontalAlignment="Left"/>
+
     </Grid>
 </s:SurfaceWindow>

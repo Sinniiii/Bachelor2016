@@ -167,29 +167,6 @@ namespace Product_Browser.ScatterItems
         #region Event Handlers
 
         /// <summary>
-        /// Overwritten to ensure we do not capture touch with anything but center object
-        /// </summary>
-        /// <param name="e"></param>
-        protected override void OnPreviewTouchDown(System.Windows.Input.TouchEventArgs e)
-        {
-            if (centerObject.TouchesOver.Contains(e.TouchDevice))
-                base.OnTouchDown(e);
-            else
-                e.Handled = true;
-        }
-
-        /// <summary>
-        /// Overwritten to ensure we do not capture touch with anything but center object
-        /// </summary>
-        protected override void OnPreviewMouseDown(MouseButtonEventArgs e)
-        {
-            if (centerObject.IsMouseOver)
-                base.OnMouseDown(e);
-            else
-                e.Handled = true;
-        }
-
-        /// <summary>
         /// Captures movement of this scatteritem, to notify connected cards
         /// </summary>
         /// <param name="e"></param>

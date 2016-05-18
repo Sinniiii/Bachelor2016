@@ -16,6 +16,7 @@ using TouchEventArgs = System.Windows.Input.TouchEventArgs;
 using System.Windows.Input;
 using Product_Browser.ScatterItems;
 using System.Windows.Threading;
+using System.Collections.Generic;
 
 //Baard was here
 
@@ -79,14 +80,23 @@ namespace Product_Browser
             manipulatedSmartCards--;
         }
 
-        private void OnScatterViewLoaded(object sender, EventArgs args)
+        private void OnSmartCardSelected(object sender, EventArgs args)
         {
-            VirtualSmartCardScatterItem x = new VirtualSmartCardScatterItem(scatterView, 1);
+            VirtualSmartCardScatterItem x = new VirtualSmartCardScatterItem(scatterView, (sender as SmartCard).TagId);
             scatterView.Items.Add(x);
             scatterView.UpdateLayout();
             x.InitializeVirtualSmartCard(scatterView);
             x.ContainerManipulationStarted += SmartCardManipulationStarted;
             x.ContainerManipulationCompleted += SmartCardManipulationEnded;
+        }
+
+        private void OnSmartCardContainerLoaded(object sender, EventArgs args)
+        {
+            ABBDataContext con = new ABBDataContext();
+            //List<SmartCard> activeList = con.SmartCards.Where(d => d.DataItems.Count > 0).ToList();
+            List<SmartCard> activeList = con.SmartCards.ToList();
+
+            smartCardContainer.Populate(activeList);
         }
 
         #endregion
@@ -163,7 +173,8 @@ namespace Product_Browser
             removeAreaAnimationTimer.Interval = new TimeSpan(0, 0, 0, 0, 30);
             removeAreaAnimationTimer.Tick += RemoveAreaAnimationHandler;
 
-            scatterView.Loaded += OnScatterViewLoaded;
+            smartCardContainer.Loaded += OnSmartCardContainerLoaded;
+            smartCardContainer.SmartCardSelected += OnSmartCardSelected;
         }
     }
 }
