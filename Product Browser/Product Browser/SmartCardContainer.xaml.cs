@@ -40,7 +40,7 @@ namespace Product_Browser
 
         #region Properties
 
-        public static Thickness StartingMargins { get; internal set; } = new Thickness(-140, 0, 0, 0);
+        public static Thickness StartingMargins { get; internal set; } = new Thickness(-160, 0, 0, 0);
 
         #endregion
 
@@ -116,9 +116,11 @@ namespace Product_Browser
 
         #endregion
 
-        protected void OnSmartCardClicked(object obj, EventArgs args)
+        protected void OnSmartCardClicked(object obj, RoutedEventArgs args)
         {
             SmartCardSelected((obj as Label).Tag, new EventArgs());
+
+            args.Handled = true;
         }
 
         #endregion
@@ -137,8 +139,10 @@ namespace Product_Browser
                 label.BorderBrush = new SolidColorBrush(new Color() { R = 42, G = 95, B = 111, A = 255 });
                 label.Background = new SolidColorBrush(Colors.Black);
                 label.BorderThickness = new Thickness(1d);
+                label.VerticalContentAlignment = VerticalAlignment.Center;
+                label.Height = 42;
 
-                label.TouchUp += OnSmartCardClicked;
+                label.TouchDown += OnSmartCardClicked;
                 label.MouseUp += OnSmartCardClicked;
 
                 stackPanel.Children.Add(label);

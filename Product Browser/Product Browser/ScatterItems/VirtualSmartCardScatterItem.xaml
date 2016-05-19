@@ -25,7 +25,7 @@
             <ColumnDefinition Width="200"/>
         </Grid.ColumnDefinitions>
 
-        <UserControl Name="animationPulse1" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="7" Grid.RowSpan="5" IsHitTestVisible="False">
+        <UserControl Visibility="Hidden" Name="animationPulse1" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="7" Grid.RowSpan="5" IsHitTestVisible="False">
             <UserControl.Background>
                 <RadialGradientBrush>
                     <GradientStop Color="Black" Offset="0"/>
@@ -33,7 +33,7 @@
                 </RadialGradientBrush>
             </UserControl.Background>
         </UserControl>
-        <UserControl Name="animationPulse2" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="7" Grid.RowSpan="5" IsHitTestVisible="False">
+        <UserControl Visibility="Hidden" Name="animationPulse2" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="7" Grid.RowSpan="5" IsHitTestVisible="False">
             <UserControl.Background>
                 <RadialGradientBrush>
                     <GradientStop Color="#FFBD1010" Offset="0"/>

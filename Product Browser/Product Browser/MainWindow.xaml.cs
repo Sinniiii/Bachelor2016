@@ -86,8 +86,8 @@ namespace Product_Browser
         private void OnSmartCardContainerLoaded(object sender, EventArgs args)
         {
             ABBDataContext con = new ABBDataContext();
-            //List<SmartCard> activeList = con.SmartCards.Where(d => d.DataItems.Count > 0).ToList();
-            List<SmartCard> activeList = con.SmartCards.ToList();
+            List<SmartCard> activeList = con.SmartCards.Where(d => d.DataItems.Count > 0).ToList();
+            //List<SmartCard> activeList = con.SmartCards.ToList();
 
             smartCardContainer.Populate(activeList);
         }

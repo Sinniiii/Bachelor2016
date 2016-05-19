@@ -208,7 +208,9 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="ProductBrowser.xml" />
+    <Resource Include="ProductBrowser.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\icon.png">
