@@ -75,16 +75,16 @@
                     if (activetagID != null) {
                         window.location.href = 'Overview?tagID=' + activetagID;
                     }
-                else {
+                    else {
                         location.reload(true);
-                }
+                    }
 
                 });
-        this.on("error", function (file, errorMessage) {
-            alert("A file did not upload correctly: " + file.name + "\n" + errorMessage);
-        });
+                this.on("error", function (file, errorMessage) {
+                    alert("A file did not upload correctly: " + file.name + "\n" + errorMessage);
+                });
 
-        }
+            }
         };
 
 
@@ -98,7 +98,7 @@
             @*window.scrollBy(0, -65);*@
 
             $('html, body').animate({
-                scrollTop: $("#@ViewData["activePanel"]").offset().top-55
+                scrollTop: $("#@ViewData["activePanel"]").offset().top - 55
             }, 700);
 
 
@@ -111,7 +111,7 @@
 
     @model List<DatabaseModel.Model.SmartCard>
 
-        @*<p> Debug data:</p>
+    @*<p> Debug data:</p>
         <p> Number of cards in passed list: @Model.Count</p>
         <h2>@ViewData["nameOfCard"]</h2>
         <h2>@ViewData["tagID"]</h2>
@@ -139,7 +139,7 @@
                     Accepted video formats: <b>.3gp, .3g2, .avi, .mp4, .mpeg, .mpg, .avi, .mov, .wm, .wmv, .wmx</b><br />
                     Accepted image formats: <b>.bmp, .gif, .png, .jpg, .tiff, .ico, .pdf</b><br />
                     Accepted document formats: <b>.pdf</b><br />
-                    @if ((int) @ViewData["firstEmptyIndex"] == 0)
+                    @if ((int)@ViewData["firstEmptyIndex"] == 0)
                     {
                         <font size="2" color="red">
                             There are currently no active smartcards. Use the Show/Hide empty cards button below and add some content to an empty card.<br />
@@ -151,13 +151,13 @@
         </div>
 
         @* Smart-card panels - one pr card - ACTIVE CARDS*@
-        @for (int i = 1; i <=  (int) @ViewData["firstEmptyIndex"]; i++)
+        @for (int i = 1; i <= (int)@ViewData["firstEmptyIndex"]; i++)
         {
             //Convert tagID to hexcode (show in smartcard bytetag)
             string hexValue = @Model[i - 1].TagId.ToString("X");
 
             <div onclick="setactivetagID(@( (int) Model[i - 1].TagId) )" class="@(@Model[i - 1].DataItems.Count > 0 ? "panel panel-success" : "panel panel-default")">
-                <div class="panel-heading panel" data-toggle="collapse" data-parent="#accordion" id="paneltitle_@Model[i-1].TagId" href="#collapse_@Model[i-1].TagId" >
+                <div class="panel-heading panel" data-toggle="collapse" data-parent="#accordion" id="paneltitle_@Model[i-1].TagId" href="#collapse_@Model[i-1].TagId">
                     <h4 class="panel-title">
                         <span>
                             #@Model[i - 1].TagId &emsp; &emsp;
@@ -170,7 +170,7 @@
                             {
                                 <span>&nbsp;</span>
                             }
-                            
+
                             @(@Model[i - 1].DataItems.Count > 0 ? "Active" : "Empty") &emsp; &emsp; @Model[i - 1].Name (@hexValue)
                             <span class="pull-right glyphicon glyphicon-menu-down"></span>
                     </h4>
@@ -189,6 +189,7 @@
 
                         <p></p>
 
+                        @*LOADING CARDIMAGE / DISPLAYING CARDIMAGE DROPZONE*@
                         @{
                             ABBDataContext context = new ABBDataContext();
                             int tagid = Model[i - 1].TagId;
@@ -209,22 +210,18 @@
 
                                 <div class="panel-body">
                                     <form class="form-inline" role="form" method="post" action="OverviewDeleteCardimage">
-                                        <div class="form-group">
+                                        <span class="pull-left" STYLE="padding-top: 41px; padding-right: 37px">
+                                            <div class="form-group">
 
-                                            <button type="submit" class="btn btn-danger btn-xs glyphicon glyphicon-remove" data-toggle="tooltip" title="Delete this cardimage"></button>
-                                            <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
-                                            &emsp;&emsp;
-                                            @*<label for="mediaType">
-        <span data-toggle="tooltip" title="Media type">@Model[i - 1].DataItems.ElementAt(j).Category</span>
-        &emsp; &emsp;
-        <span data-toggle="tooltip" title="Filename">@Model[i - 1].DataItems.ElementAt(j).Name</span>
-    </label>*@
-
-                                        </div>
+                                                <button type="submit" class="btn btn-danger btn-xs glyphicon glyphicon-remove" data-toggle="tooltip" title="Delete this cardimage"></button>
+                                                <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
+                                                &emsp;&emsp;
+                                            </div>
+                                        </span>
+                                        <img src="@imgSrc" width="180px" height="111px" style="border:1px solid black" data-toggle="tooltip" title="Cardimage" />
                                     </form>
                                 </div>
 
-                                <img src="@imgSrc" width="180px" height="111px"/>
                             }
                             else
                             {
@@ -236,10 +233,6 @@
                             }
                         }
 
-
-
-                        @*<img src="pic_mountain.jpg" alt="Mountain View" style="width:304px;height:228px;">*@
-
                         <p></p>
 
                         @* Does the card have no dataitems? Then we can skip this, otherwise...*@
@@ -249,19 +242,19 @@
                             <div class="panel panel-default">
                                 <div class="panel-heading" data-toggle="tooltip" title="List of all media files on this card">
                                     <h1 class="panel-title pull-left" STYLE="padding-top: 8px;">Media Content</h1>
-                                        <span class="pull-right">
-                                            <form class="form-inline" role="form" method="post" action="OverviewDeleteAllDataitems">
-                                                <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
-                                                <button type="submit" class="btn btn-sm btn-warning btn-sm glyphicon glyphicon-trash" data-toggle="tooltip" title="Delete ALL media items from card"></button>
-                                            </form>
-                                        </span>
-                                        <div class="clearfix"></div>
-</div>
+                                    <span class="pull-right">
+                                        <form class="form-inline" role="form" method="post" action="OverviewDeleteAllDataitems">
+                                            <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
+                                            <button type="submit" class="btn btn-sm btn-warning btn-sm glyphicon glyphicon-trash" data-toggle="tooltip" title="Delete ALL media items from card"></button>
+                                        </form>
+                                    </span>
+                                    <div class="clearfix"></div>
+                                </div>
 
-                                                                @*
+                                @*
                                     <button class="btn btn-default pull-right">asdadsad</button>
                                     <div class="clearfix"></div>
-                                                                *@
+                                *@
 
                                 @* List all dataitems in this Smartcard*@
                                 @for (int j = 0; j < Model[i - 1].DataItems.Count; j++)
@@ -301,16 +294,16 @@
                                 <input type="submit" name="Submit" value="Upload selected" class="btn btn-primary" />
                             </form>*@
 
-                        @*DROPZONE STYLE OPLOAD FORM*@
+                        @*DROPZONE STYLE UPLOAD FORM*@
                         <form asp-action="OverviewUploadDataitemDZ" asp-controller="Home" method="post" enctype="multipart/form-data" class="dropzone" id="mydropzone">
-                            <div class="dz-message" data-dz-message><span>Drop files to upload, or click to browse</span></div>
+                            <div class="dz-message" data-dz-message><span>Add media files (drop files or click)</span></div>
                             <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
                         </form>
 
                     </div>
                 </div>
             </div>
-        }
+                            }
 
 
         @*SPACING*@
@@ -321,8 +314,8 @@
 
         <div class="panel-group">
             <div>
-                    @*<b>Click to Show/Hide empty cards</b>*@
-                    <button type="button" class="btn btn-warning" data-toggle="collapse" href="#collapse_emptylist">Show/Hide empty cards</button>
+                @*<b>Click to Show/Hide empty cards</b>*@
+                <button type="button" class="btn btn-warning" data-toggle="collapse" href="#collapse_emptylist">Show/Hide empty cards</button>
                 <div id="collapse_emptylist" class="@( (bool) @ViewData["tagIsActive"] ? "panel-collapse collapse" : "panel-collapse collapse in")">
                     @*<div class="panel-body">Panel Body</div>*@
 
@@ -382,6 +375,52 @@
 
                                         <p></p>
 
+                                        @*LOADING CARDIMAGE / DISPLAYING CARDIMAGE DROPZONE*@
+                                        @{
+                                            ABBDataContext context = new ABBDataContext();
+                                            int tagid = Model[i - 1].TagId;
+                                            var smartcard = context.SmartCards.First(a => a.TagId == tagid);
+
+                                            context.Entry(smartcard).Reference(a => a.CardImage).Load();
+
+                                            //var cardimage = smartcard.CardImage;
+                                            //var cardimagedata = smartcard.CardImage.DataField.Data;
+
+                                            if (smartcard.CardImage != null)
+                                            {
+                                                var cardImage = smartcard.CardImage;
+                                                context.Entry(cardImage).Reference(a => a.DataField).Load();
+
+                                                var base64 = Convert.ToBase64String(smartcard.CardImage.DataField.Data);
+                                                var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+
+                                                <div class="panel-body">
+                                                    <form class="form-inline" role="form" method="post" action="OverviewDeleteCardimage">
+                                                        <span class="pull-left" STYLE="padding-top: 41px; padding-right: 37px">
+                                                            <div class="form-group">
+
+                                                                <button type="submit" class="btn btn-danger btn-xs glyphicon glyphicon-remove" data-toggle="tooltip" title="Delete this cardimage"></button>
+                                                                <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
+                                                                &emsp;&emsp;
+                                                            </div>
+                                                        </span>
+                                                        <img src="@imgSrc" width="180px" height="111px" style="border:1px solid black" />
+                                                    </form>
+                                                </div>
+
+                                            }
+                                            else
+                                            {
+                                                @*DROPZONE FOR CARDIMAGE*@
+                                                <form asp-action="OverviewUploadDataitemDZcardimage" asp-controller="Home" method="post" enctype="multipart/form-data" class="dropzone" id="DZcardimage" style="width: 180px; height: 111px; min-height: 0px;">
+                                                    <div class="dz-message" data-dz-message><span>Add card-front image (drop image or click)</span></div>
+                                                    <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
+                                                </form>
+                                            }
+                                        }
+
+                                        <p></p>
+
                                         @* Does the card have no dataitems? Then we can skip this, otherwise...*@
                                         @if (Model[i - 1].DataItems.Count > 0)
                 {
@@ -428,33 +467,33 @@
 
                                         @*OLD STYLE UPLOAD FORM NOT IN USE*@
                                         @*<form class="form-inline" method="post" action="@Url.Content("OverviewUploadDataitemDZ")" enctype="multipart/form-data">
-                                    <span class="btn btn-default btn-file">
-                                        Select new file... <input type="file">
-                                        <input type="file" name="file" class="" id="file" style="display:inline-block;" accept="image/*,video/*,.pdf" />
-                                        <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
+                                                <span class="btn btn-default btn-file">
+                                                    Select new file... <input type="file">
+                                                    <input type="file" name="file" class="" id="file" style="display:inline-block;" accept="image/*,video/*,.pdf" />
+                                                    <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
 
-                                    </span>
-                                    <input type="submit" name="Submit" value="Upload selected" class="btn btn-primary" />
-                                </form>*@
+                                                </span>
+                                                <input type="submit" name="Submit" value="Upload selected" class="btn btn-primary" />
+                                            </form>*@
 
                                         @*DROPZONE STYLE OPLOAD FORM*@
                                         <form asp-action="OverviewUploadDataitemDZ" asp-controller="Home" method="post" enctype="multipart/form-data" class="dropzone" id="mydropzone">
-                                            <div class="dz-message" data-dz-message><span>Drop files to upload, or click to browse</span></div>
+                                            <div class="dz-message" data-dz-message><span>Add media files (drop files or click)</span></div>
                                             <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
                                         </form>
 
                                     </div>
                                 </div>
                             </div>
-                        }
+                                            }
 
                         @*<div class="panel-footer">Panel Footer</div>*@
                     </div>
                 </div>
-        </div>
+            </div>
 
-        
 
-            
+
+
 
         </div>
