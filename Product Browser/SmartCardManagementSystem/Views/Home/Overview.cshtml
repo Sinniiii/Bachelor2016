@@ -189,12 +189,6 @@
 
                         <p></p>
 
-                        @*DROPZONE FOR CARDIMAGE*@
-                        <form asp-action="OverviewUploadDataitemDZcardimage" asp-controller="Home" method="post" enctype="multipart/form-data" class="dropzone" id="DZcardimage" style="width: 180px; height: 111px; min-height: 0px;">
-                            <div class="dz-message" data-dz-message><span>Add card-front image (drop image or click)</span></div>
-                            <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
-                        </form>
-
                         @{
                             ABBDataContext context = new ABBDataContext();
                             int tagid = Model[i - 1].TagId;
@@ -213,8 +207,32 @@
                                 var base64 = Convert.ToBase64String(smartcard.CardImage.DataField.Data);
                                 var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
 
-                                <img src="@imgSrc" />
-                                <p>had cardimage</p>
+                                <div class="panel-body">
+                                    <form class="form-inline" role="form" method="post" action="OverviewDeleteCardimage">
+                                        <div class="form-group">
+
+                                            <button type="submit" class="btn btn-danger btn-xs glyphicon glyphicon-remove" data-toggle="tooltip" title="Delete this cardimage"></button>
+                                            <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
+                                            &emsp;&emsp;
+                                            @*<label for="mediaType">
+        <span data-toggle="tooltip" title="Media type">@Model[i - 1].DataItems.ElementAt(j).Category</span>
+        &emsp; &emsp;
+        <span data-toggle="tooltip" title="Filename">@Model[i - 1].DataItems.ElementAt(j).Name</span>
+    </label>*@
+
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <img src="@imgSrc" width="180px" height="111px"/>
+                            }
+                            else
+                            {
+                                @*DROPZONE FOR CARDIMAGE*@
+                                <form asp-action="OverviewUploadDataitemDZcardimage" asp-controller="Home" method="post" enctype="multipart/form-data" class="dropzone" id="DZcardimage" style="width: 180px; height: 111px; min-height: 0px;">
+                                    <div class="dz-message" data-dz-message><span>Add card-front image (drop image or click)</span></div>
+                                    <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
+                                </form>
                             }
                         }
 

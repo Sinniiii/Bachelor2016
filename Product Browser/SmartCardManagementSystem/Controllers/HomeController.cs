@@ -45,6 +45,26 @@ namespace SmartCardManagementSystem.Controllers
             return RedirectToAction("Overview", new { tagID = tagID });
         }
 
+        //POST for deleting cardimage from a smartcard
+        [HttpPost]
+        public IActionResult OverviewDeleteCardimage(int tagID)
+        {
+            System.Diagnostics.Debug.WriteLine("-------RUNNING POST----------");
+
+            ABBDataContext context = new ABBDataContext();
+            var smartCard = context.SmartCards.First(a => a.TagId == tagID);
+            context.Entry(smartCard).Reference(a => a.CardImage).Load();
+            var cardimageToRemove = smartCard.CardImage;
+            context.Entry(cardimageToRemove).Reference(a => a.DataField).Load();
+            context.SmartCardImages.Remove(cardimageToRemove);
+            context.SaveChanges();
+
+            ViewData["tagID"] = tagID;
+            ViewData["activePanel"] = "paneltitle_" + tagID;
+
+            return RedirectToAction("Overview", new { tagID = tagID });
+        }
+
         //POST for changing name of smartcard
         [HttpPost]
         public IActionResult OverviewSaveSmartcardName(string nameOfCard, int tagID)
