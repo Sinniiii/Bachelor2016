@@ -40,7 +40,7 @@
         </Grid.ColumnDefinitions>
 
         <MediaElement x:Name="videoPlayer" HorizontalAlignment="Center" VerticalAlignment="Center" Height="Auto" Width="Auto"
-                      ScrubbingEnabled="True" Stretch="Uniform" IsMuted="True" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Grid.ColumnSpan="4"/>
+                      ScrubbingEnabled="True" Stretch="Uniform" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Grid.ColumnSpan="4"/>
 
         <controls:SurfaceButton Grid.Row="1" Content="{StaticResource playButtonImage}" Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ScatterViewItem}}, Path=IsPaused, Converter={StaticResource BoolToVisCon}}"
                                 Margin="0, 0, 0, 0" MinHeight="0" MinWidth="0" Width="Auto" Height="Auto" Padding="0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Click="PlayButtonClicked" Background="Transparent" />
@@ -49,6 +49,7 @@
         <ProgressBar Name="progressBar" Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ScatterViewItem}}, Path=ControlsVisible, Converter={StaticResource BoolToVisCon}}"
             Minimum="0" Maximum="100" Value="0" Grid.Column="2" Width="Auto" HorizontalAlignment="Stretch" Height="5" Grid.Row="1" VerticalAlignment="Center" Foreground="Blue" />
 
+        <Image Name="overlay" Width="50" Height="50" Source="/Resources/btnPlay.png" Grid.ColumnSpan="4" Grid.RowSpan="2" />
 
     </Grid>
 </local:ABBScatterItem>

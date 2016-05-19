@@ -363,6 +363,9 @@ namespace Product_Browser.ScatterItems
             foreach(ABBScatterItem item in physicsItemsActive)
             {
                 item.Deleting = true;
+
+                if (item is VideoScatterItem)
+                    (item as VideoScatterItem).KillVideo();
             }
         }
 

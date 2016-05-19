@@ -8,6 +8,6 @@
     <Description></Description>
     <ExecutableFile>Product Browser.exe</ExecutableFile>
     <Arguments></Arguments>
-    <IconImageFile>InstalledAppInfo\AppIcon.png</IconImageFile>  
+    <IconImageFile>Resources\icon.png</IconImageFile>  
   </Application>
 </ss:ApplicationInfo>

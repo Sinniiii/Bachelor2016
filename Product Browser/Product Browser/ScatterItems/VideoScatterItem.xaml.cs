@@ -33,9 +33,18 @@ namespace Product_Browser.ScatterItems
 
         DispatcherTimer videoControlTimer, controlsVisibleTimer;
 
+
+
         #endregion
 
         #region Properties
+
+        private bool hasBeenManipulated = false;
+        public bool HasBeenManipulated
+        {
+            get { return hasBeenManipulated; }
+            set { hasBeenManipulated = value; NotifyPropertyChanged(); }
+        }
 
         private bool _controlsVisible = false;
         public bool ControlsVisible
@@ -103,6 +112,16 @@ namespace Product_Browser.ScatterItems
             grad.Angle = (grad.Angle + 0.5d) % 360d;
         }
 
+        protected void OnOverlayManipulated(object sender, RoutedEventArgs e)
+        {
+            HasBeenManipulated = true;
+            overlay.Visibility = Visibility.Hidden;
+            IsPlaying = true;
+            videoPlayer.Play();
+
+            e.Handled = true;
+        }
+
         protected void VideoPlayerLoadedHandler(object obj, EventArgs args)
         {
             videoPlayer.Play(); // Avoid black screen by starting video and triggering media load
@@ -158,14 +177,16 @@ namespace Product_Browser.ScatterItems
         {
             base.OnPreviewMouseMove(e);
 
-            ShowControls();
+            if(HasBeenManipulated)
+                ShowControls();
         }
 
         protected override void OnPreviewTouchMove(System.Windows.Input.TouchEventArgs e)
         {
             base.OnPreviewTouchMove(e);
 
-            ShowControls();
+            if(HasBeenManipulated)
+                ShowControls();
         }
 
         #endregion
@@ -202,6 +223,13 @@ namespace Product_Browser.ScatterItems
             }
         }
 
+        public void KillVideo()
+        {
+            PauseVideo();
+
+            videoPlayer.Close();
+        }
+
         #endregion
 
         public VideoScatterItem(SmartCardDataItem video)
@@ -225,6 +253,9 @@ namespace Product_Browser.ScatterItems
             controlsVisibleTimer = new DispatcherTimer(DispatcherPriority.Normal, this.Dispatcher);
             controlsVisibleTimer.Interval = new TimeSpan(0, 0, 0, 0, 1500);
             controlsVisibleTimer.Tick += ControlsVisibleTick;
+
+            overlay.MouseDown += OnOverlayManipulated;
+            overlay.TouchDown += OnOverlayManipulated;
         }
         
     }
