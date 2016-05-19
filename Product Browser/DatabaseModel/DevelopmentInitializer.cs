@@ -58,6 +58,7 @@ namespace DatabaseModel
             var smartcard2 = new SmartCard();
             smartcard2.Name = "Test card 2";
             smartcard2.TagId = 2;
+            //smartcard2.CardImage = item5;
             smartcard2.DataItems = new List<SmartCardDataItem>();
             
             smartcard2.DataItems.Add(item8);

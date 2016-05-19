@@ -102,14 +102,14 @@ namespace SmartCardManagementSystem.Controllers
 
         //    System.Diagnostics.Debug.WriteLine("-------RUNNING UPLOAD----------");
 
-            
-            
+
+
 
         //    var fileName = ContentDispositionHeaderValue.Parse(uploadfile.ContentDisposition).FileName.Trim('"');
         //    int lastPeriod = fileName.LastIndexOf('.');
         //    string extension = fileName.Substring(lastPeriod + 1);
         //    //var extension = fileName.Substring(Math.Max(0, fileName.Length - 3));
-            
+
         //    System.Diagnostics.Debug.WriteLine("-------Extension was----------");
         //    System.Diagnostics.Debug.WriteLine(extension);
 
@@ -198,6 +198,7 @@ namespace SmartCardManagementSystem.Controllers
 
         //}
 
+        //Upload function using DropZone for dataitems
         [HttpPost]
         public IActionResult OverviewUploadDataitemDZ(int tagID)
         {
@@ -282,6 +283,61 @@ namespace SmartCardManagementSystem.Controllers
                 ABBDataContext context = new ABBDataContext();
                 var cardToUpdate = context.SmartCards.First(a => a.TagId == tagID);
                 cardToUpdate.DataItems.Add(item1);
+
+                context.SaveChanges();
+            }
+
+            ViewData["tagID"] = tagID;
+            ViewData["activePanel"] = "paneltitle_" + tagID;
+
+            //return View("Overview", context.SmartCards.Include(a => a.DataItems).ToList());
+            return new EmptyResult();
+
+        }
+
+        //Upload function using DropZone for cardimage
+        [HttpPost]
+        public IActionResult OverviewUploadDataitemDZcardimage(int tagID)
+        {
+
+            var uploadfile = Request.Form.Files.FirstOrDefault();
+
+            System.Diagnostics.Debug.WriteLine("-------RUNNING UPLOAD----------");
+
+            var fileName = ContentDispositionHeaderValue.Parse(uploadfile.ContentDisposition).FileName.Trim('"');
+            int lastPeriod = fileName.LastIndexOf('.');
+            string extension = fileName.Substring(lastPeriod + 1);
+
+            System.Diagnostics.Debug.WriteLine("-------Extension was----------");
+            System.Diagnostics.Debug.WriteLine(extension);
+
+            //SmartCardDataItem item1;
+            SmartCardImage item1;
+
+            //TODO PROPER INPUT CONTROL
+            //Create new dataitem
+            if (extension == "bmp"
+                || extension == "gif"
+                || extension == "png"
+                || extension == "jpg"
+                || extension == "tiff"
+                || extension == "ico"
+                )
+            {
+                var readstream = uploadfile.OpenReadStream();
+                byte[] bytes = new byte[readstream.Length];  //declare arraysize
+                readstream.Read(bytes, 0, bytes.Length); // read from stream to byte array
+                readstream.Close();
+
+                System.Diagnostics.Debug.WriteLine("-------Creating front-image----------");
+                //item1 = new SmartCardDataItem(fileName, SmartCardDataItemCategory.Image, bytes);
+                item1 = new SmartCardImage(fileName, bytes);
+
+                ABBDataContext context = new ABBDataContext();
+                var cardToUpdate = context.SmartCards.First(a => a.TagId == tagID);
+                //cardToUpdate.DataItems.Add(item1);
+                var oldimage = cardToUpdate.CardImage;
+                cardToUpdate.CardImage = item1;
 
                 context.SaveChanges();
             }
