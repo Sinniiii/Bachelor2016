@@ -9,13 +9,68 @@ using Microsoft.AspNet.Http;
 using System.IO;
 using DatabaseModel.Model;
 using Microsoft.Net.Http.Headers;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 
 //asdadd
+
+
 
 namespace SmartCardManagementSystem.Controllers
 {
     public class HomeController : Controller
     {
+
+        /// <summary>
+        /// Resize the image to the specified width and height.
+        /// </summary>
+        /// <param name="image">The image to resize.</param>
+        /// <param name="width">The width to resize to.</param>
+        /// <param name="height">The height to resize to.</param>
+        /// <returns>The resized image.</returns>
+        public static Bitmap ResizeImage(Image image, int width, int height)
+        {
+            var destRect = new Rectangle(0, 0, width, height);
+            var destImage = new Bitmap(width, height);
+
+            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+
+            using (var graphics = Graphics.FromImage(destImage))
+            {
+                graphics.CompositingMode = CompositingMode.SourceCopy;
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                using (var wrapMode = new ImageAttributes())
+                {
+                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
+                }
+            }
+
+            return destImage;
+        }
+
+        public Image byteArrayToImage(byte[] byteArrayIn)
+        {
+            MemoryStream ms = new MemoryStream(byteArrayIn);
+            Image returnImage = Image.FromStream(ms);
+            return returnImage;
+        }
+
+        public byte[] imageToByteArray(System.Drawing.Image imageIn)
+        {
+            MemoryStream ms = new MemoryStream();
+            imageIn.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+            return ms.ToArray();
+        }
+
+
+
+
         public IActionResult Index()
         {
             //return View();
@@ -353,11 +408,16 @@ namespace SmartCardManagementSystem.Controllers
                 //item1 = new SmartCardDataItem(fileName, SmartCardDataItemCategory.Image, bytes);
                 item1 = new SmartCardImage(fileName, bytes);
 
+                var myimage = byteArrayToImage(bytes);
+                var myresizedimage = ResizeImage(myimage, 180, 111);
+                var myresizedbytearray = imageToByteArray(myresizedimage);
+                var item2 = new SmartCardImage(fileName, myresizedbytearray);
+
                 ABBDataContext context = new ABBDataContext();
                 var cardToUpdate = context.SmartCards.First(a => a.TagId == tagID);
                 //cardToUpdate.DataItems.Add(item1);
                 var oldimage = cardToUpdate.CardImage;
-                cardToUpdate.CardImage = item1;
+                cardToUpdate.CardImage = item2;
 
                 context.SaveChanges();
             }

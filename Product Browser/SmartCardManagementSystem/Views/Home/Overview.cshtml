@@ -1,14 +1,4 @@
-﻿@using System;
-@using System.Collections.Generic;
-@using System.Linq;
-@using System.Threading.Tasks;
-@using Microsoft.AspNet.Mvc;
-@using DatabaseModel;
-@using Microsoft.Data.Entity;
-@using Microsoft.AspNet.Http;
-@using System.IO;
-@using DatabaseModel.Model;
-@using Microsoft.Net.Http.Headers;
+﻿@using DatabaseModel;
 
 <style>
     .btn-file {
@@ -66,7 +56,7 @@
 
 
         Dropzone.options.DZcardimage = {
-            maxFilesize: 10,
+            maxFilesize: 100,
             acceptedFiles: ".bmp, .gif, .png, .jpg, .tiff, .ico",
             parallelUploads: 1,
             init: function () {
@@ -139,6 +129,7 @@
                     Accepted video formats: <b>.3gp, .3g2, .avi, .mp4, .mpeg, .mpg, .avi, .mov, .wm, .wmv, .wmx</b><br />
                     Accepted image formats: <b>.bmp, .gif, .png, .jpg, .tiff, .ico, .pdf</b><br />
                     Accepted document formats: <b>.pdf</b><br />
+                    Card front-images are natively 180x111pixels. This app will resize and fit images automatically if they are larger than 150KB.
                     @if ((int)@ViewData["firstEmptyIndex"] == 0)
                     {
                         <font size="2" color="red">
@@ -208,7 +199,7 @@
                                 var base64 = Convert.ToBase64String(smartcard.CardImage.DataField.Data);
                                 var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
 
-                                <div class="panel-body">
+                                @*<div class="panel-body">
                                     <form class="form-inline" role="form" method="post" action="OverviewDeleteCardimage">
                                         <span class="pull-left" STYLE="padding-top: 41px; padding-right: 37px">
                                             <div class="form-group">
@@ -220,14 +211,23 @@
                                         </span>
                                         <img src="@imgSrc" width="180px" height="111px" style="border:1px solid black" data-toggle="tooltip" title="Cardimage" />
                                     </form>
-                                </div>
+                                </div>*@
+
+                                <form class="form-inline" role="form" method="post" action="OverviewDeleteCardimage">
+                                    <img src="@imgSrc" width="180px" height="111px" style="border:1px solid black" data-toggle="tooltip" title="Cardimage" />
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-danger btn-sm glyphicon glyphicon-remove" data-toggle="tooltip" title="Delete this cardimage"></button>
+                                        <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
+                                        &emsp;&emsp;
+                                    </div>
+                                </form>
 
                             }
                             else
                             {
                                 @*DROPZONE FOR CARDIMAGE*@
                                 <form asp-action="OverviewUploadDataitemDZcardimage" asp-controller="Home" method="post" enctype="multipart/form-data" class="dropzone" id="DZcardimage" style="width: 180px; height: 111px; min-height: 0px;">
-                                    <div class="dz-message" data-dz-message><span>Add card-front image (drop image or click)</span></div>
+                                    <div class="dz-message" data-dz-message><span>Add card front-image (drop image or click)</span></div>
                                     <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
                                 </form>
                             }
@@ -413,7 +413,7 @@
                                             {
                                                 @*DROPZONE FOR CARDIMAGE*@
                                                 <form asp-action="OverviewUploadDataitemDZcardimage" asp-controller="Home" method="post" enctype="multipart/form-data" class="dropzone" id="DZcardimage" style="width: 180px; height: 111px; min-height: 0px;">
-                                                    <div class="dz-message" data-dz-message><span>Add card-front image (drop image or click)</span></div>
+                                                    <div class="dz-message" data-dz-message><span>Add card front-image (drop image or click)</span></div>
                                                     <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
                                                 </form>
                                             }
