@@ -386,10 +386,6 @@ namespace SmartCardManagementSystem.Controllers
             System.Diagnostics.Debug.WriteLine("-------Extension was----------");
             System.Diagnostics.Debug.WriteLine(extension);
 
-            //SmartCardDataItem item1;
-            SmartCardImage item1;
-
-            //TODO PROPER INPUT CONTROL
             //Create new dataitem
             if (extension == "bmp"
                 || extension == "gif"
@@ -404,22 +400,38 @@ namespace SmartCardManagementSystem.Controllers
                 readstream.Read(bytes, 0, bytes.Length); // read from stream to byte array
                 readstream.Close();
 
-                System.Diagnostics.Debug.WriteLine("-------Creating front-image----------");
-                //item1 = new SmartCardDataItem(fileName, SmartCardDataItemCategory.Image, bytes);
-                item1 = new SmartCardImage(fileName, bytes);
+                var fileSize = bytes.Count();
+                System.Diagnostics.Debug.WriteLine("filesize was: " +fileSize);
 
-                var myimage = byteArrayToImage(bytes);
-                var myresizedimage = ResizeImage(myimage, 180, 111);
-                var myresizedbytearray = imageToByteArray(myresizedimage);
-                var item2 = new SmartCardImage(fileName, myresizedbytearray);
+                if (fileSize > 100000) //if file larger than 100KB - resize then save
+                {
+                    System.Diagnostics.Debug.WriteLine("-------Creating RESIZED front-image (more than 100KB)----------");
 
-                ABBDataContext context = new ABBDataContext();
-                var cardToUpdate = context.SmartCards.First(a => a.TagId == tagID);
-                //cardToUpdate.DataItems.Add(item1);
-                var oldimage = cardToUpdate.CardImage;
-                cardToUpdate.CardImage = item2;
+                    var tempImageToResize = byteArrayToImage(bytes);
+                    var tempResizedImage = ResizeImage(tempImageToResize, 180, 111);
+                    var resizedByteArray = imageToByteArray(tempResizedImage);
+                    var item1 = new SmartCardImage(fileName, resizedByteArray);
 
-                context.SaveChanges();
+                    ABBDataContext context = new ABBDataContext();
+                    var cardToUpdate = context.SmartCards.First(a => a.TagId == tagID);
+                    var oldimage = cardToUpdate.CardImage;
+                    cardToUpdate.CardImage = item1;
+
+                    context.SaveChanges();
+                }
+                else  //if file smaller than 100KB - just save it
+                {
+                    System.Diagnostics.Debug.WriteLine("-------Creating UNTOUCHED front-image (less than 100KB)----------");
+
+                    var item1 = new SmartCardImage(fileName, bytes);
+
+                    ABBDataContext context = new ABBDataContext();
+                    var cardToUpdate = context.SmartCards.First(a => a.TagId == tagID);
+                    var oldimage = cardToUpdate.CardImage;
+                    cardToUpdate.CardImage = item1;
+
+                    context.SaveChanges();
+                }
             }
 
             ViewData["tagID"] = tagID;
@@ -437,7 +449,7 @@ namespace SmartCardManagementSystem.Controllers
             System.Diagnostics.Debug.WriteLine("-------RUNNING GET----------");
 
             ABBDataContext context = new ABBDataContext();
-            var smartcardList = context.SmartCards.OrderByDescending(a => a.DataItems.Count).ThenBy(a => a.TagId).ToList();
+            var smartcardList = context.SmartCards.OrderByDescending(a => a.DataItems.Count > 0).ThenBy(a => a.TagId).ToList();
 
             var firstEmptyIndex = -1;
             var tagIsActive = false;
