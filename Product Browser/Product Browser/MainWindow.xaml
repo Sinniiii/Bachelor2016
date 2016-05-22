@@ -13,8 +13,9 @@
 
         <Image Grid.RowSpan="3" Source="/Resources/ABB Product Browser BG.jpg" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" />
 
-        <s:TagVisualizer Grid.RowSpan="3" Name="tagVisualizer" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" Height="Auto"/>
-        <local:ScatterViewMod Grid.RowSpan="3" x:Name="scatterView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" Height="Auto"/>
+        <s:TagVisualizer Grid.RowSpan="3" Name="tagVisualizer" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" Height="Auto">
+            <local:ScatterViewMod Grid.RowSpan="3" x:Name="scatterView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" Height="Auto"/>
+        </s:TagVisualizer>
 
         <TextBox Background="White" Opacity="0.05" Text="Remove" RenderTransformOrigin="0.5,0.5" TextAlignment="Center" FontSize="30" FontWeight="Bold" 
                           HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsEnabled="False" >

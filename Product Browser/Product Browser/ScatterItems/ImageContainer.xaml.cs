@@ -34,12 +34,17 @@ namespace Product_Browser.ScatterItems
         private const double
             SCROLL_SPEED = 10d,
             PAGE_NUMBER_OPACITY = 0.15d,
-            INACTIVE_OPACITY = 0.4d;
+            INACTIVE_OPACITY = 0.4d,
+            USER_SELECTED_IMAGE_ERROR_MARGIN = 3d;
 
         private double numberOfImages = 3d;
         private int placeholderImages = 2;
 
-        UserControl selectedImage;
+        UserControl
+            currentlySelectedImage,
+            userSelectedImage;
+
+        bool scrollingToUserSelected = false;
 
         List<BitmapImage> images;
         
@@ -112,11 +117,17 @@ namespace Product_Browser.ScatterItems
                 {
                     double delta = point.X - scrollStartPoint;
 
+                    if (Math.Abs(delta) > USER_SELECTED_IMAGE_ERROR_MARGIN)
+                        scrollingToUserSelected = false;
+
                     scrollBar.ScrollToHorizontalOffset(-delta + scrollStartOffset);
                 }
                 else
                 {
                     double delta = point.Y - scrollStartPoint;
+
+                    if (Math.Abs(delta) > USER_SELECTED_IMAGE_ERROR_MARGIN)
+                        scrollingToUserSelected = false;
 
                     scrollBar.ScrollToVerticalOffset(-delta + scrollStartOffset);
                 }
@@ -133,11 +144,17 @@ namespace Product_Browser.ScatterItems
                 {
                     double delta = point.X - scrollStartPoint;
 
+                    if (Math.Abs(delta) > USER_SELECTED_IMAGE_ERROR_MARGIN)
+                        scrollingToUserSelected = false;
+
                     scrollBar.ScrollToHorizontalOffset(-delta + scrollStartOffset);
                 }
                 else
                 {
                     double delta = point.Y - scrollStartPoint;
+
+                    if (Math.Abs(delta) > USER_SELECTED_IMAGE_ERROR_MARGIN)
+                        scrollingToUserSelected = false;
 
                     scrollBar.ScrollToVerticalOffset(-delta + scrollStartOffset);
                 }
@@ -149,7 +166,10 @@ namespace Product_Browser.ScatterItems
             if (scrollBar.IsMouseCaptured)
                 scrollBar.ReleaseMouseCapture();
 
-            StartAutoScroll(-1);
+            if (scrollingToUserSelected)
+                StartAutoScroll((int)userSelectedImage.Tag);
+            else
+                StartAutoScroll(-1);
         }
 
         protected void OnScrollBarTouchUp(object obj, TouchEventArgs e)
@@ -157,7 +177,10 @@ namespace Product_Browser.ScatterItems
             if (e.TouchDevice.Captured == scrollBar)
                 scrollBar.ReleaseTouchCapture(e.TouchDevice);
 
-            StartAutoScroll(-1);
+            if (scrollingToUserSelected)
+                StartAutoScroll((int)userSelectedImage.Tag);
+            else
+                StartAutoScroll(-1);
         }
 
         protected void OnScrollBarSizeChanged(object obj, SizeChangedEventArgs args)
@@ -225,16 +248,22 @@ namespace Product_Browser.ScatterItems
                 NewMainImage(((Image)((Grid)((UserControl)stackPanel.Children[desiredImageIndex + (placeholderImages / 2)]).Content).Children[0]).Source);
 
                 // Remove old highlight, if any
-                if (selectedImage != null)
-                    selectedImage.Opacity = INACTIVE_OPACITY;
+                if (currentlySelectedImage != null)
+                    currentlySelectedImage.Opacity = INACTIVE_OPACITY;
 
                 // Add highlight
-                selectedImage = stackPanel.Children[desiredImageIndex + (placeholderImages / 2)] as UserControl;
-                selectedImage.Opacity = 1d;
+                currentlySelectedImage = stackPanel.Children[desiredImageIndex + (placeholderImages / 2)] as UserControl;
+                currentlySelectedImage.Opacity = 1d;
 
                 scrollTimer.Stop();
             }
         }   
+
+        protected void OnUserImageSelected(object sender, EventArgs args)
+        {
+            userSelectedImage = sender as UserControl;
+            scrollingToUserSelected = true;
+        }
 
         #endregion
 
@@ -372,13 +401,15 @@ namespace Product_Browser.ScatterItems
                 Image child = new Image();
                 child.Source = images[i];
                 child.Stretch = Stretch.Fill;
-                child.IsHitTestVisible = false;
 
                 UserControl u = new UserControl();
 
                 u.BorderBrush = new SolidColorBrush(new Color() { R = 42, G = 95, B = 111, A = 255});
                 u.BorderThickness = new Thickness(1d);
-                u.IsHitTestVisible = false;
+                u.Tag = i;
+
+                u.PreviewTouchDown += OnUserImageSelected;
+                u.PreviewMouseDown += OnUserImageSelected;
 
                 Grid g = new Grid();
                 u.Content = g;
@@ -401,7 +432,7 @@ namespace Product_Browser.ScatterItems
                 }
 
                 if (i == 0)
-                    selectedImage = u;
+                    currentlySelectedImage = u;
                 else
                     u.Opacity = INACTIVE_OPACITY;
 

@@ -54,15 +54,21 @@
                     <GradientStop Color="Black"/>
                     <GradientStop Color="#0179bc" Offset="0.25"/>
                     <GradientStop Color="Black" Offset="0.50"/>
-                    <GradientStop Color="#2a5f6f" Offset="0.75"/>
+                    <GradientStop Color="{Binding Path=GradientColor, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:ScatterViewItem}}" Offset="0.75"/>
                     <GradientStop Color="Black" Offset="1"/>
                 </LinearGradientBrush>
             </UserControl.BorderBrush>
         </UserControl>
 
-        <UserControl Name="imagePlaceholder" Visibility="Hidden" Grid.Column="6" Grid.Row="2" BorderBrush="Gray" BorderThickness="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent" IsHitTestVisible="False"/>
-        <UserControl Name="videoPlaceholder" Visibility="Hidden" Grid.Column="0" Grid.Row="2" BorderBrush="Gray" BorderThickness="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent" IsHitTestVisible="False"/>
-        <UserControl Name="documentPlaceholder" Visibility="Hidden" Grid.Column="3" Grid.Row="0" BorderBrush="Gray" BorderThickness="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent" IsHitTestVisible="False"/>
+        <UserControl Name="imagePlaceholder" Visibility="Visible" Grid.Column="6" Grid.Row="2" BorderBrush="Gray" BorderThickness="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent" IsHitTestVisible="False">
+            <UserControl Background="AntiqueWhite" Width="20" Height="20" HorizontalAlignment="Left" Margin="-20, 0, 0, 0"/>
+        </UserControl>
+        <UserControl Name="videoPlaceholder" Visibility="Visible" Grid.Column="0" Grid.Row="2" BorderBrush="Gray" BorderThickness="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent" IsHitTestVisible="False">
+            <UserControl Background="AntiqueWhite" Width="20" Height="20" HorizontalAlignment="Right" Margin="0, 0, -20, 0"/>
+        </UserControl>
+        <UserControl Name="documentPlaceholder" Visibility="Visible" Grid.Column="3" Grid.Row="0" BorderBrush="Gray" BorderThickness="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent" IsHitTestVisible="False">
+            <UserControl Background="AntiqueWhite" Width="20" Height="20" VerticalAlignment="Bottom" Margin="0, 0, 0, -20"/>
+        </UserControl>
 
         <ContentControl Name="loadingControl"
                         Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ScatterViewItem}}, Path=LoadingSmartCard, Converter={StaticResource BoolToVisCon}, FallbackValue=Visible}"

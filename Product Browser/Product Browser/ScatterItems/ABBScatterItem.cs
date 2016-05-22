@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 using Microsoft.Surface.Presentation.Controls;
 using System.Windows.Input;
 using Microsoft.Surface.Presentation.Input;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows.Media;
 
 namespace Product_Browser.ScatterItems
 {
@@ -21,8 +24,22 @@ namespace Product_Browser.ScatterItems
     /// A simple class for containing the physics details of a scatter item and animation
     /// stuff. Inherit this in scatterviewitems.
     /// </summary>
-    public abstract class ABBScatterItem : ScatterViewItem
+    public abstract class ABBScatterItem : ScatterViewItem, INotifyPropertyChanged
     {
+        #region PropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+        #endregion
+
+        #region Fields
+
         // Physics-related constants
         private const double
             ACCELERATION = 0.5d,
@@ -31,6 +48,8 @@ namespace Product_Browser.ScatterItems
             DEGREES_TO_RADIANS = (2 * Math.PI) / 360d;
 
         public bool Deleting { get; set; } = false;
+
+        #endregion
 
         #region Properties
 
@@ -46,6 +65,13 @@ namespace Product_Browser.ScatterItems
         public Size OriginalSize { get; set; }
 
         public Vector Speed { get; private set; } = new Vector();
+
+        private Color gradientColor;
+        public Color GradientColor
+        {
+            get { return gradientColor; }
+            set { gradientColor = value; NotifyPropertyChanged(); }
+        }
 
         #endregion
 

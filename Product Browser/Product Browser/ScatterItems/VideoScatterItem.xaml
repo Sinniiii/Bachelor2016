@@ -16,9 +16,9 @@
                 </TransformGroup>
             </LinearGradientBrush.RelativeTransform>
             <GradientStop Color="Black"/>
-            <GradientStop Color="#2a5f6f" Offset="0.25"/>
+            <GradientStop Color="{Binding Path=GradientColor, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:ScatterViewItem}}" Offset="0.25"/>
             <GradientStop Color="Black" Offset="0.5" />
-            <GradientStop Color="#2a5f6f" Offset="0.75"/>
+            <GradientStop Color="{Binding Path=GradientColor, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:ScatterViewItem}}" Offset="0.75"/>
             <GradientStop Color="Black" Offset="1" />
         </LinearGradientBrush>
     </local:ABBScatterItem.BorderBrush>

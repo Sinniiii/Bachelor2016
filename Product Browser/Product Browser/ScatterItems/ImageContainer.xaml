@@ -22,25 +22,25 @@
 
         <controls:SurfaceButton Padding="0,0,0,0" Background="Black" Name="leftButton" Grid.Column="0" Grid.Row="1" MinHeight="0" MinWidth="0" Click="toFirst_Click">
             <Viewbox Stretch="Fill" IsHitTestVisible="False">
-                <Path Data="M 3,3 L 0,1.5 3,0 Z"
+                <Path Data="M 3,3 L 0.6,1.5 3,0 M 0.6,0 L 0.6,3 3,3 L 0,3 0,0"
               Fill="#2a5f6f" />
             </Viewbox>
         </controls:SurfaceButton>
         <controls:SurfaceButton Padding="0,0,0,0" Background="Black" Name="rightButton" Grid.Column="2" Grid.Row="1" MinHeight="0" MinWidth="0" Click="toLast_Click">
             <Viewbox Stretch="Fill" IsHitTestVisible="False">
-                <Path Data="M 0,3 L 3,1.5 0,0 Z"
+                <Path Data="M 0,3 L 2.4,1.5 0,0 M 2.4,0 L 2.4,3 3,3 L 3,3 3,0"
               Fill="#2a5f6f" />
             </Viewbox>
         </controls:SurfaceButton>
         <controls:SurfaceButton Padding="0,0,0,0" Background="Black" Name="upButton" Grid.Column="1" Grid.Row="0" Click="toFirst_Click" MinWidth="0" MinHeight="0">
             <Viewbox Stretch="Fill" IsHitTestVisible="False">
-                <Path Data="M 1.5,0 L 3,3 0,3 Z"
+                <Path Data="M 1.5,0.6 L 3,3 0,3 M 0,0.6 L 3,0.6 3,0 L 3,0 0,0"
               Fill="#2a5f6f" />
             </Viewbox>
         </controls:SurfaceButton>
         <controls:SurfaceButton Padding="0,0,0,0" Background="Black" Name="downButton" Grid.Column="1" Grid.Row="2" Click="toLast_Click" MinWidth="0" MinHeight="0">
             <Viewbox Stretch="Fill" IsHitTestVisible="False">
-                <Path Data="M 0,0 L 1.5,3 3,0 Z"
+                <Path Data="M 0,0 L 1.5,2.4 3,0 M 0,2.4 L 3,2.4 3,3 L 3,3 0,3"
               Fill="#2a5f6f" />
             </Viewbox>
         </controls:SurfaceButton>

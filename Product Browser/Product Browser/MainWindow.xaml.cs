@@ -7,6 +7,7 @@ using DatabaseModel.Model;
 using Product_Browser.ScatterItems;
 using System.Windows.Threading;
 using System.Collections.Generic;
+using System.Windows.Media;
 
 //Baard was here
 
@@ -25,6 +26,7 @@ namespace Product_Browser
         DispatcherTimer removeAreaAnimationTimer;
 
         int manipulatedSmartCards = 0;
+        byte colorsUsed = 0;
 
         #endregion
 
@@ -75,7 +77,7 @@ namespace Product_Browser
             VirtualSmartCardScatterItem x = new VirtualSmartCardScatterItem(scatterView, (sender as SmartCard).TagId);
             scatterView.Items.Add(x);
             scatterView.UpdateLayout();
-            x.InitializeVirtualSmartCard(scatterView);
+            x.InitializeVirtualSmartCard(scatterView, GetNextColorTheme());
             x.ContainerManipulationStarted += SmartCardManipulationStarted;
             x.ContainerManipulationCompleted += SmartCardManipulationEnded;
 
@@ -143,7 +145,9 @@ namespace Product_Browser
                 scatterView.Items.Add(item);
                 scatterView.UpdateLayout(); // Force an immediate update
 
-                item.InitializeVirtualSmartCard(scatterView);
+
+
+                item.InitializeVirtualSmartCard(scatterView, GetNextColorTheme());
 
                 // Assign our event handlers to input, so we can show the removal area
                 item.ContainerManipulationStarted += SmartCardManipulationStarted;
@@ -153,15 +157,24 @@ namespace Product_Browser
             (args.TagVisualization as TagVisualizationMod).InitializeSmartCard(item);
         }
 
+        private Color GetNextColorTheme()
+        {
+            // Original #2a5f6f R = 42, G = 95, B = 111, A = 255
+            //return (Color)ColorConverter.ConvertFromString("#2a5f6f");
+
+            colorsUsed = (byte)((colorsUsed + 1) % 5);
+
+            return new Color() { R = 42, G = (byte)(95 - colorsUsed * 5), B = (byte)(111 + colorsUsed * 5), A = 255 };
+        }
+
         #endregion
-
-
+        
         public MainWindow()
         {
             InitializeComponent();
 
             InitializeTagVisualizer();
-
+            
             removeAreaAnimationTimer = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);
             removeAreaAnimationTimer.Interval = new TimeSpan(0, 0, 0, 0, 30);
             removeAreaAnimationTimer.Tick += RemoveAreaAnimationHandler;

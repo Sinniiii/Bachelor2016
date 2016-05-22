@@ -12,13 +12,14 @@ using System.Windows.Threading;
 using System.IO;
 using System.Windows.Input;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace Product_Browser.ScatterItems
 {
     /// <summary>
     /// Interaction logic for TagWindow.xaml
     /// </summary>
-    public partial class VirtualSmartCardScatterItem : ABBScatterItem, INotifyPropertyChanged
+    public partial class VirtualSmartCardScatterItem : ABBScatterItem
     {
 
         #region Physics, position and graphics constants
@@ -60,18 +61,6 @@ namespace Product_Browser.ScatterItems
             ANIMATION_PULSE_2_MIN_OPACITY = 0.05d;
 
 
-        #endregion
-
-        #region PropertyChanged
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
         #endregion
 
         #region Fields
@@ -321,21 +310,6 @@ namespace Product_Browser.ScatterItems
 
         public void Moved()
         {
-            // Physics based, catch-up
-
-            //// Add all inactive to active
-            //physicsItemsActive.AddRange(physicsItemsInactive);
-
-            //// Clear inactive
-            //physicsItemsInactive.Clear();
-
-            //// Calculate new positions for all of them
-            //CalculateNewPositions(physicsItemsActive);
-
-            //// Start timer if not running
-            //if (!physicsTimer.IsEnabled)
-            //    physicsTimer.Start();
-
             // Instant
             foreach (ABBScatterItem item in physicsItemsInactive)
                 item.MoveToOriginalPosition(ActualCenter, ActualOrientation);
@@ -447,7 +421,7 @@ namespace Product_Browser.ScatterItems
         /// after this SmartCardScatterViewItem has been added to the ScattterView visual tree(use UpdateLayout on scatterview)
         /// </summary>
         /// <param name="view"></param>
-        public async void InitializeVirtualSmartCard(ScatterView view)
+        public async void InitializeVirtualSmartCard(ScatterView view, Color colorTheme)
         {
             // Remove shadow of this smartcard, or we get an ugly effect
             var ssc = this.GetTemplateChild("shadow") as Microsoft.Surface.Presentation.Generic.SurfaceShadowChrome;
@@ -460,6 +434,8 @@ namespace Product_Browser.ScatterItems
                 .FirstOrDefaultAsync(a => a.TagId == TagId);
             
             List<SmartCardDataItem> dataItems = null;
+
+            GradientColor = colorTheme;
 
             if (smartCard == null || (dataItems = smartCard.DataItems.ToList()) == null || dataItems.Count == 0)
             {
@@ -522,6 +498,9 @@ namespace Product_Browser.ScatterItems
             for (int i = 0; i < scatterItems.Count; i++)
             {
                 ABBScatterItem physics = scatterItems[i];
+
+                // Set color theme
+                physics.GradientColor = colorTheme;
 
                 // Register for animation ticks
                 animationPulseTimer.Tick += physics.AnimationPulseHandler;
@@ -599,8 +578,6 @@ namespace Product_Browser.ScatterItems
 
             animationPulse1.Opacity = ANIMATION_PULSE_1_STARTING_OPACITY;
             animationPulse2.Opacity = ANIMATION_PULSE_2_STARTING_OPACITY;
-            
-            //InitializeVirtualSmartCard(view);
         }
     }
 }
