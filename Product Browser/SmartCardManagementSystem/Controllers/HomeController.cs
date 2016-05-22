@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Microsoft.AspNet.Mvc;
 using DatabaseModel;
-using Microsoft.Data.Entity;
 using Microsoft.AspNet.Http;
 using System.IO;
 using DatabaseModel.Model;
@@ -12,10 +8,6 @@ using Microsoft.Net.Http.Headers;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-
-//asdadd
-
-
 
 namespace SmartCardManagementSystem.Controllers
 {
@@ -475,14 +467,11 @@ namespace SmartCardManagementSystem.Controllers
                 }
             }
 
-            //if (tagID < 0) { tagIsActive = true; }
-
             //Set viewdata
             ViewData["tagID"] = tagID;
             ViewData["tagIsActive"] = tagIsActive;
             ViewData["activePanel"] = "paneltitle_" + tagID;
             ViewData["firstEmptyIndex"] = firstEmptyIndex;
-
 
             return View(smartcardList);
         }
