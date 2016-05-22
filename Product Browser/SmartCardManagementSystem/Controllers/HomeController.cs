@@ -29,6 +29,7 @@ namespace SmartCardManagementSystem.Controllers
         /// <param name="width">The width to resize to.</param>
         /// <param name="height">The height to resize to.</param>
         /// <returns>The resized image.</returns>
+        /// RESIZE IMAGE
         public static Bitmap ResizeImage(Image image, int width, int height)
         {
             var destRect = new Rectangle(0, 0, width, height);
@@ -54,6 +55,7 @@ namespace SmartCardManagementSystem.Controllers
             return destImage;
         }
 
+        // CRATE IMAGE FROM BYTE ARRAY
         public Image byteArrayToImage(byte[] byteArrayIn)
         {
             MemoryStream ms = new MemoryStream(byteArrayIn);
@@ -61,6 +63,7 @@ namespace SmartCardManagementSystem.Controllers
             return returnImage;
         }
 
+        // CREATE BYTE ARRAY FROM IMAGE
         public byte[] imageToByteArray(System.Drawing.Image imageIn)
         {
             MemoryStream ms = new MemoryStream();
@@ -89,11 +92,11 @@ namespace SmartCardManagementSystem.Controllers
             context.SmartCardDataItems.Remove(dataItemToRemove);
             context.SaveChanges();
 
-            if(dataItemToRemove.Category == SmartCardDataItemCategory.Video && System.IO.File.Exists(SmartCardDataItem.VIDEO_FOLDER + tagID + @"\" + dataItemToRemove.Name) )
+            if (dataItemToRemove.Category == SmartCardDataItemCategory.Video && System.IO.File.Exists(SmartCardDataItem.VIDEO_FOLDER + tagID + @"\" + dataItemToRemove.Name))
             {
                 System.IO.File.Delete(SmartCardDataItem.VIDEO_FOLDER + tagID + @"\" + dataItemToRemove.Name);
             }
-            
+
             ViewData["tagID"] = tagID;
             ViewData["activePanel"] = "paneltitle_" + tagID;
 
@@ -154,7 +157,7 @@ namespace SmartCardManagementSystem.Controllers
             foreach (var v in list)
             {
                 context.Entry(v).Reference(a => a.DataField).Load();
-                if (v.Category == SmartCardDataItemCategory.Video && System.IO.File.Exists(SmartCardDataItem.VIDEO_FOLDER + tagID + @"\" + v.Name) )
+                if (v.Category == SmartCardDataItemCategory.Video && System.IO.File.Exists(SmartCardDataItem.VIDEO_FOLDER + tagID + @"\" + v.Name))
                 {
                     System.IO.File.Delete(SmartCardDataItem.VIDEO_FOLDER + tagID + @"\" + v.Name);
                 }
@@ -170,7 +173,7 @@ namespace SmartCardManagementSystem.Controllers
             return RedirectToAction("Overview", new { tagID = tagID });
         }
 
-
+        //OLD UPLOAD CONTROLLER BEFORE IMPLMENTING DROPZONE - DEACTIVATED
         //[HttpPost]
         //public IActionResult OverviewUploadDataitem(IFormFile uploadfile, int tagID)
         //{
@@ -307,7 +310,7 @@ namespace SmartCardManagementSystem.Controllers
                 var cardToUpdate = context.SmartCards.First(a => a.TagId == tagID);
                 cardToUpdate.DataItems.Add(item1);
 
-                
+
 
                 context.SaveChanges();
             }
@@ -346,7 +349,7 @@ namespace SmartCardManagementSystem.Controllers
                 || extension == "tiff"
                 || extension == "ico"
                 )
-                {
+            {
                 var readstream = uploadfile.OpenReadStream();
                 byte[] bytes = new byte[readstream.Length];  //declare arraysize
                 readstream.Read(bytes, 0, bytes.Length); // read from stream to byte array
@@ -401,7 +404,7 @@ namespace SmartCardManagementSystem.Controllers
                 readstream.Close();
 
                 var fileSize = bytes.Count();
-                System.Diagnostics.Debug.WriteLine("filesize was: " +fileSize);
+                System.Diagnostics.Debug.WriteLine("filesize was: " + fileSize);
 
                 if (fileSize > 100000) //if file larger than 100KB - resize then save
                 {
@@ -459,7 +462,7 @@ namespace SmartCardManagementSystem.Controllers
             {
                 var count = smartcardList.ElementAt(i).DataItems.Count;
                 var currenttagID = smartcardList.ElementAt(i).TagId;
-                if (tagID == currenttagID)
+                if (tagID == currenttagID || tagID == -1)
                 {
                     tagIsActive = true;
                 }
@@ -472,7 +475,7 @@ namespace SmartCardManagementSystem.Controllers
                 }
             }
 
-            if (tagID < 0) { tagIsActive = true; }
+            //if (tagID < 0) { tagIsActive = true; }
 
             //Set viewdata
             ViewData["tagID"] = tagID;

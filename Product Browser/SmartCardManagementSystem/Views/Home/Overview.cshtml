@@ -101,13 +101,13 @@
 
     @model List<DatabaseModel.Model.SmartCard>
 
-    @*<p> Debug data:</p>
-        <p> Number of cards in passed list: @Model.Count</p>
-        <h2>@ViewData["nameOfCard"]</h2>
-        <h2>@ViewData["tagID"]</h2>
-        <h2>@ViewData["tagIsActive"]</h2>
-        <h2>@ViewData["activepanel"]</h2>
-        <h2>@ViewData["firstEmptyIndex"]</h2>*@
+    @*<p> Number of cards in passed list: @Model.Count</p>
+    <h2>@ViewData["nameOfCard"]</h2>
+    <h2>@ViewData["tagID"]</h2>
+    <h2>@ViewData["tagIsActive"]</h2>
+    <h2>@ViewData["activepanel"]</h2>
+    <h2>@ViewData["firstEmptyIndex"]</h2>*@
+
 
     @* top spacer *@
     <p> </p>
@@ -123,7 +123,7 @@
             </div>
             <div id="collapse_-1" class="@( (int) @ViewData["tagID"] == -1 ? "panel-collapse collapse in" : "panel-collapse collapse")">
                 <div class="panel-body">
-                    Here you can edit your cards by connecting data to an empty card, or edit an existing cards.<br />
+                    Here you can edit your cards by connecting data to an empty card, or edit an existing card.<br />
                     Cards marked by green are active (have valid content on them).<br />
                     You can hover over all buttons/fields to get tooltip information.<br />
                     Accepted video formats: <b>.3gp, .3g2, .avi, .mp4, .mpeg, .mpg, .avi, .mov, .wm, .wmv, .wmx</b><br />
@@ -199,19 +199,20 @@
                                 var base64 = Convert.ToBase64String(smartcard.CardImage.DataField.Data);
                                 var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
 
+                                @*ALTERNATE BUTTONPLACEMENT FOR CARDIMAGE DELETE - DEACTIVATED*@
                                 @*<div class="panel-body">
-                                    <form class="form-inline" role="form" method="post" action="OverviewDeleteCardimage">
-                                        <span class="pull-left" STYLE="padding-top: 41px; padding-right: 37px">
-                                            <div class="form-group">
+                                        <form class="form-inline" role="form" method="post" action="OverviewDeleteCardimage">
+                                            <span class="pull-left" STYLE="padding-top: 41px; padding-right: 37px">
+                                                <div class="form-group">
 
-                                                <button type="submit" class="btn btn-danger btn-xs glyphicon glyphicon-remove" data-toggle="tooltip" title="Delete this cardimage"></button>
-                                                <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
-                                                &emsp;&emsp;
-                                            </div>
-                                        </span>
-                                        <img src="@imgSrc" width="180px" height="111px" style="border:1px solid black" data-toggle="tooltip" title="Cardimage" />
-                                    </form>
-                                </div>*@
+                                                    <button type="submit" class="btn btn-danger btn-xs glyphicon glyphicon-remove" data-toggle="tooltip" title="Delete this cardimage"></button>
+                                                    <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
+                                                    &emsp;&emsp;
+                                                </div>
+                                            </span>
+                                            <img src="@imgSrc" width="180px" height="111px" style="border:1px solid black" data-toggle="tooltip" title="Cardimage" />
+                                        </form>
+                                    </div>*@
 
                                 <form class="form-inline" role="form" method="post" action="OverviewDeleteCardimage">
                                     <img src="@imgSrc" width="180px" height="111px" style="border:1px solid black" data-toggle="tooltip" title="Cardimage" />
@@ -226,7 +227,7 @@
                             else
                             {
                                 @*DROPZONE FOR CARDIMAGE*@
-                                <form asp-action="OverviewUploadDataitemDZcardimage" asp-controller="Home" method="post" enctype="multipart/form-data" class="dropzone" id="DZcardimage" style="width: 180px; height: 111px; min-height: 0px;">
+                                <form asp-action="OverviewUploadDataitemDZcardimage" asp-controller="Home" method="post" enctype="multipart/form-data" class="dropzone" id="DZcardimage" data-toggle="tooltip" title="Drop cardimage file here - or click to browse" style="width: 180px; height: 111px; min-height: 0px;">
                                     <div class="dz-message" data-dz-message><span>Add card front-image (drop image or click)</span></div>
                                     <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
                                 </form>
@@ -250,11 +251,6 @@
                                     </span>
                                     <div class="clearfix"></div>
                                 </div>
-
-                                @*
-                                    <button class="btn btn-default pull-right">asdadsad</button>
-                                    <div class="clearfix"></div>
-                                *@
 
                                 @* List all dataitems in this Smartcard*@
                                 @for (int j = 0; j < Model[i - 1].DataItems.Count; j++)
@@ -295,7 +291,7 @@
                             </form>*@
 
                         @*DROPZONE STYLE UPLOAD FORM*@
-                        <form asp-action="OverviewUploadDataitemDZ" asp-controller="Home" method="post" enctype="multipart/form-data" class="dropzone" id="mydropzone">
+                        <form asp-action="OverviewUploadDataitemDZ" asp-controller="Home" method="post" enctype="multipart/form-data" class="dropzone" id="mydropzone" data-toggle="tooltip" title="Drop mediafiles here - or click to browse">
                             <div class="dz-message" data-dz-message><span>Add media files (drop files or click)</span></div>
                             <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
                         </form>
@@ -304,13 +300,8 @@
                 </div>
             </div>
                             }
-
-
         @*SPACING*@
         <br /><br /><br />
-
-
-
 
         <div class="panel-group">
             <div>
@@ -394,25 +385,35 @@
                                                 var base64 = Convert.ToBase64String(smartcard.CardImage.DataField.Data);
                                                 var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
 
-                                                <div class="panel-body">
-                                                    <form class="form-inline" role="form" method="post" action="OverviewDeleteCardimage">
-                                                        <span class="pull-left" STYLE="padding-top: 41px; padding-right: 37px">
-                                                            <div class="form-group">
+                                                @*ALTERNATE BUTTONPLACEMENT FOR CARDIMAGE DELETE - DEACTIVATED*@
+                                                @*<div class="panel-body">
+                                                        <form class="form-inline" role="form" method="post" action="OverviewDeleteCardimage">
+                                                            <span class="pull-left" STYLE="padding-top: 41px; padding-right: 37px">
+                                                                <div class="form-group">
 
-                                                                <button type="submit" class="btn btn-danger btn-xs glyphicon glyphicon-remove" data-toggle="tooltip" title="Delete this cardimage"></button>
-                                                                <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
-                                                                &emsp;&emsp;
-                                                            </div>
-                                                        </span>
-                                                        <img src="@imgSrc" width="180px" height="111px" style="border:1px solid black" />
-                                                    </form>
-                                                </div>
+                                                                    <button type="submit" class="btn btn-danger btn-xs glyphicon glyphicon-remove" data-toggle="tooltip" title="Delete this cardimage"></button>
+                                                                    <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
+                                                                    &emsp;&emsp;
+                                                                </div>
+                                                            </span>
+                                                            <img src="@imgSrc" width="180px" height="111px" style="border:1px solid black" data-toggle="tooltip" title="Cardimage" />
+                                                        </form>
+                                                    </div>*@
+
+                                                <form class="form-inline" role="form" method="post" action="OverviewDeleteCardimage">
+                                                    <img src="@imgSrc" width="180px" height="111px" style="border:1px solid black" data-toggle="tooltip" title="Cardimage" />
+                                                    <div class="form-group">
+                                                        <button type="submit" class="btn btn-danger btn-sm glyphicon glyphicon-remove" data-toggle="tooltip" title="Delete this cardimage"></button>
+                                                        <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
+                                                        &emsp;&emsp;
+                                                    </div>
+                                                </form>
 
                                             }
                                             else
                                             {
                                                 @*DROPZONE FOR CARDIMAGE*@
-                                                <form asp-action="OverviewUploadDataitemDZcardimage" asp-controller="Home" method="post" enctype="multipart/form-data" class="dropzone" id="DZcardimage" style="width: 180px; height: 111px; min-height: 0px;">
+                                                <form asp-action="OverviewUploadDataitemDZcardimage" asp-controller="Home" method="post" enctype="multipart/form-data" class="dropzone" id="DZcardimage" data-toggle="tooltip" title="Drop cardimage file here - or click to browse" style="width: 180px; height: 111px; min-height: 0px;">
                                                     <div class="dz-message" data-dz-message><span>Add card front-image (drop image or click)</span></div>
                                                     <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
                                                 </form>
@@ -477,7 +478,7 @@
                                             </form>*@
 
                                         @*DROPZONE STYLE OPLOAD FORM*@
-                                        <form asp-action="OverviewUploadDataitemDZ" asp-controller="Home" method="post" enctype="multipart/form-data" class="dropzone" id="mydropzone">
+                                        <form asp-action="OverviewUploadDataitemDZ" asp-controller="Home" method="post" enctype="multipart/form-data" class="dropzone" id="mydropzone" data-toggle="tooltip" title="Drop mediafiles here - or click to browse">
                                             <div class="dz-message" data-dz-message><span>Add media files (drop files or click)</span></div>
                                             <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
                                         </form>
@@ -491,9 +492,4 @@
                     </div>
                 </div>
             </div>
-
-
-
-
-
         </div>
