@@ -16,8 +16,6 @@ namespace Product_Browser
     {
         public App()
         {
-            DatabaseModel.ABBDataContext context = new DatabaseModel.ABBDataContext();
-            context.SmartCards.ToList();
         }
     }
 }

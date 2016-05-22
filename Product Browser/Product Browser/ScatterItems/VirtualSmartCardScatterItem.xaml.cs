@@ -13,6 +13,7 @@ using System.IO;
 using System.Windows.Input;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Collections.ObjectModel;
 
 namespace Product_Browser.ScatterItems
 {
@@ -67,7 +68,7 @@ namespace Product_Browser.ScatterItems
 
         SmartCard smartCard = null;
 
-        ScatterView view;
+        ObservableCollection<ABBScatterItem> view;
 
         List<ABBScatterItem> 
             physicsItemsActive = new List<ABBScatterItem>(10),
@@ -345,10 +346,14 @@ namespace Product_Browser.ScatterItems
 
         private void Dead()
         {
-            view.Items.Remove(this);
+            view.Remove(this);
 
             foreach (ABBScatterItem item in physicsItemsActive)
-                view.Items.Remove(item);
+                view.Remove(item);
+
+            animationPulseTimer.Stop();
+            physicsTimer.Stop();
+            physicsTimerLowPriority.Stop();
         }
 
         private void ScatterViewItemLocked(ABBScatterItem e)
@@ -421,7 +426,7 @@ namespace Product_Browser.ScatterItems
         /// after this SmartCardScatterViewItem has been added to the ScattterView visual tree(use UpdateLayout on scatterview)
         /// </summary>
         /// <param name="view"></param>
-        public async void InitializeVirtualSmartCard(ScatterView view, Color colorTheme)
+        public async void InitializeVirtualSmartCard(Color colorTheme)
         {
             // Remove shadow of this smartcard, or we get an ugly effect
             var ssc = this.GetTemplateChild("shadow") as Microsoft.Surface.Presentation.Generic.SurfaceShadowChrome;
@@ -545,7 +550,7 @@ namespace Product_Browser.ScatterItems
                     videoPlaceholder.Visibility = Visibility.Visible;
                 }
 
-                view.Items.Add(scatterItems[i]);
+                view.Add(scatterItems[i]);
                 physicsItemsActive.Add(physics);
             }
 
@@ -555,12 +560,12 @@ namespace Product_Browser.ScatterItems
 
         #endregion
 
-        public VirtualSmartCardScatterItem(ScatterView view, long tagId)
+        public VirtualSmartCardScatterItem(ObservableCollection<ABBScatterItem> view, long tagId)
         {
             InitializeComponent();
 
             this.view = view;
-
+            
             TagId = tagId;
 
             physicsTimer = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);

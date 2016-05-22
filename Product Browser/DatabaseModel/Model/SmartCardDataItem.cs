@@ -99,7 +99,7 @@ namespace DatabaseModel.Model
                 return null;
 
             List<BitmapImage> images = new List<BitmapImage>();
-
+            
             int current = 0;
             while (current < DataField.Data.Length)
             {

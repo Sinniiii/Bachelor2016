@@ -99,6 +99,10 @@ namespace Product_Browser.ScatterItems
                 scrollStartPoint = e.GetPosition(scrollBar).Y;
                 scrollStartOffset = scrollBar.VerticalOffset;
             }
+
+            if (!(e.MouseDevice.DirectlyOver is Image))
+                scrollingToUserSelected = false;
+
             scrollBar.CaptureMouse();
             e.Handled = true;
         }
@@ -115,6 +119,9 @@ namespace Product_Browser.ScatterItems
                 scrollStartPoint = e.GetTouchPoint(scrollBar).Position.Y;
                 scrollStartOffset = scrollBar.VerticalOffset;
             }
+
+            if (!(e.TouchDevice.DirectlyOver is Image))
+                scrollingToUserSelected = false;
 
             e.TouchDevice.Capture(scrollBar);
             e.Handled = true;

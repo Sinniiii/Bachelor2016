@@ -8,6 +8,7 @@ using Product_Browser.ScatterItems;
 using System.Windows.Threading;
 using System.Collections.Generic;
 using System.Windows.Media;
+using System.Collections.ObjectModel;
 
 //Baard was here
 
@@ -18,8 +19,9 @@ namespace Product_Browser
     /// </summary>
     public partial class MainWindow : SurfaceWindow
     {
-
         #region Fields
+
+        ObservableCollection<ABBScatterItem> scatterItemCollection = new ObservableCollection<ABBScatterItem>();
 
         static double MAX_REMOVE_AREA_SIZE = Microsoft.Surface.Core.InteractiveSurface.PrimarySurfaceDevice.Height * 0.05d;
 
@@ -76,10 +78,12 @@ namespace Product_Browser
 
         private void OnSmartCardSelected(object sender, EventArgs args)
         {
-            VirtualSmartCardScatterItem x = new VirtualSmartCardScatterItem(scatterView, (sender as SmartCard).TagId);
-            scatterView.Items.Add(x);
+            VirtualSmartCardScatterItem x = new VirtualSmartCardScatterItem(scatterItemCollection, (sender as SmartCard).TagId);
+            scatterItemCollection.Add(x);
+            
             scatterView.UpdateLayout();
-            x.InitializeVirtualSmartCard(scatterView, GetNextColorTheme());
+            x.InitializeVirtualSmartCard(GetNextColorTheme());
+
             x.ContainerManipulationStarted += SmartCardManipulationStarted;
             x.ContainerManipulationCompleted += SmartCardManipulationEnded;
 
@@ -94,6 +98,38 @@ namespace Product_Browser
             //List<SmartCard> activeList = con.SmartCards.ToList();
 
             smartCardContainer.Populate(activeList);
+        }
+
+        private void OnVisualizationAdded(object sender, TagVisualizerEventArgs args)
+        {
+            TagVisualizationMod tagVis = args.TagVisualization as TagVisualizationMod;
+
+            VirtualSmartCardScatterItem item = null;
+
+            foreach (ScatterViewItem it in scatterView.Items) // Find out if we already have virtual version of this card placed
+            {
+                if (it is VirtualSmartCardScatterItem)
+                {
+                    if ((it as VirtualSmartCardScatterItem).TagId == tagVis.VisualizedTag.Value)
+                        item = it as VirtualSmartCardScatterItem;
+                }
+            }
+
+            if (item == null)
+            {
+                item = new VirtualSmartCardScatterItem(scatterItemCollection, tagVis.VisualizedTag.Value);
+
+                scatterItemCollection.Add(item);
+                scatterView.UpdateLayout(); // Force an immediate update
+
+                item.InitializeVirtualSmartCard(GetNextColorTheme());
+
+                // Assign our event handlers to input, so we can show the removal area
+                item.ContainerManipulationStarted += SmartCardManipulationStarted;
+                item.ContainerManipulationCompleted += SmartCardManipulationEnded;
+            }
+
+            (args.TagVisualization as TagVisualizationMod).InitializeSmartCard(item);
         }
 
         #endregion
@@ -122,47 +158,12 @@ namespace Product_Browser
             }
 
             // Subscribe to add event, since we need to handle that one
-            tagVisualizer.VisualizationAdded += VisualizationAdded;
-        }
-
-        private void VisualizationAdded(object sender, TagVisualizerEventArgs args)
-        {
-            TagVisualizationMod tagVis = args.TagVisualization as TagVisualizationMod;
-
-            VirtualSmartCardScatterItem item = null;
-
-            foreach (ScatterViewItem it in scatterView.Items) // Find out if we already have virtual version of this card placed
-            {
-                if (it is VirtualSmartCardScatterItem)
-                {
-                    if ((it as VirtualSmartCardScatterItem).TagId == tagVis.VisualizedTag.Value)
-                        item = it as VirtualSmartCardScatterItem;
-                }
-            }
-
-            if (item == null)
-            {
-                item = new VirtualSmartCardScatterItem(scatterView, tagVis.VisualizedTag.Value);
-
-                scatterView.Items.Add(item);
-                scatterView.UpdateLayout(); // Force an immediate update
-
-
-
-                item.InitializeVirtualSmartCard(scatterView, GetNextColorTheme());
-
-                // Assign our event handlers to input, so we can show the removal area
-                item.ContainerManipulationStarted += SmartCardManipulationStarted;
-                item.ContainerManipulationCompleted += SmartCardManipulationEnded;
-            }
-
-            (args.TagVisualization as TagVisualizationMod).InitializeSmartCard(item);
+            tagVisualizer.VisualizationAdded += OnVisualizationAdded;
         }
 
         private Color GetNextColorTheme()
         {
             // Original #2a5f6f R = 42, G = 95, B = 111, A = 255
-            //return (Color)ColorConverter.ConvertFromString("#2a5f6f");
 
             Color newColor = new Color();
             newColor.R = (byte)randomGenerator.Next(10, 70);
@@ -184,9 +185,11 @@ namespace Product_Browser
             removeAreaAnimationTimer = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);
             removeAreaAnimationTimer.Interval = new TimeSpan(0, 0, 0, 0, 30);
             removeAreaAnimationTimer.Tick += RemoveAreaAnimationHandler;
-
+            
             smartCardContainer.Loaded += OnSmartCardContainerLoaded;
             smartCardContainer.SmartCardSelected += OnSmartCardSelected;
+
+            scatterView.ItemsSource = scatterItemCollection;
         }
     }
 }

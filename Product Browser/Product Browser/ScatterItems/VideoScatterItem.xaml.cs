@@ -228,6 +228,7 @@ namespace Product_Browser.ScatterItems
             PauseVideo();
 
             videoPlayer.Close();
+            videoPlayer.Source = null;
         }
 
         #endregion
