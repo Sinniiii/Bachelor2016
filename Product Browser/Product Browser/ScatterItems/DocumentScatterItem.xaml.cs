@@ -33,6 +33,7 @@ namespace Product_Browser.ScatterItems
         public void OnBarLoaded(object obj, EventArgs args)
         {
             container.Populate(images, System.Windows.Controls.Orientation.Vertical, 4, true, true);
+            container.ColorTheme = GradientColor;
         }
 
         public void OnNewMainImage(ImageSource source)

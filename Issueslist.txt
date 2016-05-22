@@ -1,9 +1,9 @@
 APP:
-- Treg tracking
-- Scrolling i imagecontainer ikke intuitivt, folk prøver å trykke på bildene istdenfor scroll; skygge med opp/ned piler langs siden?
-- Dobbelklikke for å lukke kort?
-- Fargekoding av forskjellige smartcards?
-- Abstrake bilder ved skyggene rundt smartcards, illustrere 'her ligger bilder, her ligger video' osv
+- Treg tracking -fixed
+- Scrolling i imagecontainer ikke intuitivt, folk prøver å trykke på bildene istdenfor scroll; skygge med opp/ned piler langs siden? -done, trykking implementert
+- Dobbelklikke for å lukke kort? -nei
+- Fargekoding av forskjellige smartcards? -done, ok farger?
+- Abstrake bilder ved skyggene rundt smartcards, illustrere 'her ligger bilder, her ligger video' osv -done, ok ikoner?
 
 - deploye appen til surface greien
 

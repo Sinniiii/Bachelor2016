@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -14,7 +15,7 @@ namespace Product_Browser.ScatterItems
     /// <summary>
     /// Interaction logic for ImageContainer.xaml
     /// </summary>
-    public partial class ImageContainer : UserControl
+    public partial class ImageContainer : UserControl, INotifyPropertyChanged
     {
 
         #region PropertyChanged
@@ -61,7 +62,19 @@ namespace Product_Browser.ScatterItems
 
         #region Properties
 
+        private Color colorTheme;
+        public Color ColorTheme
+        {
+            get { return colorTheme; }
+            set { colorTheme = value; ColorThemeBrush = new SolidColorBrush(value); NotifyPropertyChanged(); }
+        }
 
+        private SolidColorBrush colorThemeBrush;
+        public SolidColorBrush ColorThemeBrush
+        {
+            get { return colorThemeBrush; }
+            set { this.colorThemeBrush = value; NotifyPropertyChanged(); }
+        }
 
         #endregion
 
@@ -404,7 +417,10 @@ namespace Product_Browser.ScatterItems
 
                 UserControl u = new UserControl();
 
-                u.BorderBrush = new SolidColorBrush(new Color() { R = 42, G = 95, B = 111, A = 255});
+                Binding binding = new Binding("ColorThemeBrush");
+                binding.RelativeSource = new RelativeSource(RelativeSourceMode.FindAncestor, typeof(ImageContainer), 1);
+                u.SetBinding(UserControl.BorderBrushProperty, binding);
+
                 u.BorderThickness = new Thickness(1d);
                 u.Tag = i;
 

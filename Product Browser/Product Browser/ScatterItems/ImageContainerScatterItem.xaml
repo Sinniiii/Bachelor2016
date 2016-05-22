@@ -31,7 +31,7 @@
 
         <Image x:Name="mainImage" HorizontalAlignment="Center" VerticalAlignment="Center" Height="Auto" Width="Auto" Stretch="Uniform" Grid.Row="0"/>
 
-        <local:ImageContainer BorderBrush="#2a5f6f" BorderThickness="0, 2, 0, 0" Grid.Row="1" x:Name="container" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        <local:ImageContainer BorderBrush="{Binding Path=ColorThemeBrush, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:ScatterViewItem}}" BorderThickness="0, 2, 0, 0" Grid.Row="1" x:Name="container" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
     </Grid>
 </local:ABBScatterItem>

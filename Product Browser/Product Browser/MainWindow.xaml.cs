@@ -23,6 +23,8 @@ namespace Product_Browser
 
         static double MAX_REMOVE_AREA_SIZE = Microsoft.Surface.Core.InteractiveSurface.PrimarySurfaceDevice.Height * 0.05d;
 
+        Random randomGenerator = new Random();
+
         DispatcherTimer removeAreaAnimationTimer;
 
         int manipulatedSmartCards = 0;
@@ -162,9 +164,13 @@ namespace Product_Browser
             // Original #2a5f6f R = 42, G = 95, B = 111, A = 255
             //return (Color)ColorConverter.ConvertFromString("#2a5f6f");
 
-            colorsUsed = (byte)((colorsUsed + 1) % 5);
+            Color newColor = new Color();
+            newColor.R = (byte)randomGenerator.Next(10, 70);
+            newColor.G = (byte)randomGenerator.Next(60, 130);
+            newColor.B = (byte)randomGenerator.Next(80, 140);
+            newColor.A = 255;
 
-            return new Color() { R = 42, G = (byte)(95 - colorsUsed * 5), B = (byte)(111 + colorsUsed * 5), A = 255 };
+            return newColor;
         }
 
         #endregion

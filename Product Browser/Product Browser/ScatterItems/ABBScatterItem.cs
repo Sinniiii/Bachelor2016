@@ -70,13 +70,20 @@ namespace Product_Browser.ScatterItems
         public Color GradientColor
         {
             get { return gradientColor; }
-            set { gradientColor = value; NotifyPropertyChanged(); }
+            set { gradientColor = value; ColorThemeBrush = new SolidColorBrush(value); NotifyPropertyChanged(); }
+        }
+
+        private SolidColorBrush colorThemeBrush;
+        public SolidColorBrush ColorThemeBrush
+        {
+            get { return colorThemeBrush; }
+            set { this.colorThemeBrush = value; NotifyPropertyChanged(); }
         }
 
         #endregion
 
         #region EventHandlers
-        
+
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
             base.OnMouseDown(e);
