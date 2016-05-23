@@ -446,10 +446,12 @@ namespace Product_Browser.ScatterItems
                     box.VerticalAlignment = VerticalAlignment.Center;
                     box.Stretch = Stretch.Uniform;
                     box.Opacity = PAGE_NUMBER_OPACITY;
+                    box.IsHitTestVisible = false;
 
                     TextBlock text = new TextBlock();
                     text.Text = (i + 1).ToString();
                     box.Child = text;
+                    text.IsHitTestVisible = false;
 
                     g.Children.Add(box);
                 }

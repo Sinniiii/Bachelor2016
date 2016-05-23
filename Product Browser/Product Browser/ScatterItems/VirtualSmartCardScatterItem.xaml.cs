@@ -435,8 +435,13 @@ namespace Product_Browser.ScatterItems
             ABBDataContext context = new ABBDataContext();
             
             smartCard = await context.SmartCards
-                .Include(s => s.DataItems.Select(d => d.DataField)).Include(s => s.CardImage.DataField)
+                //.Include(s => s.DataItems.Select(d => d.DataField)).Include(s => s.CardImage.DataField)
                 .FirstOrDefaultAsync(a => a.TagId == TagId);
+
+            context.Entry(smartCard.CardImage).Reference(a => a.DataField).Load();
+
+            foreach (var item in smartCard.DataItems)
+                context.Entry(item).Reference(oo => oo.DataField).Load();
             
             List<SmartCardDataItem> dataItems = null;
 
