@@ -11,7 +11,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="0.7*"/>
             <RowDefinition Height="*" MaxHeight="4"/>
-            <RowDefinition Height="0.2*" MaxHeight="60"/>
+            <RowDefinition Height="0.15*"/>
         </Grid.RowDefinitions>
 
         <UserControl BorderThickness="4" Background="Black">

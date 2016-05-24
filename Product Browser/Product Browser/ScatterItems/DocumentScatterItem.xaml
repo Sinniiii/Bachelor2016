@@ -13,7 +13,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.7*"/>
             <ColumnDefinition Width="*" MaxWidth="4"/>
-            <ColumnDefinition Width="0.2*" MaxWidth="60"/>
+            <ColumnDefinition Width="0.15*"/>
         </Grid.ColumnDefinitions>
 
         <UserControl BorderThickness="4" Background="Black">

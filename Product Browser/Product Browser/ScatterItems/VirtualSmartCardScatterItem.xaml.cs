@@ -33,14 +33,14 @@ namespace Product_Browser.ScatterItems
         readonly int MAX_IMAGES_BEFORE_CONTAINER = 1;
 
         readonly Size
-            SCATTERITEM_DOCUMENT_STARTING_SIZE = new Size(150, 175),
+            SCATTERITEM_DOCUMENT_STARTING_SIZE = new Size(125, 140),
             SCATTERITEM_VIDEO_STARTING_SIZE = new Size(200, 125),
             SCATTERITEM_IMAGE_STARTING_SIZE = new Size(200, 125);
 
         readonly Vector
-            SCATTERITEM_DOCUMENT_STARTING_POSITION = new Vector(0, -180),
-            SCATTERITEM_VIDEO_STARTING_POSITION = new Vector(-225, 0),
-            SCATTERITEM_IMAGE_STARTING_POSITION = new Vector(225, 0),
+            SCATTERITEM_DOCUMENT_STARTING_POSITION = new Vector(0, -170),
+            SCATTERITEM_VIDEO_STARTING_POSITION = new Vector(-235, 0),
+            SCATTERITEM_IMAGE_STARTING_POSITION = new Vector(235, 0),
 
             SCATTERITEM_DOCUMENT_POSITION_OFFSET = new Vector(0, -20),
             SCATTERITEM_VIDEO_POSITION_OFFSET = new Vector(-20, 0),
