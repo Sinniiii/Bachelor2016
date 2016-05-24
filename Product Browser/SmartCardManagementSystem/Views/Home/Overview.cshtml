@@ -101,12 +101,12 @@
 
     @model List<DatabaseModel.Model.SmartCard>
 
-    @*<p> Number of cards in passed list: @Model.Count</p>
+    <p> Number of cards in passed list: @Model.Count</p>
     <h2>@ViewData["nameOfCard"]</h2>
     <h2>@ViewData["tagID"]</h2>
     <h2>@ViewData["tagIsActive"]</h2>
     <h2>@ViewData["activepanel"]</h2>
-    <h2>@ViewData["firstEmptyIndex"]</h2>*@
+    <h2>@ViewData["firstEmptyIndex"]</h2>
 
 
     @* top spacer *@
@@ -172,7 +172,7 @@
                         <form class="form-inline" role="form" method="post" action="OverviewSaveSmartcardName">
                             <div class="form-group">
                                 @*<label for="nameOfCard">Name of Card:</label>*@
-                                <input type="text" class="form-control" id="nameOfCard" name="nameOfCard" value="@Model[i - 1].Name" data-toggle="tooltip" title="Name of card">
+                                <input type="text" class="form-control" id="nameOfCard" name="nameOfCard" value="@Model[i - 1].Name" data-toggle="tooltip" title="Name of card" STYLE="display:inline-block; width:180px">
                                 <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
                                 <button type="submit" class="btn btn-primary btn-sm glyphicon glyphicon-floppy-disk" data-toggle="tooltip" title="Save new card name"></button>
                             </div>
@@ -215,9 +215,10 @@
                                     </div>*@
 
                                 <form class="form-inline" role="form" method="post" action="OverviewDeleteCardimage">
-                                    <img src="@imgSrc" width="180px" height="111px" style="border:1px solid black" data-toggle="tooltip" title="Cardimage" />
+                                    
                                     <div class="form-group">
-                                        <button type="submit" class="btn btn-danger btn-sm glyphicon glyphicon-remove" data-toggle="tooltip" title="Delete this cardimage"></button>
+                                        <img src="@imgSrc" width="180px" height="111px" style="border:1px solid black" data-toggle="tooltip" title="Cardimage" STYLE="display:inline-block; width:180px"/>
+                                        <button type="submit" class="btn btn-danger btn-sm glyphicon glyphicon-remove" data-toggle="tooltip" title="Delete this cardimage" ></button>
                                         <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
                                         &emsp;&emsp;
                                     </div>
@@ -358,7 +359,7 @@
                                         <form class="form-inline" role="form" method="post" action="OverviewSaveSmartcardName">
                                             <div class="form-group">
                                                 @*<label for="nameOfCard">Name of Card:</label>*@
-                                                <input type="text" class="form-control" id="nameOfCard" name="nameOfCard" value="@Model[i - 1].Name" data-toggle="tooltip" title="Name of card">
+                                                <input type="text" class="form-control" id="nameOfCard" name="nameOfCard" value="@Model[i - 1].Name" data-toggle="tooltip" title="Name of card" STYLE="display:inline-block; width:180px">
                                                 <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
                                                 <button type="submit" class="btn btn-primary btn-sm glyphicon glyphicon-floppy-disk" data-toggle="tooltip" title="Save new card name"></button>
                                             </div>

@@ -454,10 +454,6 @@ namespace SmartCardManagementSystem.Controllers
             {
                 var count = smartcardList.ElementAt(i).DataItems.Count;
                 var currenttagID = smartcardList.ElementAt(i).TagId;
-                if (tagID == currenttagID || tagID == -1)
-                {
-                    tagIsActive = true;
-                }
 
                 if (count == 0)
                 {
@@ -465,6 +461,13 @@ namespace SmartCardManagementSystem.Controllers
 
                     break;
                 }
+
+                if (tagID == currenttagID || tagID == -1)
+                {
+                    System.Diagnostics.Debug.WriteLine("DEEEEEBUUUUUUGGG " +tagID);
+                    System.Diagnostics.Debug.WriteLine("DEEEEEBUUUUUUGGG " + i);
+                    tagIsActive = true;
+                }  
             }
 
             //Set viewdata
