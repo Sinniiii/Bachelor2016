@@ -464,8 +464,8 @@ namespace SmartCardManagementSystem.Controllers
 
                 if (tagID == currenttagID || tagID == -1)
                 {
-                    System.Diagnostics.Debug.WriteLine("DEEEEEBUUUUUUGGG " +tagID);
-                    System.Diagnostics.Debug.WriteLine("DEEEEEBUUUUUUGGG " + i);
+                    //System.Diagnostics.Debug.WriteLine("DEEEEEBUUUUUUGGG " +tagID);
+                    //System.Diagnostics.Debug.WriteLine("DEEEEEBUUUUUUGGG " + i);
                     tagIsActive = true;
                 }  
             }
