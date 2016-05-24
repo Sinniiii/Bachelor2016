@@ -9,6 +9,7 @@ using System.Windows.Threading;
 using System.Collections.Generic;
 using System.Windows.Media;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 
 //Baard was here
 
@@ -21,13 +22,15 @@ namespace Product_Browser
     {
         #region Fields
 
-        ObservableCollection<ABBScatterItem> scatterItemCollection = new ObservableCollection<ABBScatterItem>();
+        static double
+            MAX_REMOVE_AREA_SIZE = Microsoft.Surface.Core.InteractiveSurface.PrimarySurfaceDevice.Height * 0.05d,
+            BACKGROUND_FADE_AMOUNT = 0.01d;
 
-        static double MAX_REMOVE_AREA_SIZE = Microsoft.Surface.Core.InteractiveSurface.PrimarySurfaceDevice.Height * 0.05d;
+        ObservableCollection<ABBScatterItem> scatterItemCollection = new ObservableCollection<ABBScatterItem>();
 
         Random randomGenerator = new Random();
 
-        DispatcherTimer removeAreaAnimationTimer;
+        DispatcherTimer removeAreaAnimationTimer, backgroundFadeTimer;
 
         int manipulatedSmartCards = 0;
         byte colorsUsed = 0;
@@ -132,6 +135,48 @@ namespace Product_Browser
             (args.TagVisualization as TagVisualizationMod).InitializeSmartCard(item);
         }
 
+        private void BackgroundFadeTick(object sender, EventArgs args)
+        {
+            double newOpacity = background.Opacity - BACKGROUND_FADE_AMOUNT;
+
+            if (newOpacity < 0d)
+                newOpacity = 0d;
+
+            background.Opacity = newOpacity;
+
+            if(newOpacity == 0d)
+                backgroundFadeTimer.Stop();
+        }
+
+        private void BackgroundShowTick(object sender, EventArgs args)
+        {
+            double newOpacity = background.Opacity + BACKGROUND_FADE_AMOUNT;
+
+            if (newOpacity > 1d)
+                newOpacity = 1d;
+
+            background.Opacity = newOpacity;
+
+            if (newOpacity == 1d)
+                backgroundFadeTimer.Stop();
+        }
+
+        private void ScatterItemCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
+        {
+            if(args.Action == NotifyCollectionChangedAction.Remove && scatterItemCollection.Count == 0)
+            {
+                backgroundFadeTimer.Tick -= BackgroundFadeTick;
+                backgroundFadeTimer.Tick += BackgroundShowTick;
+                backgroundFadeTimer.Start();
+            }
+            else if(args.Action == NotifyCollectionChangedAction.Add && scatterItemCollection.Count == 1)
+            {
+                backgroundFadeTimer.Tick += BackgroundFadeTick;
+                backgroundFadeTimer.Tick -= BackgroundShowTick;
+                backgroundFadeTimer.Start();
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -185,11 +230,16 @@ namespace Product_Browser
             removeAreaAnimationTimer = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);
             removeAreaAnimationTimer.Interval = new TimeSpan(0, 0, 0, 0, 30);
             removeAreaAnimationTimer.Tick += RemoveAreaAnimationHandler;
-            
+
+            backgroundFadeTimer = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);
+            backgroundFadeTimer.Interval = new TimeSpan(0, 0, 0, 0, 20);
+
             smartCardContainer.Loaded += OnSmartCardContainerLoaded;
             smartCardContainer.SmartCardSelected += OnSmartCardSelected;
 
             scatterView.ItemsSource = scatterItemCollection;
+
+            scatterItemCollection.CollectionChanged += ScatterItemCollectionChanged;
         }
     }
 }

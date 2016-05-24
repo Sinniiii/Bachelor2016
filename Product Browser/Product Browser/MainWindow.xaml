@@ -11,7 +11,7 @@
             <RowDefinition x:Name="removeArea2" Height="0"/>
         </Grid.RowDefinitions>
 
-        <Image Grid.RowSpan="3" Source="/Resources/ABB Product Browser BG.jpg" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" />
+        <Image Name="background" Grid.RowSpan="3" Source="/Resources/ABB Product Browser BG.jpg"/>
 
         <s:TagVisualizer Grid.RowSpan="3" Name="tagVisualizer" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" Height="Auto">
             <local:ScatterViewMod Grid.RowSpan="3" x:Name="scatterView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" Height="Auto"/>

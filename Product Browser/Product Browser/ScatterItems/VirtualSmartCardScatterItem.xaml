@@ -42,7 +42,7 @@
             </UserControl.Background>
         </UserControl>
 
-        <UserControl Name="centerObject" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="3" BorderThickness="7" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Black">
+        <UserControl Name="centerObject" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="3" BorderThickness="4" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Black">
             <UserControl.BorderBrush>
                 <LinearGradientBrush EndPoint="1,1" MappingMode="RelativeToBoundingBox" StartPoint="0.0,0">
                     <LinearGradientBrush.RelativeTransform>

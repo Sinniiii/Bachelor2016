@@ -7,8 +7,6 @@
              xmlns:local="clr-namespace:Product_Browser.ScatterItems"
              mc:Ignorable="d" Height="200" Width="100" BorderThickness="0" Background="Transparent">
 
-    
-
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.7*"/>
