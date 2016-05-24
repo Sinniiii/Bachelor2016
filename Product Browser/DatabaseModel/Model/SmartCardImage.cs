@@ -37,22 +37,20 @@ namespace DatabaseModel.Model
             if (DataField == null || DataField.Data.Length == 0)
                 return null;
 
-            BitmapImage image = new BitmapImage();
+            BitmapImage newImage = new BitmapImage();
 
-            using (var mem = new MemoryStream(DataField.Data))
-            {
-                mem.Position = 0;
-                image.BeginInit();
-                image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
-                image.CacheOption = BitmapCacheOption.OnLoad;
-                image.UriSource = null;
-                image.StreamSource = mem;
-                image.EndInit();
-            }
+            var mem = new MemoryStream(DataField.Data);
+            mem.Position = 0;
+            newImage.BeginInit();
+            newImage.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
+            newImage.CacheOption = BitmapCacheOption.None;
+            newImage.UriSource = null;
+            newImage.StreamSource = mem;
+            newImage.EndInit();
 
-            image.Freeze();
+            newImage.Freeze();
 
-            return image;
+            return newImage;
         }
 
         /// <summary>

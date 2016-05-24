@@ -5,33 +5,36 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:controls="http://schemas.microsoft.com/surface/2008"
              xmlns:local="clr-namespace:Product_Browser.ScatterItems"
-             mc:Ignorable="d" Height="100" Width="200" BorderThickness="7" Background="Black">
-
-    <local:ABBScatterItem.BorderBrush>
-        <LinearGradientBrush StartPoint="0.0, 0" EndPoint="1, 1" MappingMode="RelativeToBoundingBox">
-            <LinearGradientBrush.RelativeTransform>
-                <TransformGroup>
-                    <RotateTransform x:Name="grad" CenterY="0.5" CenterX="0.5"/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </LinearGradientBrush.RelativeTransform>
-            <GradientStop Color="Black"/>
-            <GradientStop Color="{Binding Path=GradientColor, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:ScatterViewItem}}" Offset="0.25"/>
-            <GradientStop Color="Black" Offset="0.50"/>
-            <GradientStop Color="{Binding Path=GradientColor, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:ScatterViewItem}}" Offset="0.75"/>
-            <GradientStop Color="Black" Offset="1"/>
-        </LinearGradientBrush>
-    </local:ABBScatterItem.BorderBrush>
+             mc:Ignorable="d" Height="100" Width="200" Background="Transparent">
 
     <Grid Name="grid">
         <Grid.RowDefinitions>
             <RowDefinition Height="0.7*"/>
-            <RowDefinition Height="0.3*" MaxHeight="200"/>
+            <RowDefinition Height="*" MaxHeight="4"/>
+            <RowDefinition Height="0.2*" MaxHeight="60"/>
         </Grid.RowDefinitions>
 
-        <Image x:Name="mainImage" HorizontalAlignment="Center" VerticalAlignment="Center" Height="Auto" Width="Auto" Stretch="Uniform" Grid.Row="0"/>
+        <UserControl BorderThickness="4" Background="Black">
+            <UserControl.BorderBrush>
+                <LinearGradientBrush StartPoint="0.0, 0" EndPoint="1, 1" MappingMode="RelativeToBoundingBox">
+                    <LinearGradientBrush.RelativeTransform>
+                        <TransformGroup>
+                            <RotateTransform x:Name="grad" CenterY="0.5" CenterX="0.5"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </LinearGradientBrush.RelativeTransform>
+                    <GradientStop Color="Black"/>
+                    <GradientStop Color="{Binding Path=GradientColor, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:ScatterViewItem}}" Offset="0.25"/>
+                    <GradientStop Color="Black" Offset="0.50"/>
+                    <GradientStop Color="{Binding Path=GradientColor, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:ScatterViewItem}}" Offset="0.75"/>
+                    <GradientStop Color="Black" Offset="1"/>
+                </LinearGradientBrush>
+            </UserControl.BorderBrush>
 
-        <local:ImageContainer BorderBrush="{Binding Path=ColorThemeBrush, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:ScatterViewItem}}" BorderThickness="0, 2, 0, 0" Grid.Row="1" x:Name="container" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <Image x:Name="mainImage" HorizontalAlignment="Center" VerticalAlignment="Center" Height="Auto" Width="Auto" Stretch="Uniform" Grid.Row="0"/>
+        </UserControl>
+
+        <local:ImageContainer Grid.Row="2" x:Name="container" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
     </Grid>
 </local:ABBScatterItem>

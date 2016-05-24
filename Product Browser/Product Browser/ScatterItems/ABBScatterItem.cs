@@ -171,6 +171,8 @@ namespace Product_Browser.ScatterItems
             double distance = ((Vector)Center - circlePosition).Length;
 
             if (distance >= pullRadius || AreAnyTouchesCapturedWithin || IsMouseCaptured)
+                if(Center.X > 0 && Center.X < Microsoft.Surface.Core.InteractiveSurface.PrimarySurfaceDevice.Width
+                    && Center.Y > 0 && Center.Y < Microsoft.Surface.Core.InteractiveSurface.PrimarySurfaceDevice.Height)
                 return RunState.LowPriority;
 
             return RunState.HighPriority;

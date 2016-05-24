@@ -52,22 +52,20 @@ namespace DatabaseModel.Model
             if (Category != SmartCardDataItemCategory.Image || DataField == null || DataField.Data.Length == 0)
                 return null;
 
-            BitmapImage image = new BitmapImage();
-            
-            using (var mem = new MemoryStream(DataField.Data))
-            {
-                mem.Position = 0;
-                image.BeginInit();
-                image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
-                image.CacheOption = BitmapCacheOption.OnLoad;
-                image.UriSource = null;
-                image.StreamSource = mem;
-                image.EndInit();
-            }
+            BitmapImage newImage = new BitmapImage();
 
-            image.Freeze();
+            var mem = new MemoryStream(DataField.Data);
+            mem.Position = 0;
+            newImage.BeginInit();
+            newImage.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
+            newImage.CacheOption = BitmapCacheOption.None;
+            newImage.UriSource = null;
+            newImage.StreamSource = mem;
+            newImage.EndInit();
 
-            return image;
+            newImage.Freeze();
+
+            return newImage;
         }
 
         /// <summary>
@@ -104,7 +102,7 @@ namespace DatabaseModel.Model
             while (current < DataField.Data.Length)
             {
                 BitmapImage newImage = new BitmapImage();
-
+                
                 // Find size of next element
                 int elementSize = BitConverter.ToInt32(DataField.Data, current);
                 current += 4; // Skip 4 forward, since we read those already with ToInt32
@@ -115,18 +113,16 @@ namespace DatabaseModel.Model
 
                 if (current == DataField.Data.Length) // This was the last element, which is the original pdf document. Ignore and break
                     break;
-
-                // Else we have an image, convert the byte array
-                using (var mem = new MemoryStream(imageBytes))
-                {
-                    mem.Position = 0;
-                    newImage.BeginInit();
-                    newImage.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
-                    newImage.CacheOption = BitmapCacheOption.OnLoad;
-                    newImage.UriSource = null;
-                    newImage.StreamSource = mem;
-                    newImage.EndInit();
-                }
+                
+                var mem = new MemoryStream(imageBytes);
+                mem.Position = 0;
+                newImage.BeginInit();
+                newImage.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
+                newImage.CacheOption = BitmapCacheOption.None;
+                newImage.UriSource = null;
+                newImage.StreamSource = mem;
+                newImage.EndInit();
+                
                 newImage.Freeze();
 
                 images.Add(newImage);
@@ -180,6 +176,7 @@ namespace DatabaseModel.Model
             PDFDoc pdf = new PDFDoc(pdfData, pdfData.Length);
             pdf.InitSecurityHandler();
             PDFDraw draw = new PDFDraw();
+            draw.SetDPI(72); // HMM
 
             ImageConverter converter = new ImageConverter();
 
@@ -191,7 +188,7 @@ namespace DatabaseModel.Model
             for (int i = 0; i < numbPages; i++)
             {
                 // Store each page in the array as BMP
-                tempImageArr[i] = (byte[])converter.ConvertTo(draw.GetBitmap(pdf.GetPage(i+1)), typeof(byte[]));
+                tempImageArr[i] = (byte[])converter.ConvertTo(draw.GetBitmap(pdf.GetPage(i + 1)), typeof(byte[]));
                 totalSize += tempImageArr[i].Length;
             }
 

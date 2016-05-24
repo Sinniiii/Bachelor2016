@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace Product_Browser.ScatterItems
 {
@@ -29,7 +30,7 @@ namespace Product_Browser.ScatterItems
         readonly double
             CIRCLE_SIZE = 150d;
 
-        readonly int MAX_IMAGES_BEFORE_CONTAINER = 3;
+        readonly int MAX_IMAGES_BEFORE_CONTAINER = 1;
 
         readonly Size
             SCATTERITEM_DOCUMENT_STARTING_SIZE = new Size(150, 175),
@@ -255,12 +256,12 @@ namespace Product_Browser.ScatterItems
 
         private void PhysicsDieEventHandler(object sender, EventArgs args)
         {
-            Opacity -= 0.01d;
+            Opacity -= 0.05d;
 
             foreach (ABBScatterItem item in physicsItemsActive)
             {
                 item.RunHighPriority(ActualCenter, ActualOrientation);
-                item.Opacity -= 0.01d;
+                item.Opacity -= 0.05d;
             }
 
             if(Opacity <= 0)
@@ -360,6 +361,9 @@ namespace Product_Browser.ScatterItems
         {
             physicsItemsInactive.Add(e);
 
+            if (e is VideoScatterItem)
+                (e as VideoScatterItem).PauseVideo();
+
             if (physicsItemsActive.Count == 0)
                 physicsTimer.Stop();
         }
@@ -433,16 +437,18 @@ namespace Product_Browser.ScatterItems
             ssc.Visibility = Visibility.Hidden;
 
             ABBDataContext context = new ABBDataContext();
-            
-            smartCard = await context.SmartCards
-                //.Include(s => s.DataItems.Select(d => d.DataField)).Include(s => s.CardImage.DataField)
-                .FirstOrDefaultAsync(a => a.TagId == TagId);
 
-            context.Entry(smartCard.CardImage).Reference(a => a.DataField).Load();
+            // Use Task.Run instead of extremely slow EF6.0 async functions when using varchar
+            smartCard = await Task<SmartCard>.Run( 
+                () =>
+                {
+                    return context.SmartCards
+                    .Where(a => a.TagId == TagId)
+                    .Include(s => s.DataItems.Select(d => d.DataField))
+                    .Include(s => s.CardImage.DataField)
+                    .FirstOrDefault();
+                });
 
-            foreach (var item in smartCard.DataItems)
-                context.Entry(item).Reference(oo => oo.DataField).Load();
-            
             List<SmartCardDataItem> dataItems = null;
 
             GradientColor = colorTheme;

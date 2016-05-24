@@ -33,9 +33,8 @@ namespace Product_Browser.ScatterItems
         #region Fields
 
         private const double
-            SCROLL_SPEED = 10d,
             PAGE_NUMBER_OPACITY = 0.15d,
-            INACTIVE_OPACITY = 0.4d,
+            INACTIVE_OPACITY = 0.7d,
             USER_SELECTED_IMAGE_ERROR_MARGIN = 3d;
 
         private double numberOfImages = 3d;
@@ -53,10 +52,11 @@ namespace Product_Browser.ScatterItems
         double[] stopOffsetPoints;
         double currentOffsetTarget;
         DispatcherTimer scrollTimer;
-        
+
         // Used by mouse/touch scrolling
-        double  scrollStartPoint,
-                scrollStartOffset;
+        double scrollStartPoint,
+                scrollStartOffset,
+                scrollSpeed = 10d;
 
         #endregion
 
@@ -66,7 +66,7 @@ namespace Product_Browser.ScatterItems
         public Color ColorTheme
         {
             get { return colorTheme; }
-            set { colorTheme = value; ColorThemeBrush = new SolidColorBrush(value); NotifyPropertyChanged(); }
+            set { colorTheme = value; ColorThemeBrush = new SolidColorBrush(new Color() { R = value.R, G = value.G, B = value.B, A = 235 }); NotifyPropertyChanged(); }
         }
 
         private SolidColorBrush colorThemeBrush;
@@ -217,7 +217,7 @@ namespace Product_Browser.ScatterItems
             else
                 delta = currentOffsetTarget - scrollBar.VerticalOffset;
 
-            double speed = delta > 0 ? SCROLL_SPEED : -SCROLL_SPEED;
+            double speed = delta > 0 ? scrollSpeed : -scrollSpeed;
 
             // Don't overshoot
             if (Math.Abs(speed) > Math.Abs(delta))
@@ -353,6 +353,9 @@ namespace Product_Browser.ScatterItems
             else
                 scrollSize = newSize.Height / numberOfImages;
 
+            // Update scroll speed
+            scrollSpeed = scrollSize / 3.5;
+
             double offset = numberOfImages % 2 == 0 ? 0.5 * scrollSize : scrollSize;
 
             for(int i = 0; i < childrenCount; i++)
@@ -419,6 +422,7 @@ namespace Product_Browser.ScatterItems
             for(int i = 0; i < images.Count; i++)
             {
                 Image child = new Image();
+                
                 child.Source = images[i];
                 child.Stretch = Stretch.Fill;
 

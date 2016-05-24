@@ -60,13 +60,13 @@
             </UserControl.BorderBrush>
         </UserControl>
 
-        <UserControl Name="imagePlaceholder" Visibility="Hidden" Grid.Column="6" Grid.Row="2" BorderBrush="Gray" BorderThickness="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent" IsHitTestVisible="False">
+        <UserControl Name="imagePlaceholder" Visibility="Hidden" Grid.Column="6" Grid.Row="2" BorderBrush="Gray" BorderThickness="1, 0, 0, 0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent" IsHitTestVisible="False">
             <Image Source="/Resources/iconCamera.png" Width="20" Height="20" HorizontalAlignment="Left" Margin="-25, 0, 0, 0"/>
         </UserControl>
-        <UserControl Name="videoPlaceholder" Visibility="Hidden" Grid.Column="0" Grid.Row="2" BorderBrush="Gray" BorderThickness="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent" IsHitTestVisible="False">
+        <UserControl Name="videoPlaceholder" Visibility="Hidden" Grid.Column="0" Grid.Row="2" BorderBrush="Gray" BorderThickness="0, 0, 1, 0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent" IsHitTestVisible="False">
             <Image Source="/Resources/iconVideo.png" Width="20" Height="20" HorizontalAlignment="Right" Margin="0, 0, -25, 0"/>
         </UserControl>
-        <UserControl Name="documentPlaceholder" Visibility="Hidden" Grid.Column="3" Grid.Row="0" BorderBrush="Gray" BorderThickness="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent" IsHitTestVisible="False">
+        <UserControl Name="documentPlaceholder" Visibility="Hidden" Grid.Column="3" Grid.Row="0" BorderBrush="Gray" BorderThickness="0, 0, 0, 1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent" IsHitTestVisible="False">
             <Image Source="/Resources/iconDocument.png" Width="20" Height="20" VerticalAlignment="Bottom" Margin="0, 0, 0, -25"/>
         </UserControl>
 
