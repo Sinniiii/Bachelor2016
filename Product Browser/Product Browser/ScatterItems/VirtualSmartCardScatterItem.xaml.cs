@@ -28,7 +28,7 @@ namespace Product_Browser.ScatterItems
 
         // Radius of gravity circle that pulls objects in
         readonly double
-            CIRCLE_SIZE = 150d;
+            CIRCLE_SIZE = 125d;
 
         readonly int MAX_IMAGES_BEFORE_CONTAINER = 1;
 
@@ -274,6 +274,8 @@ namespace Product_Browser.ScatterItems
         public override void AnimationPulseHandler(object sender, EventArgs args)
         {
             grad.Angle = (grad.Angle + 0.5d) % 360d;
+
+            //ripple.Progress += 0.1d;
 
             if (pulseUp1)
             {

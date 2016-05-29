@@ -179,6 +179,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="packages.config" />
+    <None Include="ProductBrowserClassDiagram.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -192,6 +193,14 @@
     <ProjectReference Include="..\DatabaseModel\DatabaseModel.csproj">
       <Project>{59439b50-f8ca-47f6-9c19-75a73796d9e1}</Project>
       <Name>DatabaseModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShaderEffectLibrary\WPFShaderEffectLibrary.csproj">
+      <Project>{967d61a9-c8f0-4c2a-a784-6cda648ecb19}</Project>
+      <Name>WPFShaderEffectLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TransitionEffects\WPFTransitionEffects.csproj">
+      <Project>{9fedf2f2-d59e-4797-a5ae-13a25e679f6a}</Project>
+      <Name>WPFTransitionEffects</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

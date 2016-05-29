@@ -1,0 +1,365 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource
+END
+SwirlGridTransitionEffect.ps
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/SwirlGridTransitionEffect.ps
+END
+LeastBrightTransitionEffect.ps
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/LeastBrightTransitionEffect.ps
+END
+RotateCrumbleTransitionEffect.ps
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/RotateCrumbleTransitionEffect.ps
+END
+RadialBlurTransitionEffect.fx
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/RadialBlurTransitionEffect.fx
+END
+WaterTransitionEffect.fx
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/WaterTransitionEffect.fx
+END
+LineRevealTransitionEffect.fx
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/LineRevealTransitionEffect.fx
+END
+RadialBlurTransitionEffect.ps
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/RadialBlurTransitionEffect.ps
+END
+WaterTransitionEffect.ps
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/WaterTransitionEffect.ps
+END
+CrumbleTransitionEffect.fx
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/CrumbleTransitionEffect.fx
+END
+LineRevealTransitionEffect.ps
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/LineRevealTransitionEffect.ps
+END
+RippleTransitionEffect.fx
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/RippleTransitionEffect.fx
+END
+CrumbleTransitionEffect.ps
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/CrumbleTransitionEffect.ps
+END
+BandedSwirlTransitionEffect.fx
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/BandedSwirlTransitionEffect.fx
+END
+CircleStretchTransitionEffect.fx
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/CircleStretchTransitionEffect.fx
+END
+ShrinkTransitionEffect.fx
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/ShrinkTransitionEffect.fx
+END
+FadeTransitionEffect.fx
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/FadeTransitionEffect.fx
+END
+RippleTransitionEffect.ps
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/RippleTransitionEffect.ps
+END
+RandomCircleRevealTransitionEffect.fx
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/RandomCircleRevealTransitionEffect.fx
+END
+PixelateInTransitionEffect.fx
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/PixelateInTransitionEffect.fx
+END
+BandedSwirlTransitionEffect.ps
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/BandedSwirlTransitionEffect.ps
+END
+CircleStretchTransitionEffect.ps
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/CircleStretchTransitionEffect.ps
+END
+ShrinkTransitionEffect.ps
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/ShrinkTransitionEffect.ps
+END
+FadeTransitionEffect.ps
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/FadeTransitionEffect.ps
+END
+RandomCircleRevealTransitionEffect.ps
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/RandomCircleRevealTransitionEffect.ps
+END
+PixelateInTransitionEffect.ps
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/PixelateInTransitionEffect.ps
+END
+BlindsTransitionEffect.fx
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/BlindsTransitionEffect.fx
+END
+PixelateTransitionEffect.fx
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/PixelateTransitionEffect.fx
+END
+BlindsTransitionEffect.ps
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/BlindsTransitionEffect.ps
+END
+PixelateTransitionEffect.ps
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/PixelateTransitionEffect.ps
+END
+MostBrightTransitionEffect.fx
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/MostBrightTransitionEffect.fx
+END
+DropFadeTransitionEffect.fx
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/DropFadeTransitionEffect.fx
+END
+MostBrightTransitionEffect.ps
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/MostBrightTransitionEffect.ps
+END
+SlideInTransitionEffect.fx
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/SlideInTransitionEffect.fx
+END
+SaturateTransitionEffect.fx
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/SaturateTransitionEffect.fx
+END
+DropFadeTransitionEffect.ps
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/DropFadeTransitionEffect.ps
+END
+CircularBlurTransitionEffect.fx
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/CircularBlurTransitionEffect.fx
+END
+RadialWiggleTransitionEffect.fx
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/RadialWiggleTransitionEffect.fx
+END
+SlideInTransitionEffect.ps
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/SlideInTransitionEffect.ps
+END
+SaturateTransitionEffect.ps
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/SaturateTransitionEffect.ps
+END
+CircularBlurTransitionEffect.ps
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/CircularBlurTransitionEffect.ps
+END
+BloodTransitionEffect.fx
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/BloodTransitionEffect.fx
+END
+CircleRevealTransitionEffect.fx
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/CircleRevealTransitionEffect.fx
+END
+RadialWiggleTransitionEffect.ps
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/RadialWiggleTransitionEffect.ps
+END
+SmoothSwirlGridTransitionEffect.fx
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/SmoothSwirlGridTransitionEffect.fx
+END
+SwirlTransitionEffect.fx
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/SwirlTransitionEffect.fx
+END
+WaveTransitionEffect.fx
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/WaveTransitionEffect.fx
+END
+PixelateOutTransitionEffect.fx
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/PixelateOutTransitionEffect.fx
+END
+BloodTransitionEffect.ps
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/BloodTransitionEffect.ps
+END
+DisolveTransitionEffect.fx
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/DisolveTransitionEffect.fx
+END
+CircleRevealTransitionEffect.ps
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/CircleRevealTransitionEffect.ps
+END
+CloudRevealTransitionEffect.fx
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/CloudRevealTransitionEffect.fx
+END
+SmoothSwirlGridTransitionEffect.ps
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/SmoothSwirlGridTransitionEffect.ps
+END
+SwirlTransitionEffect.ps
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/SwirlTransitionEffect.ps
+END
+SwirlGridTransitionEffect.fx
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/SwirlGridTransitionEffect.fx
+END
+WaveTransitionEffect.ps
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/WaveTransitionEffect.ps
+END
+LeastBrightTransitionEffect.fx
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/LeastBrightTransitionEffect.fx
+END
+PixelateOutTransitionEffect.ps
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/PixelateOutTransitionEffect.ps
+END
+RotateCrumbleTransitionEffect.fx
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/RotateCrumbleTransitionEffect.fx
+END
+DisolveTransitionEffect.ps
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/DisolveTransitionEffect.ps
+END
+CloudRevealTransitionEffect.ps
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/19891/WPF/TransitionEffects/ShaderSource/CloudRevealTransitionEffect.ps
+END

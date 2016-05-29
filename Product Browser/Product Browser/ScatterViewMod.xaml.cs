@@ -18,7 +18,7 @@ namespace Product_Browser
         {
             base.OnPreviewTouchDown(e);
 
-            //// Only let fingers manipulate scatterviewitems
+            // Only let finger-recognized input manipulate ScatterViewItems
             if (!e.TouchDevice.GetIsFingerRecognized())
                 e.Handled = true;
         }

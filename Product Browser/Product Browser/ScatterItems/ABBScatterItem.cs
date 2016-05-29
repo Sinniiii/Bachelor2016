@@ -47,8 +47,6 @@ namespace Product_Browser.ScatterItems
             SPEED_SIZE = 4d,
             DEGREES_TO_RADIANS = (2 * Math.PI) / 360d;
 
-        public bool Deleting { get; set; } = false;
-
         #endregion
 
         #region Properties
@@ -78,6 +76,21 @@ namespace Product_Browser.ScatterItems
         {
             get { return colorThemeBrush; }
             set { this.colorThemeBrush = value; NotifyPropertyChanged(); }
+        }
+
+        private bool deleting = false;
+        public bool Deleting
+        {
+            get { return deleting; }
+            set
+            {
+                deleting = value;
+
+                if (deleting)
+                    Delete();
+
+                NotifyPropertyChanged();
+            }
         }
 
         #endregion
@@ -313,6 +326,15 @@ namespace Product_Browser.ScatterItems
             double convertedY = visualizerPos.Y + Offset.Y * cos + Offset.X * sin;
 
             return new Vector(convertedX, convertedY);
+        }
+
+        /// <summary>
+        /// Should be overwritten in any class that uses a dispatcher timer, to stop the timer upon delete
+        /// to prevent memory leak.
+        /// </summary>
+        protected virtual void Delete()
+        {
+
         }
 
         #endregion

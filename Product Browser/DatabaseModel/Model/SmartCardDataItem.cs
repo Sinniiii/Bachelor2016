@@ -64,7 +64,7 @@ namespace DatabaseModel.Model
             newImage.EndInit();
 
             newImage.Freeze();
-
+            
             return newImage;
         }
 

@@ -35,7 +35,8 @@ namespace Product_Browser.ScatterItems
         private const double
             PAGE_NUMBER_OPACITY = 0.15d,
             INACTIVE_OPACITY = 0.7d,
-            USER_SELECTED_IMAGE_ERROR_MARGIN = 3d;
+            USER_SELECTED_IMAGE_ERROR_MARGIN = 3d,
+            SCROLL_MULTIPLIER = 2d;
 
         private double numberOfImages = 3d;
         private int placeholderImages = 2;
@@ -80,7 +81,7 @@ namespace Product_Browser.ScatterItems
 
         #region Events
 
-        public delegate void NewMainImageHandler(ImageSource source);
+        public delegate void NewMainImageHandler(BitmapImage source);
         public event NewMainImageHandler NewMainImage;
 
         #endregion
@@ -140,6 +141,8 @@ namespace Product_Browser.ScatterItems
                     if (Math.Abs(delta) > USER_SELECTED_IMAGE_ERROR_MARGIN)
                         scrollingToUserSelected = false;
 
+                    delta *= SCROLL_MULTIPLIER;
+
                     scrollBar.ScrollToHorizontalOffset(-delta + scrollStartOffset);
                 }
                 else
@@ -148,6 +151,8 @@ namespace Product_Browser.ScatterItems
 
                     if (Math.Abs(delta) > USER_SELECTED_IMAGE_ERROR_MARGIN)
                         scrollingToUserSelected = false;
+
+                    delta *= SCROLL_MULTIPLIER;
 
                     scrollBar.ScrollToVerticalOffset(-delta + scrollStartOffset);
                 }
@@ -167,6 +172,8 @@ namespace Product_Browser.ScatterItems
                     if (Math.Abs(delta) > USER_SELECTED_IMAGE_ERROR_MARGIN)
                         scrollingToUserSelected = false;
 
+                    delta *= SCROLL_MULTIPLIER;
+
                     scrollBar.ScrollToHorizontalOffset(-delta + scrollStartOffset);
                 }
                 else
@@ -175,6 +182,8 @@ namespace Product_Browser.ScatterItems
 
                     if (Math.Abs(delta) > USER_SELECTED_IMAGE_ERROR_MARGIN)
                         scrollingToUserSelected = false;
+
+                    delta *= SCROLL_MULTIPLIER;
 
                     scrollBar.ScrollToVerticalOffset(-delta + scrollStartOffset);
                 }
@@ -265,7 +274,7 @@ namespace Product_Browser.ScatterItems
             if(desiredImageIndex != -1) // We have arrived, check the new image
             {
                 // Send the event(add placeholderimages/2 to index, due to starting with empty images as space occupiers
-                NewMainImage(((Image)((Grid)((UserControl)stackPanel.Children[desiredImageIndex + (placeholderImages / 2)]).Content).Children[0]).Source);
+                NewMainImage(images[desiredImageIndex]);
 
                 // Remove old highlight, if any
                 if (currentlySelectedImage != null)
@@ -385,10 +394,14 @@ namespace Product_Browser.ScatterItems
                 {
                     double oldNewRatio = newSize.Width / oldSize.Width;
                     scrollBar.ScrollToHorizontalOffset(scrollBar.HorizontalOffset * oldNewRatio);
+                    // If a scroll is currently in progress, make sure the offset target is changed too
+                    currentOffsetTarget *= oldNewRatio;
                 }
                 else {
                     double oldNewRatio = newSize.Height / oldSize.Height;
                     scrollBar.ScrollToVerticalOffset(scrollBar.VerticalOffset * oldNewRatio);
+                    // If a scroll is currently in progress, make sure the offset target is changed too
+                    currentOffsetTarget *= oldNewRatio;
                 }
             }
         }

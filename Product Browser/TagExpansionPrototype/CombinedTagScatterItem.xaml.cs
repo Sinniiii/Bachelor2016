@@ -62,6 +62,42 @@ namespace TagExpansionPrototype
             TotalTagValue = tag1.VisualizedTag.Value * 256 + tag2.VisualizedTag.Value;
         }
 
+        private void DetermineLeftMostTag()
+        {
+            // Assume tag1 is leftmost
+            if (tag1.Orientation >= 0d && tag1.Orientation < 90d)
+            {
+                // Second tag should be to the right of first tag
+                if (tag2.Center.X < tag1.Center.X)
+                    SwitchTags();
+            }
+            else if (tag1.Orientation >= 90d && tag1.Orientation < 180d)
+            {
+                // Second tag should be below the first tag
+                if (tag2.Center.Y < tag1.Center.Y)
+                    SwitchTags();
+            }
+            else if(tag1.Orientation >= 180d && tag1.Orientation < 270d)
+            {
+                // Second tag should be to the left of first tag
+                if (tag2.Center.X > tag1.Center.X)
+                    SwitchTags();
+            }
+            else
+            {
+                // Second tag should be above the first tag
+                if (tag2.Center.Y > tag1.Center.Y)
+                    SwitchTags();
+            }
+        }
+
+        private void SwitchTags()
+        {
+            TagVisualizationDummy temp = tag1;
+            tag1 = tag2;
+            tag2 = temp;
+        }
+
         public CombinedTagScatterItem(TagVisualizationDummy tag1, TagVisualizationDummy tag2)
         {
             InitializeComponent();
@@ -72,6 +108,7 @@ namespace TagExpansionPrototype
             tag1.ConnectedCombinedTag = this;
             tag2.ConnectedCombinedTag = this;
 
+            DetermineLeftMostTag();
             Initialize();
         }
     }
