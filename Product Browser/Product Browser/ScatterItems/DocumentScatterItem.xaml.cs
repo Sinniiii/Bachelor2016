@@ -26,7 +26,7 @@ namespace Product_Browser.ScatterItems
     {
         #region Fields
 
-        List<BitmapImage> images;
+        SmartCardDataItem dataItem;
 
         DispatcherTimer effectTimer;
 
@@ -43,27 +43,29 @@ namespace Product_Browser.ScatterItems
 
         private void OnBarLoaded(object obj, EventArgs args)
         {
-            container.Populate(images, System.Windows.Controls.Orientation.Vertical, 4, false, true);
+            container.Populate(dataItem.GetDocumentAsThumbnailImageSources(), System.Windows.Controls.Orientation.Vertical, 4, false, true);
             container.ColorTheme = GradientColor;
         }
 
-        private void OnNewMainImage(BitmapImage source)
+        private void OnNewMainImage(int index)
         {
             // Non-shader method
             //mainImage.Source = source;
 
+            BitmapImage newImage = dataItem.GetPageFromDocumentAsImageSource(index);
+
             // Using effect shader
             if (originalAspectRatio.X == 0d)
             {
-                transitionEffect.OldImage = new ImageBrush(source);
+                transitionEffect.OldImage = new ImageBrush(newImage);
 
-                originalAspectRatio = transitionEffect.AspectRatio = FindNormalizedAspectRatio(source);
+                originalAspectRatio = transitionEffect.AspectRatio = FindNormalizedAspectRatio(newImage);
             }
             else
             {
-                transitionEffect.Input = new ImageBrush(source);
+                transitionEffect.Input = new ImageBrush(newImage);
 
-                targetAspectRatio = FindNormalizedAspectRatio(source);
+                targetAspectRatio = FindNormalizedAspectRatio(newImage);
 
                 if (!effectTimer.IsEnabled)
                     transitionEffect.Progress = 0d;
@@ -121,9 +123,9 @@ namespace Product_Browser.ScatterItems
         {
             InitializeComponent();
 
-            images = document.GetDocumentAsImageSources();
+            dataItem = document;
 
-            mainImage.Source = images[0];
+            mainImage.Source = dataItem.GetPageFromDocumentAsImageSource(0);
 
             container.Loaded += OnBarLoaded;
             container.NewMainImage += OnNewMainImage;

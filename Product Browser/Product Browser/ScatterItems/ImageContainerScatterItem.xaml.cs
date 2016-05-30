@@ -18,7 +18,7 @@ namespace Product_Browser.ScatterItems
     {
         #region Fields
 
-        List<BitmapImage> images;
+        List<SmartCardDataItem> images;
 
         DispatcherTimer effectTimer;
 
@@ -35,27 +35,33 @@ namespace Product_Browser.ScatterItems
 
         public void BarLoadedHandler(object obj, EventArgs args)
         {
-            container.Populate(images, System.Windows.Controls.Orientation.Horizontal, 4, false, false);
+            List<BitmapImage> thumbnails = new List<BitmapImage>(images.Count);
+            foreach (SmartCardDataItem item in images)
+                thumbnails.Add(item.GetTumbnailImageSource());
+
+            container.Populate(thumbnails, System.Windows.Controls.Orientation.Horizontal, 4, false, false);
             container.ColorTheme = GradientColor;
         }
 
-        private void OnNewMainImage(BitmapImage source)
+        private void OnNewMainImage(int index)
         {
             // Non-shader method
             //mainImage.Source = source;
-            
+
+            BitmapImage newImage = images[index].GetImageSource();
+
             // Using effect shader
             if (originalAspectRatio.X == 0d)
             {
-                transitionEffect.OldImage = new ImageBrush(source);
+                transitionEffect.OldImage = new ImageBrush(newImage);
 
-                originalAspectRatio = transitionEffect.AspectRatio = FindNormalizedAspectRatio(source);
+                originalAspectRatio = transitionEffect.AspectRatio = FindNormalizedAspectRatio(newImage);
             }
             else
             {
-                transitionEffect.Input = new ImageBrush(source);
+                transitionEffect.Input = new ImageBrush(newImage);
 
-                targetAspectRatio = FindNormalizedAspectRatio(source);
+                targetAspectRatio = FindNormalizedAspectRatio(newImage);
 
                 if (!effectTimer.IsEnabled)
                     transitionEffect.Progress = 0d;
@@ -112,11 +118,9 @@ namespace Product_Browser.ScatterItems
         {
             InitializeComponent();
 
-            images = new List<BitmapImage>();
-            foreach (SmartCardDataItem item in imageItems)
-                images.Add(item.GetImageSource());
+            images = imageItems;
 
-            mainImage.Source = images[0];
+            mainImage.Source = images[0].GetImageSource();
 
             container.Loaded += BarLoadedHandler;
             container.NewMainImage += OnNewMainImage;

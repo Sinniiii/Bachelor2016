@@ -46,8 +46,6 @@ namespace Product_Browser.ScatterItems
             userSelectedImage;
 
         bool scrollingToUserSelected = false;
-
-        List<BitmapImage> images;
         
         // For automatically scrolling to closest item point
         double[] stopOffsetPoints;
@@ -81,7 +79,7 @@ namespace Product_Browser.ScatterItems
 
         #region Events
 
-        public delegate void NewMainImageHandler(BitmapImage source);
+        public delegate void NewMainImageHandler(int index);
         public event NewMainImageHandler NewMainImage;
 
         #endregion
@@ -273,8 +271,8 @@ namespace Product_Browser.ScatterItems
             
             if(desiredImageIndex != -1) // We have arrived, check the new image
             {
-                // Send the event(add placeholderimages/2 to index, due to starting with empty images as space occupiers
-                NewMainImage(images[desiredImageIndex]);
+                // Send the event
+                NewMainImage(desiredImageIndex);
 
                 // Remove old highlight, if any
                 if (currentlySelectedImage != null)
@@ -348,12 +346,10 @@ namespace Product_Browser.ScatterItems
 
         private void RecalculateSize(Size oldSize, Size newSize)
         {
-            if (images == null) // Can be called before we've received images, on initial placement, so jump out early
+            if (stopOffsetPoints == null) // Can be called before we've received images, on initial placement, so jump out early
                 return;
 
             int childrenCount = stackPanel.Children.Count;
-
-            stopOffsetPoints = new double[images.Count];
 
             double scrollSize;
 
@@ -408,13 +404,14 @@ namespace Product_Browser.ScatterItems
 
         public void Populate(List<BitmapImage> images, Orientation alignment, int numberOfImagesToDisplay, bool displayNavButtons, bool displayNumber)
         {
-            this.images = images;
             stackPanel.Orientation = alignment;
             this.numberOfImages = numberOfImagesToDisplay;
 
             if (stackPanel.Children.Count > 0) // Re-initialization ?
                 stackPanel.Children.Clear();
-            
+
+            stopOffsetPoints = new double[images.Count];
+
             // Need even number of placeholders
             placeholderImages = numberOfImagesToDisplay % 2 == 0 ? numberOfImagesToDisplay : numberOfImagesToDisplay + 1;
 

@@ -58,13 +58,41 @@ namespace DatabaseModel.Model
             mem.Position = 0;
             newImage.BeginInit();
             newImage.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
-            newImage.CacheOption = BitmapCacheOption.None;
+            newImage.CacheOption = BitmapCacheOption.OnLoad;
             newImage.UriSource = null;
             newImage.StreamSource = mem;
             newImage.EndInit();
 
+            mem.Close(); mem.Dispose();
+
             newImage.Freeze();
             
+            return newImage;
+        }
+
+        public BitmapImage GetTumbnailImageSource()
+        {
+            if (Category != SmartCardDataItemCategory.Image || DataField == null || DataField.Data.Length == 0)
+                return null;
+
+            BitmapImage newImage = new BitmapImage();
+
+            var mem = new MemoryStream(DataField.Data);
+            mem.Position = 0;
+            newImage.BeginInit();
+            newImage.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
+            newImage.CacheOption = BitmapCacheOption.OnLoad;
+            newImage.UriSource = null;
+            newImage.StreamSource = mem;
+
+            newImage.DecodePixelWidth = 64;
+
+            newImage.EndInit();
+
+            mem.Close(); mem.Dispose();
+
+            newImage.Freeze();
+
             return newImage;
         }
 
@@ -117,12 +145,113 @@ namespace DatabaseModel.Model
                 var mem = new MemoryStream(imageBytes);
                 mem.Position = 0;
                 newImage.BeginInit();
-                newImage.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
+                newImage.CreateOptions = BitmapCreateOptions.PreservePixelFormat & BitmapCreateOptions.DelayCreation;
                 newImage.CacheOption = BitmapCacheOption.None;
                 newImage.UriSource = null;
                 newImage.StreamSource = mem;
                 newImage.EndInit();
-                
+
+                newImage.Freeze();
+
+                images.Add(newImage);
+            }
+            return images;
+        }
+
+        /// <summary>
+        /// Retrieves a page from the document as an image.
+        /// Returns null if Data is null or if Category does not match "document".
+        /// </summary>
+        /// <returns></returns>
+        public BitmapImage GetPageFromDocumentAsImageSource(int page)
+        {
+            if (Category != SmartCardDataItemCategory.Document || DataField == null || DataField.Data.Length == 0)
+                return null;
+
+            BitmapImage image = new BitmapImage();
+
+            int index = 0;
+            int current = 0;
+            while (current < DataField.Data.Length)
+            {
+                // Find size of next element
+                int elementSize = BitConverter.ToInt32(DataField.Data, current);
+                current += 4; // Skip 4 forward, since we read those already with ToInt32
+
+                if(index != page)
+                {
+                    current += elementSize;
+                    index++;
+                    continue;
+                }
+
+                byte[] imageBytes = new byte[elementSize];
+                for (int i = 0; i < elementSize; i++)
+                    imageBytes[i] = DataField.Data[current++]; // Transfer
+
+                if (current == DataField.Data.Length) // This was the last element, which is the original pdf document. Ignore and break
+                    break;
+
+                var mem = new MemoryStream(imageBytes);
+                mem.Position = 0;
+                image.BeginInit();
+                image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
+                image.CacheOption = BitmapCacheOption.OnLoad;
+                image.UriSource = null;
+                image.StreamSource = mem;
+                image.EndInit();
+
+                mem.Close();mem.Dispose();
+
+                image.Freeze();
+
+                break;
+            }
+
+            return image;
+        }
+
+        /// <summary>
+        /// Retrieves the document from the Data array as a list of thumbnail images.
+        /// Returns null if Data is null or if Category does not match "document".
+        /// </summary>
+        /// <returns></returns>
+        public List<BitmapImage> GetDocumentAsThumbnailImageSources()
+        {
+            if (Category != SmartCardDataItemCategory.Document || DataField == null || DataField.Data.Length == 0)
+                return null;
+
+            List<BitmapImage> images = new List<BitmapImage>();
+
+            int current = 0;
+            while (current < DataField.Data.Length)
+            {
+                BitmapImage newImage = new BitmapImage();
+
+                // Find size of next element
+                int elementSize = BitConverter.ToInt32(DataField.Data, current);
+                current += 4; // Skip 4 forward, since we read those already with ToInt32
+
+                byte[] imageBytes = new byte[elementSize];
+                for (int i = 0; i < elementSize; i++)
+                    imageBytes[i] = DataField.Data[current++]; // Transfer
+
+                if (current == DataField.Data.Length) // This was the last element, which is the original pdf document. Ignore and break
+                    break;
+
+                var mem = new MemoryStream(imageBytes);
+                mem.Position = 0;
+                newImage.BeginInit();
+                newImage.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
+                newImage.CacheOption = BitmapCacheOption.OnLoad;
+                newImage.UriSource = null;
+                newImage.StreamSource = mem;
+
+                newImage.DecodePixelWidth = 64;
+                newImage.EndInit();
+
+                mem.Close();mem.Dispose();
+
                 newImage.Freeze();
 
                 images.Add(newImage);
@@ -176,7 +305,7 @@ namespace DatabaseModel.Model
             PDFDoc pdf = new PDFDoc(pdfData, pdfData.Length);
             pdf.InitSecurityHandler();
             PDFDraw draw = new PDFDraw();
-            draw.SetDPI(72); // HMM
+            draw.SetDPI(92); // HMM
 
             ImageConverter converter = new ImageConverter();
 

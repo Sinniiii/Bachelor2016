@@ -40,7 +40,7 @@
                 
                 <Image x:Name="mainImage" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stretch="Fill">
                     <Image.Effect>
-                        <TransitionEffects:LineRevealTransitionEffectPAR x:Name="transitionEffect" Progress="0"/>
+                        <TransitionEffects:LineRevealTransitionEffectPAR x:Name="transitionEffect"/>
                     </Image.Effect>
                 </Image>
             </UserControl>
