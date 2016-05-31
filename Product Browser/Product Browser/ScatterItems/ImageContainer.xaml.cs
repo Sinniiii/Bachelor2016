@@ -65,7 +65,12 @@ namespace Product_Browser.ScatterItems
         public Color ColorTheme
         {
             get { return colorTheme; }
-            set { colorTheme = value; ColorThemeBrush = new SolidColorBrush(new Color() { R = value.R, G = value.G, B = value.B, A = 235 }); NotifyPropertyChanged(); }
+            set {
+                colorTheme = value;
+                ColorThemeBrush = new SolidColorBrush(new Color() { R = value.R, G = value.G, B = value.B, A = 235 });
+                //ColorBackgroundThemeBrush = new SolidColorBrush(new Color() { R = value.R, G = value.G, B = value.B, A = 100 });
+                NotifyPropertyChanged();
+            }
         }
 
         private SolidColorBrush colorThemeBrush;
@@ -73,6 +78,13 @@ namespace Product_Browser.ScatterItems
         {
             get { return colorThemeBrush; }
             set { this.colorThemeBrush = value; NotifyPropertyChanged(); }
+        }
+
+        private SolidColorBrush colorBackgroundThemeBrush = new SolidColorBrush(new Color() { R = 50, G = 50, B = 50, A = 100 });
+        public SolidColorBrush ColorBackgroundThemeBrush
+        {
+            get { return colorBackgroundThemeBrush; }
+            set { this.colorBackgroundThemeBrush = value; NotifyPropertyChanged(); }
         }
 
         #endregion
@@ -427,22 +439,26 @@ namespace Product_Browser.ScatterItems
             // Add half the placeholders
             for(int i = 0; i < placeholderImages / 2; i++)
                 stackPanel.Children.Add(placeholders[i]);
-
+            
             // Add all images
-            for(int i = 0; i < images.Count; i++)
+            for (int i = 0; i < images.Count; i++)
             {
                 Image child = new Image();
                 
                 child.Source = images[i];
-                child.Stretch = Stretch.Fill;
+                child.Stretch = Stretch.Uniform;
 
                 UserControl u = new UserControl();
 
-                Binding binding = new Binding("ColorThemeBrush");
+                Binding binding = new Binding("ColorBackgroundThemeBrush");
                 binding.RelativeSource = new RelativeSource(RelativeSourceMode.FindAncestor, typeof(ImageContainer), 1);
-                u.SetBinding(UserControl.BorderBrushProperty, binding);
+                u.SetBinding(UserControl.BackgroundProperty, binding);
 
-                u.BorderThickness = new Thickness(1d);
+                //binding = new Binding("ColorThemeBrush");
+                //binding.RelativeSource = new RelativeSource(RelativeSourceMode.FindAncestor, typeof(ImageContainer), 1);
+                //u.SetBinding(UserControl.BorderBrushProperty, binding);
+
+                //u.BorderThickness = new Thickness(1d);
                 u.Tag = i;
 
                 u.PreviewTouchDown += OnUserImageSelected;

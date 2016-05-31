@@ -45,7 +45,7 @@
             </Viewbox>
         </controls:SurfaceButton>
 
-        <ScrollViewer Grid.Row="1" Grid.Column="1" Name="scrollBar" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Background="#3F000000">
+        <ScrollViewer Grid.Row="1" Grid.Column="1" Name="scrollBar" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Background="#00000000">
             <StackPanel Name="stackPanel" Orientation="Horizontal" VirtualizingStackPanel.VirtualizationMode="Recycling"/>
         </ScrollViewer>
     </Grid>
