@@ -33,14 +33,16 @@ namespace Product_Browser.ScatterItems
         readonly int MAX_IMAGES_BEFORE_CONTAINER = 1;
 
         readonly Size
-            SCATTERITEM_DOCUMENT_STARTING_SIZE = new Size(125, 140),
+            SCATTERITEM_DOCUMENT_STARTING_SIZE = new Size(166.66, 165),
             SCATTERITEM_VIDEO_STARTING_SIZE = new Size(200, 125),
-            SCATTERITEM_IMAGE_STARTING_SIZE = new Size(200, 125);
+            SCATTERITEM_IMAGE_STARTING_SIZE = new Size(200, 125),
+            SCATTERITEM_IMAGE_CONTAINER_STARTING_SIZE = new Size(200, 166.66);
 
         readonly Vector
-            SCATTERITEM_DOCUMENT_STARTING_POSITION = new Vector(0, -170),
+            SCATTERITEM_DOCUMENT_STARTING_POSITION = new Vector(20, -190),
             SCATTERITEM_VIDEO_STARTING_POSITION = new Vector(-235, 0),
             SCATTERITEM_IMAGE_STARTING_POSITION = new Vector(235, 0),
+            SCATTERITEM_IMAGE_CONTAINER_STARTING_POSITION = new Vector(235, 20),
 
             SCATTERITEM_DOCUMENT_POSITION_OFFSET = new Vector(0, -20),
             SCATTERITEM_VIDEO_POSITION_OFFSET = new Vector(-20, 0),
@@ -52,16 +54,10 @@ namespace Product_Browser.ScatterItems
             SCATTERITEM_IMAGE_STARTING_ROTATION = 0d;
 
         readonly double
-            ANIMATION_PULSE_1_STARTING_OPACITY = 0.05d,
-            ANIMATION_PULSE_1_OPACITY_CHANGE = 0.01d,
-            ANIMATION_PULSE_1_MAX_OPACITY = 0.65,
-            ANIMATION_PULSE_1_MIN_OPACITY = 0.05d,
-
-            ANIMATION_PULSE_2_STARTING_OPACITY = 0.05d,
-            ANIMATION_PULSE_2_OPACITY_CHANGE = 0.01d,
-            ANIMATION_PULSE_2_MAX_OPACITY = 0.65,
-            ANIMATION_PULSE_2_MIN_OPACITY = 0.05d;
-
+            ANIMATION_PULSE_1_STARTING_OPACITY = 0.3d,
+            ANIMATION_PULSE_1_OPACITY_CHANGE = 0.008d,
+            ANIMATION_PULSE_1_MAX_OPACITY = 0.80,
+            ANIMATION_PULSE_1_MIN_OPACITY = 0.3d;
 
         #endregion
 
@@ -275,6 +271,7 @@ namespace Product_Browser.ScatterItems
         {
             grad.Angle = (grad.Angle + 0.5d) % 360d;
 
+            imagetest.Angle += 0.1d;
             //ripple.Progress += 0.1d;
 
             if (pulseUp1)
@@ -290,21 +287,6 @@ namespace Product_Browser.ScatterItems
 
                 if (animationPulse1.Opacity <= ANIMATION_PULSE_1_MIN_OPACITY)
                     pulseUp1 = true;
-            }
-
-            if (pulseUp2)
-            {
-                animationPulse2.Opacity += ANIMATION_PULSE_2_OPACITY_CHANGE;
-
-                if (animationPulse2.Opacity >= ANIMATION_PULSE_2_MAX_OPACITY)
-                    pulseUp2 = false;
-            }
-            else
-            {
-                animationPulse2.Opacity -= ANIMATION_PULSE_2_OPACITY_CHANGE;
-
-                if (animationPulse2.Opacity <= ANIMATION_PULSE_2_MIN_OPACITY)
-                    pulseUp2 = true;
             }
         }
 
@@ -402,8 +384,9 @@ namespace Product_Browser.ScatterItems
         private void CalculateNewPositions(List<ABBScatterItem> items)
         {
             var documents = items.Where(a => a is DocumentScatterItem).ToList();
-            var images = items.Where(a => a is ImageScatterItem || a is ImageContainerScatterItem).ToList();
+            var images = items.Where(a => a is ImageScatterItem).ToList();
             var videos = items.Where(a => a is VideoScatterItem).ToList();
+            var imageContainers = items.Where(a => a is ImageContainerScatterItem).ToList();
 
             for (int i = 0; i < documents.Count; i++)
             {
@@ -415,6 +398,12 @@ namespace Product_Browser.ScatterItems
             {
                 images[i].OriginalPositionOffset = (Point)(SCATTERITEM_IMAGE_STARTING_POSITION + SCATTERITEM_IMAGE_POSITION_OFFSET * i);
                 images[i].ZIndex = i;
+            }
+
+            for (int i = 0; i < imageContainers.Count; i++)
+            {
+                imageContainers[i].OriginalPositionOffset = (Point)(SCATTERITEM_IMAGE_CONTAINER_STARTING_POSITION + SCATTERITEM_IMAGE_POSITION_OFFSET * i);
+                imageContainers[i].ZIndex = i;
             }
 
             for (int i = 0; i < videos.Count; i++)
@@ -543,11 +532,20 @@ namespace Product_Browser.ScatterItems
                 else if (scatterItems[i] is ImageContainerScatterItem || scatterItems[i] is ImageScatterItem)
                 {
                     physics.OriginalOrientationOffset = SCATTERITEM_IMAGE_STARTING_ROTATION;
-                    physics.OriginalSize = SCATTERITEM_IMAGE_STARTING_SIZE;
                     physics.PullOffset = (Point)SCATTERITEM_IMAGE_STARTING_POSITION;
 
-                    physics.Width = SCATTERITEM_IMAGE_STARTING_SIZE.Width;
-                    physics.Height = SCATTERITEM_IMAGE_STARTING_SIZE.Height;
+                    if (scatterItems[i] is ImageContainerScatterItem)
+                    {
+                        physics.OriginalSize = SCATTERITEM_IMAGE_CONTAINER_STARTING_SIZE;
+                        physics.Width = SCATTERITEM_IMAGE_CONTAINER_STARTING_SIZE.Width;
+                        physics.Height = SCATTERITEM_IMAGE_CONTAINER_STARTING_SIZE.Height;
+                    }
+                    else
+                    {
+                        physics.OriginalSize = SCATTERITEM_IMAGE_STARTING_SIZE;
+                        physics.Width = SCATTERITEM_IMAGE_STARTING_SIZE.Width;
+                        physics.Height = SCATTERITEM_IMAGE_STARTING_SIZE.Height;
+                    }
 
                     imagePlaceholder.Visibility = Visibility.Visible;
                 }
@@ -582,7 +580,7 @@ namespace Product_Browser.ScatterItems
             TagId = tagId;
 
             physicsTimer = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);
-            physicsTimer.Interval = new TimeSpan(0, 0, 0, 0, 5);
+            physicsTimer.Interval = new TimeSpan(0, 0, 0, 0, 6);
             physicsTimer.Tick += PhysicsEventHandler;
 
             physicsTimerLowPriority = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);
@@ -595,7 +593,6 @@ namespace Product_Browser.ScatterItems
             animationPulseTimer.Start();
 
             animationPulse1.Opacity = ANIMATION_PULSE_1_STARTING_OPACITY;
-            animationPulse2.Opacity = ANIMATION_PULSE_2_STARTING_OPACITY;
         }
     }
 }

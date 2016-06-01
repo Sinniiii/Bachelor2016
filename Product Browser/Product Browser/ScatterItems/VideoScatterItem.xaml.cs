@@ -167,6 +167,9 @@ namespace Product_Browser.ScatterItems
 
         protected void ControlsVisibleTick(object obj, EventArgs args)
         {
+            if (IsPaused)
+                return;
+
             ControlsVisible = false;
 
             videoControlTimer.Stop();

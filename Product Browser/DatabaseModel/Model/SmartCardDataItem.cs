@@ -305,7 +305,7 @@ namespace DatabaseModel.Model
             PDFDoc pdf = new PDFDoc(pdfData, pdfData.Length);
             pdf.InitSecurityHandler();
             PDFDraw draw = new PDFDraw();
-            draw.SetDPI(92); // HMM
+            draw.SetDPI(150); // HMM
 
             ImageConverter converter = new ImageConverter();
 

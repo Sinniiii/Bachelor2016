@@ -10,9 +10,9 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.7*"/>
-            <ColumnDefinition Width="*" MaxWidth="4"/>
-            <ColumnDefinition Width="0.15*"/>
+            <ColumnDefinition Width="0.75*"/>
+            <ColumnDefinition Width="0.05*"/>
+            <ColumnDefinition Width="0.20*"/>
         </Grid.ColumnDefinitions>
 
         <UserControl BorderThickness="4" Background="Black">
@@ -34,7 +34,7 @@
 
             <UserControl> <!-- Dummy control with dummy effect to get antialiasing on our image shader effect... -->
                 <UserControl.Effect>
-                    <BlurEffect Radius="0"/>
+                    <DropShadowEffect BlurRadius="0" ShadowDepth="0" Opacity="0" />
                 </UserControl.Effect>
                 
                 <Image x:Name="mainImage" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stretch="Uniform">

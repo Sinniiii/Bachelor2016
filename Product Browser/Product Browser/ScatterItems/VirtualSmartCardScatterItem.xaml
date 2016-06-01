@@ -10,11 +10,13 @@
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="59"/>
             <RowDefinition Height="175"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="125"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="175"/>
+            <RowDefinition Height="59"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>
@@ -26,28 +28,19 @@
             <ColumnDefinition Width="200"/>
         </Grid.ColumnDefinitions>
 
-        <UserControl x:Name="animationPulse1" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="7" Grid.RowSpan="5" IsHitTestVisible="False">
-            <!--<UserControl.Effect>
-                <ShaderEffectLibrary:RippleEffect x:Name="ripple" Phase="0" Amplitude="0.01"/>
+        <Image Name="animationPulse1" Grid.ColumnSpan="7" Grid.RowSpan="7" IsHitTestVisible="False" RenderTransformOrigin="0.5,0.5">
+            <Image.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform x:Name="imagetest" Angle="1"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Image.RenderTransform>
 
-            </UserControl.Effect>-->
-            <UserControl.Background>
-                <RadialGradientBrush>
-                    <GradientStop Color="#FF06566E" Offset="0"/>
-                    <GradientStop Color="#0006566E" Offset="1"/>
-                </RadialGradientBrush>
-            </UserControl.Background>
-        </UserControl>
-        <UserControl x:Name="animationPulse2" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="7" Grid.RowSpan="5" IsHitTestVisible="False">
-            <UserControl.Background>
-                <RadialGradientBrush>
-                    <GradientStop Color="#FF7070BF"/>
-                    <GradientStop Color="#002323CD" Offset="1"/>
-                </RadialGradientBrush>
-            </UserControl.Background>
-        </UserControl>
-
-        <UserControl x:Name="centerObject" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="3" BorderThickness="4" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Black">
+        </Image>
+        
+        <UserControl x:Name="centerObject" Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="3" BorderThickness="4" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Black">
             <UserControl.BorderBrush>
                 <LinearGradientBrush EndPoint="1,1" MappingMode="RelativeToBoundingBox" StartPoint="0.0,0">
                     <LinearGradientBrush.RelativeTransform>
@@ -65,33 +58,33 @@
             </UserControl.BorderBrush>
         </UserControl>
 
-        <UserControl x:Name="imagePlaceholder" Visibility="Hidden" Grid.Column="6" Grid.Row="2" BorderBrush="Gray" BorderThickness="1, 0, 0, 0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent" IsHitTestVisible="False">
+        <UserControl x:Name="imagePlaceholder" Visibility="Hidden" Grid.Column="6" Grid.Row="3" BorderBrush="Gray" BorderThickness="1, 0, 0, 0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent" IsHitTestVisible="False">
             <Image Source="/Resources/iconCamera.png" Width="20" Height="20" HorizontalAlignment="Left" Margin="-25, 0, 0, 0"/>
         </UserControl>
-        <UserControl x:Name="videoPlaceholder" Visibility="Hidden" Grid.Column="0" Grid.Row="2" BorderBrush="Gray" BorderThickness="0, 0, 1, 0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent" IsHitTestVisible="False">
+        <UserControl x:Name="videoPlaceholder" Visibility="Hidden" Grid.Column="0" Grid.Row="3" BorderBrush="Gray" BorderThickness="0, 0, 1, 0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent" IsHitTestVisible="False">
             <Image Source="/Resources/iconVideo.png" Width="20" Height="20" HorizontalAlignment="Right" Margin="0, 0, -25, 0"/>
         </UserControl>
-        <UserControl x:Name="documentPlaceholder" Visibility="Hidden" Grid.Column="3" Grid.Row="0" BorderBrush="Gray" BorderThickness="0, 0, 0, 1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent" IsHitTestVisible="False">
+        <UserControl x:Name="documentPlaceholder" Visibility="Hidden" Grid.Column="3" Grid.Row="1" BorderBrush="Gray" BorderThickness="0, 0, 0, 1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent" IsHitTestVisible="False">
             <Image Source="/Resources/iconDocument.png" Width="20" Height="20" VerticalAlignment="Bottom" Margin="0, 0, 0, -25"/>
         </UserControl>
 
         <ContentControl x:Name="loadingControl"
 			Visibility="{Binding LoadingSmartCard, Converter={StaticResource BoolToVisCon}, FallbackValue=Visible, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ScatterViewItem}}}"
-			Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="3" IsHitTestVisible="False">
+			Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="3" IsHitTestVisible="False">
 
             <controls:SurfaceTextBox Background="Transparent" BorderThickness="0" x:Name="loadingText" Text="Loading Smart Card" HorizontalAlignment="Center" VerticalAlignment="Center" IsManipulationEnabled="True" AllowDrop="False" Focusable="False" IsHitTestVisible="False" IsTabStop="False" />
         </ContentControl>
 
         <ContentControl x:Name="notFoundControl"
 			Visibility="{Binding NotFoundSmartCard, Converter={StaticResource BoolToVisCon}, FallbackValue=Hidden, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ScatterViewItem}}}"
-			Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="3" IsHitTestVisible="False">
+			Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="3" IsHitTestVisible="False">
 
             <controls:SurfaceTextBox Background="Transparent" BorderThickness="0" x:Name="notFoundText" Text="Empty SmartCard" HorizontalAlignment="Center" VerticalAlignment="Center" AllowDrop="False" Focusable="False" IsHitTestVisible="False" IsTabStop="False" />
         </ContentControl>
 
         <ContentControl x:Name="foundControl"
 			Visibility="{Binding FoundSmartCard, Converter={StaticResource BoolToVisCon}, FallbackValue=Hidden, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ScatterViewItem}}}"
-			Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="3" IsHitTestVisible="False">
+			Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="3" IsHitTestVisible="False">
 
             <controls:SurfaceTextBox Background="Transparent" BorderThickness="0" x:Name="FoundText" HorizontalAlignment="Center" VerticalAlignment="Center"
 				Text="{Binding SmartCardName, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ScatterViewItem}}}" AllowDrop="False" Focusable="False" IsTabStop="False"/>

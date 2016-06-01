@@ -53,6 +53,7 @@ namespace TagExpansionPrototype
                 tagDef.LostTagTimeout = 2000;
                 tagDef.TagRemovedBehavior = TagRemovedBehavior.Fade;
                 tagDef.Value = i;
+                tagDef.MaxCount = 1;
 
                 tagVisualizer.Definitions.Add(tagDef);
             }

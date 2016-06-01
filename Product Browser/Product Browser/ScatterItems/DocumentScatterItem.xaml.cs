@@ -50,7 +50,7 @@ namespace Product_Browser.ScatterItems
         private void OnNewMainImage(int index)
         {
             // Non-shader method
-            //mainImage.Source = source;
+            //mainImage.Source = dataItem.GetPageFromDocumentAsImageSource(index);
 
             BitmapImage newImage = dataItem.GetPageFromDocumentAsImageSource(index);
 
@@ -67,10 +67,13 @@ namespace Product_Browser.ScatterItems
 
                 targetAspectRatio = FindNormalizedAspectRatio(newImage);
 
-                if (!effectTimer.IsEnabled)
+                if (transitionEffect.Progress >= 1d)
                     transitionEffect.Progress = 0d;
-                else
-                    originalAspectRatio = transitionEffect.AspectRatio;
+
+                //if (!effectTimer.IsEnabled)
+                //    transitionEffect.Progress = 0d;
+                //else
+                originalAspectRatio = transitionEffect.AspectRatio;
 
                 effectTimer.Start();
             }
