@@ -15,7 +15,7 @@
             <ColumnDefinition Width="0.20*"/>
         </Grid.ColumnDefinitions>
 
-        <Border CornerRadius="4" BorderThickness="6">
+        <Border CornerRadius="4" BorderThickness="2">
 
             <Border.BorderBrush>
                 <LinearGradientBrush StartPoint="0.0, 0" EndPoint="1, 1" MappingMode="RelativeToBoundingBox">

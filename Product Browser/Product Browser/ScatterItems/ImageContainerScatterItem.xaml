@@ -16,7 +16,7 @@
         </Grid.RowDefinitions>
 
 
-        <Border CornerRadius="4" BorderThickness="6">
+        <Border CornerRadius="4" BorderThickness="2">
             <Border.BorderBrush>
                 <LinearGradientBrush StartPoint="0.0, 0" EndPoint="1, 1" MappingMode="RelativeToBoundingBox">
                     <LinearGradientBrush.RelativeTransform>
