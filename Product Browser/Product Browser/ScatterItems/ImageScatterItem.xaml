@@ -7,7 +7,7 @@
              xmlns:local="clr-namespace:Product_Browser.ScatterItems"
              mc:Ignorable="d" Height="100" Width="200" Background="Transparent">
 
-    <Border CornerRadius="4" BorderThickness="2">
+    <Border CornerRadius="4" BorderThickness="3">
         <Border.BorderBrush>
             <LinearGradientBrush StartPoint="0.0, 0" EndPoint="1, 1" MappingMode="RelativeToBoundingBox">
                 <LinearGradientBrush.RelativeTransform>

@@ -40,7 +40,7 @@
 
         </Image>
 
-        <Border BorderThickness="6" CornerRadius="4" Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="3">
+        <Border BorderThickness="5" CornerRadius="4" Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="3">
             <Border.BorderBrush>
                 <LinearGradientBrush EndPoint="1,1" MappingMode="RelativeToBoundingBox" StartPoint="0.0,0">
                     <LinearGradientBrush.RelativeTransform>

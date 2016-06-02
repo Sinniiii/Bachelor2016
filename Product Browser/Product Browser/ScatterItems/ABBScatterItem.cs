@@ -17,6 +17,7 @@ namespace Product_Browser.ScatterItems
     {
         HighPriority,
         LowPriority,
+        Spawn,
         Locked
     }
 
@@ -43,6 +44,7 @@ namespace Product_Browser.ScatterItems
         // Physics-related constants
         private const double
             ACCELERATION = 0.5d,
+            SPAWN_DECELERATION = 0.05d,
             SPEED_ANGULAR = 4d,
             SPEED_SIZE = 4d,
             DEGREES_TO_RADIANS = (2 * Math.PI) / 360d;
@@ -62,7 +64,7 @@ namespace Product_Browser.ScatterItems
 
         public Size OriginalSize { get; set; }
 
-        public Vector Speed { get; private set; } = new Vector();
+        public Vector Speed { get; set; } = new Vector();
 
         private Color gradientColor;
         public Color GradientColor
@@ -101,12 +103,16 @@ namespace Product_Browser.ScatterItems
         {
             base.OnMouseDown(e);
             e.Handled = false; // Continue upwards, to notify tagWindow of movement
+
+            Speed = new Vector(0, 0);
         }
 
         protected override void OnTouchDown(TouchEventArgs e)
         {
             base.OnTouchDown(e);
             e.Handled = false; // Continue upwards, to notify tagWindow of movement
+
+            Speed = new Vector(0, 0);
         }
 
         protected override void OnPreviewMouseDown(MouseButtonEventArgs e)
@@ -189,6 +195,30 @@ namespace Product_Browser.ScatterItems
                 return RunState.LowPriority;
 
             return RunState.HighPriority;
+        }
+
+        public RunState RunSpawn()
+        {
+            if (Speed.X == 0 && Speed.Y == 0)
+                return RunState.LowPriority;
+
+            double deltaSpeedX = -Speed.X;
+            if (deltaSpeedX > SPAWN_DECELERATION)
+                deltaSpeedX = SPAWN_DECELERATION;
+            else if (deltaSpeedX < -SPAWN_DECELERATION)
+                deltaSpeedX = -SPAWN_DECELERATION;
+
+            double deltaSpeedY = -Speed.Y;
+            if (deltaSpeedY > SPAWN_DECELERATION)
+                deltaSpeedY = SPAWN_DECELERATION;
+            else if (deltaSpeedY < -SPAWN_DECELERATION)
+                deltaSpeedY = -SPAWN_DECELERATION;
+
+            Speed = new Vector(Speed.X + deltaSpeedX, Speed.Y + deltaSpeedY);
+
+            Center = new Point(Center.X + Speed.X, Center.Y + Speed.Y);
+
+            return RunState.Spawn;
         }
 
         public void MoveToOriginalPosition(Point tagPosition, double tagRotation)

@@ -28,7 +28,7 @@ namespace Product_Browser.ScatterItems
 
         // Radius of gravity circle that pulls objects in
         readonly double
-            CIRCLE_SIZE = 125d;
+            CIRCLE_SIZE = 100d;
 
         readonly int MAX_IMAGES_BEFORE_CONTAINER = 1;
 
@@ -63,20 +63,27 @@ namespace Product_Browser.ScatterItems
 
         #region Fields
 
+        static Random random = new Random();
+
         SmartCard smartCard = null;
 
         ObservableCollection<ABBScatterItem> view;
 
-        List<ABBScatterItem> 
+        List<ABBScatterItem>
             physicsItemsActive = new List<ABBScatterItem>(10),
             physicsItemsActiveLowPriority = new List<ABBScatterItem>(10),
-            physicsItemsInactive = new List<ABBScatterItem>(10);
+            physicsItemsInactive = new List<ABBScatterItem>(10),
+            physicsItemsSpawned = new List<ABBScatterItem>(10),
+            physicsItemsSpawning = new List<ABBScatterItem>(10);
 
-        DispatcherTimer physicsTimer,
-                        physicsTimerLowPriority,
-                        animationPulseTimer;
+        DispatcherTimer 
+            physicsTimer,
+            physicsTimerLowPriority,
+            physicsTimerSpawn,
+            physicsTimerSpawned,
+            animationPulseTimer;
 
-        bool pulseUp1 = true, pulseUp2 = true;
+        bool pulseUp1 = true;
 
         /// <summary>
         /// These are helpers to determine visibility of UI elements in TagWindow.xaml. Start by displaying loading
@@ -248,6 +255,49 @@ namespace Product_Browser.ScatterItems
 
             if (physicsItemsActiveLowPriority.Count == 0)
                 physicsTimerLowPriority.Stop();
+        }
+
+        private void PhysicsSpawnedEventHandler(object sender, EventArgs args)
+        {
+            List<ABBScatterItem> toDiscard = new List<ABBScatterItem>(physicsItemsActive.Count);
+
+            for (int i = 0; i < physicsItemsSpawned.Count; i++)
+                switch (physicsItemsSpawned[i].RunSpawn())
+                {
+                    case RunState.LowPriority:
+                        ScatterViewItemLowPriority(physicsItemsSpawned[i]);
+                        toDiscard.Add(physicsItemsSpawned[i]);
+                        break;
+                    default:
+                        break;
+                }
+
+            physicsItemsSpawned.RemoveAll(a => toDiscard.Contains(a));
+
+            if (physicsItemsSpawned.Count == 0)
+                physicsTimerSpawned.Stop();
+        }
+
+        private void PhysicsSpawnEventHandler(object sender, EventArgs args)
+        {
+            if (physicsItemsSpawning.Count == 0)
+            {
+                physicsTimerSpawn.Stop();
+                return;
+            }
+
+            ABBScatterItem item = physicsItemsSpawning[0];
+
+            physicsItemsSpawning.Remove(item);
+            item.Visibility = Visibility.Visible;
+            physicsItemsSpawned.Add(item);
+
+            double speedX = (random.NextDouble() * 3d + 3) * (random.NextDouble() > 0.5d ? 1d : -1d);
+            double speedY = (random.NextDouble() * 3d + 3) * (random.NextDouble() > 0.5d ? 1d : -1d);
+
+            item.Speed = new Vector(speedX, speedY);
+
+            physicsTimerSpawned.Start();
         }
 
         private void PhysicsDieEventHandler(object sender, EventArgs args)
@@ -522,7 +572,7 @@ namespace Product_Browser.ScatterItems
                 {
                     physics.OriginalOrientationOffset = SCATTERITEM_DOCUMENT_STARTING_ROTATION;
                     physics.OriginalSize = SCATTERITEM_DOCUMENT_STARTING_SIZE;
-                    physics.PullOffset = (Point)SCATTERITEM_DOCUMENT_STARTING_POSITION;
+                    physics.PullOffset = new Point(0d, 0d);
 
                     physics.Width = SCATTERITEM_DOCUMENT_STARTING_SIZE.Width;
                     physics.Height = SCATTERITEM_DOCUMENT_STARTING_SIZE.Height;
@@ -532,7 +582,7 @@ namespace Product_Browser.ScatterItems
                 else if (scatterItems[i] is ImageContainerScatterItem || scatterItems[i] is ImageScatterItem)
                 {
                     physics.OriginalOrientationOffset = SCATTERITEM_IMAGE_STARTING_ROTATION;
-                    physics.PullOffset = (Point)SCATTERITEM_IMAGE_STARTING_POSITION;
+                    physics.PullOffset = new Point(0d, 0d);
 
                     if (scatterItems[i] is ImageContainerScatterItem)
                     {
@@ -553,7 +603,7 @@ namespace Product_Browser.ScatterItems
                 {
                     physics.OriginalOrientationOffset = SCATTERITEM_VIDEO_STARTING_ROTATION;
                     physics.OriginalSize = SCATTERITEM_VIDEO_STARTING_SIZE;
-                    physics.PullOffset = (Point)SCATTERITEM_VIDEO_STARTING_POSITION;
+                    physics.PullOffset = new Point(0d, 0d);
 
                     physics.Width = SCATTERITEM_VIDEO_STARTING_SIZE.Width;
                     physics.Height = SCATTERITEM_VIDEO_STARTING_SIZE.Height;
@@ -562,11 +612,15 @@ namespace Product_Browser.ScatterItems
                 }
 
                 view.Add(scatterItems[i]);
-                physicsItemsActive.Add(physics);
+                //physicsItemsActive.Add(physics);
+
+                scatterItems[i].Visibility = Visibility.Hidden;
+                physicsItemsSpawning.Add(physics);
             }
 
-            CalculateNewPositions(physicsItemsActive);
-            physicsTimer.Start();
+            //CalculateNewPositions(physicsItemsActive);
+            //physicsTimer.Start();
+            physicsTimerSpawn.Start();
         }
 
         #endregion
@@ -584,8 +638,16 @@ namespace Product_Browser.ScatterItems
             physicsTimer.Tick += PhysicsEventHandler;
 
             physicsTimerLowPriority = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);
-            physicsTimerLowPriority.Interval = new TimeSpan(0, 0, 0, 0, 200);
+            physicsTimerLowPriority.Interval = new TimeSpan(0, 0, 0, 0, 400);
             physicsTimerLowPriority.Tick += PhysicsLowPriorityEventHandler;
+
+            physicsTimerSpawn = new DispatcherTimer(DispatcherPriority.Normal, this.Dispatcher);
+            physicsTimerSpawn.Interval = new TimeSpan(0, 0, 0, 0, 500);
+            physicsTimerSpawn.Tick += PhysicsSpawnEventHandler;
+
+            physicsTimerSpawned = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);
+            physicsTimerSpawned.Interval = new TimeSpan(0, 0, 0, 0, 6);
+            physicsTimerSpawned.Tick += PhysicsSpawnedEventHandler;
 
             animationPulseTimer = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);
             animationPulseTimer.Interval = new TimeSpan(0, 0, 0, 0, 25);
