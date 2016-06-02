@@ -15,8 +15,9 @@
             <RowDefinition Height="0.2*"/>
         </Grid.RowDefinitions>
 
-        <UserControl BorderThickness="4" Background="Black">
-            <UserControl.BorderBrush>
+
+        <Border CornerRadius="4" BorderThickness="6">
+            <Border.BorderBrush>
                 <LinearGradientBrush StartPoint="0.0, 0" EndPoint="1, 1" MappingMode="RelativeToBoundingBox">
                     <LinearGradientBrush.RelativeTransform>
                         <TransformGroup>
@@ -30,22 +31,23 @@
                     <GradientStop Color="{Binding Path=GradientColor, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:ScatterViewItem}}" Offset="0.75"/>
                     <GradientStop Color="Black" Offset="1"/>
                 </LinearGradientBrush>
-            </UserControl.BorderBrush>
+            </Border.BorderBrush>
 
-            <UserControl>
-                <!-- Dummy control with dummy effect to get antialiasing on our image shader effect... -->
-                <UserControl.Effect>
-                    <DropShadowEffect BlurRadius="0" ShadowDepth="0" Opacity="0" />
-                </UserControl.Effect>
-                
-                <Image x:Name="mainImage" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stretch="Fill">
-                    <Image.Effect>
-                        <TransitionEffects:LineRevealTransitionEffectPAR x:Name="transitionEffect"/>
-                    </Image.Effect>
-                </Image>
+            <UserControl Background="Black">
+                <UserControl>
+                    <!-- Dummy control with dummy effect to get antialiasing on our image shader effect... -->
+                    <UserControl.Effect>
+                        <DropShadowEffect BlurRadius="0" ShadowDepth="0" Opacity="0" />
+                    </UserControl.Effect>
+
+                    <Image x:Name="mainImage" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stretch="Fill">
+                        <Image.Effect>
+                            <TransitionEffects:LineRevealTransitionEffectPAR x:Name="transitionEffect"/>
+                        </Image.Effect>
+                    </Image>
+                </UserControl>
             </UserControl>
-        </UserControl>
-
+        </Border>
         <local:ImageContainer Grid.Row="2" x:Name="container" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
     </Grid>

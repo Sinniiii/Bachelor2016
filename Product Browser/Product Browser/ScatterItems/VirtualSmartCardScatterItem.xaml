@@ -28,7 +28,7 @@
             <ColumnDefinition Width="200"/>
         </Grid.ColumnDefinitions>
 
-        <Image Name="animationPulse1" Grid.ColumnSpan="7" Grid.RowSpan="7" IsHitTestVisible="False" RenderTransformOrigin="0.5,0.5">
+        <Image Name="animationPulse1" Grid.ColumnSpan="7" Grid.RowSpan="7" IsHitTestVisible="False" RenderTransformOrigin="0.5,0.5" Source="/resources/Starburst1.png">
             <Image.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -39,9 +39,9 @@
             </Image.RenderTransform>
 
         </Image>
-        
-        <UserControl x:Name="centerObject" Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="3" BorderThickness="4" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Black">
-            <UserControl.BorderBrush>
+
+        <Border BorderThickness="6" CornerRadius="4" Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="3">
+            <Border.BorderBrush>
                 <LinearGradientBrush EndPoint="1,1" MappingMode="RelativeToBoundingBox" StartPoint="0.0,0">
                     <LinearGradientBrush.RelativeTransform>
                         <TransformGroup>
@@ -55,9 +55,27 @@
                     <GradientStop Color="{Binding GradientColor, RelativeSource={RelativeSource AncestorType={x:Type controls:ScatterViewItem}, Mode=FindAncestor}}" Offset="0.75"/>
                     <GradientStop Color="Black" Offset="1"/>
                 </LinearGradientBrush>
-            </UserControl.BorderBrush>
-        </UserControl>
+            </Border.BorderBrush>
 
+
+            <UserControl x:Name="centerObject"   VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Black">
+               <!-- <UserControl.BorderBrush>
+                    <LinearGradientBrush EndPoint="1,1" MappingMode="RelativeToBoundingBox" StartPoint="0.0,0">
+                        <LinearGradientBrush.RelativeTransform>
+                            <TransformGroup>
+                                <RotateTransform x:Name="grad" CenterY="0.5" CenterX="0.5"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </LinearGradientBrush.RelativeTransform>
+                        <GradientStop Color="Black"/>
+                        <GradientStop Color="#0179bc" Offset="0.25"/>
+                        <GradientStop Color="Black" Offset="0.50"/>
+                        <GradientStop Color="{Binding GradientColor, RelativeSource={RelativeSource AncestorType={x:Type controls:ScatterViewItem}, Mode=FindAncestor}}" Offset="0.75"/>
+                        <GradientStop Color="Black" Offset="1"/>
+                    </LinearGradientBrush>
+                </UserControl.BorderBrush>-->
+            </UserControl>
+        </Border>
         <UserControl x:Name="imagePlaceholder" Visibility="Hidden" Grid.Column="6" Grid.Row="3" BorderBrush="Gray" BorderThickness="1, 0, 0, 0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent" IsHitTestVisible="False">
             <Image Source="/Resources/iconCamera.png" Width="20" Height="20" HorizontalAlignment="Left" Margin="-25, 0, 0, 0"/>
         </UserControl>

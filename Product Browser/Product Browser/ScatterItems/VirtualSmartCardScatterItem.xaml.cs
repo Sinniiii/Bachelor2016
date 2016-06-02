@@ -30,7 +30,7 @@ namespace Product_Browser.ScatterItems
         readonly double
             CIRCLE_SIZE = 125d;
 
-        readonly int MAX_IMAGES_BEFORE_CONTAINER = 1;
+        readonly int MAX_IMAGES_BEFORE_CONTAINER = 8;
 
         readonly Size
             SCATTERITEM_DOCUMENT_STARTING_SIZE = new Size(166.66, 165),

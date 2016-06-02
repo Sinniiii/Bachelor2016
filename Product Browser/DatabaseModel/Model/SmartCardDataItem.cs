@@ -85,7 +85,7 @@ namespace DatabaseModel.Model
             newImage.UriSource = null;
             newImage.StreamSource = mem;
 
-            newImage.DecodePixelWidth = 64;
+            newImage.DecodePixelWidth = 128;
 
             newImage.EndInit();
 
