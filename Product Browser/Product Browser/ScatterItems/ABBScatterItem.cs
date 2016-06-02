@@ -202,19 +202,15 @@ namespace Product_Browser.ScatterItems
             if (Speed.X == 0 && Speed.Y == 0)
                 return RunState.LowPriority;
 
-            double deltaSpeedX = -Speed.X;
-            if (deltaSpeedX > SPAWN_DECELERATION)
-                deltaSpeedX = SPAWN_DECELERATION;
-            else if (deltaSpeedX < -SPAWN_DECELERATION)
-                deltaSpeedX = -SPAWN_DECELERATION;
+            Vector deceleration = Speed;
+            deceleration.Negate();
+            deceleration.Normalize();
+            deceleration *= SPAWN_DECELERATION;
 
-            double deltaSpeedY = -Speed.Y;
-            if (deltaSpeedY > SPAWN_DECELERATION)
-                deltaSpeedY = SPAWN_DECELERATION;
-            else if (deltaSpeedY < -SPAWN_DECELERATION)
-                deltaSpeedY = -SPAWN_DECELERATION;
+            Speed = new Vector(Speed.X + deceleration.X, Speed.Y + deceleration.Y);
 
-            Speed = new Vector(Speed.X + deltaSpeedX, Speed.Y + deltaSpeedY);
+            if (Speed.Length < SPAWN_DECELERATION)
+                Speed = new Vector();
 
             Center = new Point(Center.X + Speed.X, Center.Y + Speed.Y);
 
