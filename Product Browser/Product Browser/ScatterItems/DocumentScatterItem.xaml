@@ -10,13 +10,12 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.75*"/>
-            <ColumnDefinition Width="0.05*"/>
-            <ColumnDefinition Width="0.20*"/>
+            <ColumnDefinition Width="0.80*"/>
+            <ColumnDefinition Width="0.01*"/>
+            <ColumnDefinition Width="0.19*"/>
         </Grid.ColumnDefinitions>
 
         <Border CornerRadius="4" BorderThickness="3">
-
             <Border.BorderBrush>
                 <LinearGradientBrush StartPoint="0.0, 0" EndPoint="1, 1" MappingMode="RelativeToBoundingBox">
                     <LinearGradientBrush.RelativeTransform>
@@ -34,22 +33,13 @@
             </Border.BorderBrush>
 
             <UserControl Background="Black">
-                <UserControl>
-                    <!-- Dummy control with dummy effect to get antialiasing on our image shader effect... -->
-                    <UserControl.Effect>
-                        <DropShadowEffect BlurRadius="0" ShadowDepth="0" Opacity="0" />
-                    </UserControl.Effect>
-
-                    <Image x:Name="mainImage" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stretch="Uniform">
-                        <Image.Effect>
-                            <TransitionEffects:LineRevealTransitionEffectPAR x:Name="transitionEffect" Progress="0"/>
-                        </Image.Effect>
-                    </Image>
-                </UserControl>
+                <ScrollViewer Grid.Row="0" Grid.Column="0" Name="scrollBar" Background="Black" VerticalScrollBarVisibility="Hidden" IsHitTestVisible="False">
+                    <StackPanel Name="stackPanel" Orientation="Vertical" VirtualizingStackPanel.VirtualizationMode="Recycling" IsHitTestVisible="False"/>
+                </ScrollViewer>
             </UserControl>
         </Border>
 
-        <local:ImageContainer Grid.Column="2" x:Name="container" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+        <controls:SurfaceSlider Orientation="Vertical" Name="slider" Grid.Column="2" Minimum="0" IsDirectionReversed="True" MinWidth="10"/>
 
     </Grid>
 </local:ABBScatterItem>

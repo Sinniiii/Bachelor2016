@@ -453,12 +453,7 @@ namespace Product_Browser.ScatterItems
                 Binding binding = new Binding("ColorBackgroundThemeBrush");
                 binding.RelativeSource = new RelativeSource(RelativeSourceMode.FindAncestor, typeof(ImageContainer), 1);
                 u.SetBinding(UserControl.BackgroundProperty, binding);
-
-                //binding = new Binding("ColorThemeBrush");
-                //binding.RelativeSource = new RelativeSource(RelativeSourceMode.FindAncestor, typeof(ImageContainer), 1);
-                //u.SetBinding(UserControl.BorderBrushProperty, binding);
-
-                //u.BorderThickness = new Thickness(1d);
+                
                 u.Tag = i;
 
                 u.PreviewTouchDown += OnUserImageSelected;

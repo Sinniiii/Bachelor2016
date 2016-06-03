@@ -28,9 +28,7 @@ namespace Product_Browser.ScatterItems
 
         SmartCardDataItem dataItem;
 
-        DispatcherTimer effectTimer;
-
-        Point originalAspectRatio, targetAspectRatio;
+        int previousActive = -1;
 
         #endregion
 
@@ -41,82 +39,74 @@ namespace Product_Browser.ScatterItems
             grad.Angle = (grad.Angle + 0.5d) % 360d;
         }
 
-        private void OnBarLoaded(object obj, EventArgs args)
+        private void OnStackPanelLoaded(object obj, EventArgs args)
         {
-            container.Populate(dataItem.GetDocumentAsThumbnailImageSources(), System.Windows.Controls.Orientation.Vertical, 4, false, true);
-            container.ColorTheme = GradientColor;
-        }
+            var pages = dataItem.GetDocumentAsThumbnailImageSources();
 
-        private void OnNewMainImage(int index)
-        {
-            // Non-shader method
-            //mainImage.Source = dataItem.GetPageFromDocumentAsImageSource(index);
+            Binding binding = new Binding("ActualHeight");
+            binding.BindsDirectlyToSource = true;
+            binding.Source = stackPanel;
+            slider.SetBinding(SurfaceSlider.MaximumProperty, binding);
+            slider.Minimum = 0d;
 
-            BitmapImage newImage = dataItem.GetPageFromDocumentAsImageSource(index);
-
-            // Using effect shader
-            if (originalAspectRatio.X == 0d)
+            for (int i = 0; i < pages.Count; i++)
             {
-                transitionEffect.OldImage = new ImageBrush(newImage);
+                UserControl control = new UserControl();
+                control.IsHitTestVisible = false;
+                
+                binding = new Binding("ActualWidth");
+                binding.BindsDirectlyToSource = true;
+                binding.Source = scrollBar;
+                control.SetBinding(UserControl.WidthProperty, binding);
 
-                originalAspectRatio = transitionEffect.AspectRatio = FindNormalizedAspectRatio(newImage);
-            }
-            else
-            {
-                transitionEffect.Input = new ImageBrush(newImage);
+                binding = new Binding("ActualHeight");
+                binding.BindsDirectlyToSource = true;
+                binding.Source = scrollBar;
+                control.SetBinding(UserControl.HeightProperty, binding);
 
-                targetAspectRatio = FindNormalizedAspectRatio(newImage);
+                Image image = new Image();
+                image.IsHitTestVisible = false;
+                image.Stretch = Stretch.Uniform;
+                control.Content = image;
 
-                if (transitionEffect.Progress >= 1d)
-                    transitionEffect.Progress = 0d;
+                if(i < 2)
+                {
+                    image.Source = dataItem.GetPageFromDocumentAsImageSource(i);
+                }
 
-                //if (!effectTimer.IsEnabled)
-                //    transitionEffect.Progress = 0d;
-                //else
-                originalAspectRatio = transitionEffect.AspectRatio;
-
-                effectTimer.Start();
-            }
-        }
-
-        private void OnEffectTimer(object sender, EventArgs args)
-        {
-            transitionEffect.Progress += 0.05;
-
-            transitionEffect.AspectRatio = originalAspectRatio + ((targetAspectRatio - originalAspectRatio) * transitionEffect.Progress);
-
-            if (transitionEffect.Progress >= 1d)
-            {
-                transitionEffect.OldImage = transitionEffect.Input;
-                transitionEffect.AspectRatio = originalAspectRatio = targetAspectRatio;
-                targetAspectRatio = new Point();
-                effectTimer.Stop();
+                stackPanel.Children.Add(control);
             }
         }
 
-        #endregion
-
-        #region Methods
-
-        private Point FindNormalizedAspectRatio(BitmapImage image)
+        private void OnSlider(object obj, RoutedPropertyChangedEventArgs<double> args)
         {
-            double containerAspectRatio = mainImage.ActualHeight / mainImage.ActualWidth;
-            double imageAspectRatio = (double)image.PixelHeight / image.PixelWidth;
+            scrollBar.ScrollToVerticalOffset(args.NewValue);
 
-            if (imageAspectRatio >= containerAspectRatio)
+            int count = stackPanel.Children.Count;
+            int activeImage = (int)(args.NewValue / (stackPanel.ActualHeight / count));
+
+            if (activeImage == previousActive)
+                return;
+
+            previousActive = activeImage;
+
+            for(int i = 0; i < count; i++)
             {
-                // Tall, height maxed
-                double width = (mainImage.ActualHeight / imageAspectRatio);
-
-                return new Point(width / mainImage.ActualWidth, 1d);
+                if (i > activeImage - 2 && i < activeImage + 2)
+                    ((Image)((UserControl)stackPanel.Children[i]).Content).Source = dataItem.GetPageFromDocumentAsImageSource(i);
+                else
+                    ((Image)((UserControl)stackPanel.Children[i]).Content).Source = null;
             }
-            else
-            {
-                // Wide, width maxed
-                double height = (mainImage.ActualWidth * imageAspectRatio);
+        }
 
-                return new Point(1d, height / mainImage.ActualHeight);
-            }
+        private void OnScrollBarSizeChanged(object o, SizeChangedEventArgs args)
+        {
+            if (args.PreviousSize.Height == 0) 
+                return;
+
+            double ratio = args.NewSize.Height / args.PreviousSize.Height;
+
+            slider.Value *= ratio;
         }
 
         #endregion
@@ -128,14 +118,10 @@ namespace Product_Browser.ScatterItems
 
             dataItem = document;
 
-            mainImage.Source = dataItem.GetPageFromDocumentAsImageSource(0);
+            stackPanel.Loaded += OnStackPanelLoaded;
+            slider.ValueChanged += OnSlider;
 
-            container.Loaded += OnBarLoaded;
-            container.NewMainImage += OnNewMainImage;
-
-            effectTimer = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);
-            effectTimer.Interval = new TimeSpan(0, 0, 0, 0, 20);
-            effectTimer.Tick += OnEffectTimer;
+            scrollBar.SizeChanged += OnScrollBarSizeChanged;
         }
     }
 }

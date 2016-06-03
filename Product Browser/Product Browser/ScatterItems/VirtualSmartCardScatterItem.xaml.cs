@@ -81,11 +81,12 @@ namespace Product_Browser.ScatterItems
             physicsItemsSpawningDocuments = new List<ABBScatterItem>(10);
 
 
-        DispatcherTimer 
+        DispatcherTimer
             physicsTimer,
             physicsTimerLowPriority,
             physicsTimerSpawn,
             physicsTimerSpawned,
+            physicsTimerSpawnDelay,
             animationPulseTimer;
 
         int
@@ -291,16 +292,33 @@ namespace Product_Browser.ScatterItems
                 physicsTimerSpawned.Stop();
         }
 
+        private void PhysicsSpawnDelayEventHandler(object sender, EventArgs args)
+        {
+            Opacity += 0.05;
+
+            for (int i = 0; i < physicsItemsSpawningDocuments.Count; i++)
+                physicsItemsSpawningDocuments[i].Opacity += 0.05d;
+            for (int i = 0; i < physicsItemsSpawningImages.Count; i++)
+                physicsItemsSpawningImages[i].Opacity += 0.05d;
+            for (int i = 0; i < physicsItemsSpawningVideos.Count; i++)
+                physicsItemsSpawningVideos[i].Opacity += 0.05d;
+
+            if (Opacity < 1d)
+                return;
+
+            physicsTimerSpawnDelay.Stop();
+            physicsTimerSpawn.Start();
+        }
+
         private void PhysicsSpawnEventHandler(object sender, EventArgs args)
         {
-            bool cancel = false;
+            bool cancel = true;
 
             if(physicsItemsSpawningImages.Count > 0)
             {
                 ABBScatterItem item = physicsItemsSpawningImages[0];
 
                 physicsItemsSpawningImages.Remove(item);
-                item.Visibility = Visibility.Visible;
                 physicsItemsSpawned.Add(item);
 
                 int thisCard = imagesSpawned++ + 1;
@@ -317,7 +335,10 @@ namespace Product_Browser.ScatterItems
                 double x = Math.Cos(targetDirection);
                 double y = Math.Sin(targetDirection);
 
-                item.Speed = new Vector(x, y) * 6d;
+                item.Speed = new Vector(x, y) * 7d;
+                item.Deleting = false;
+
+                cancel = false;
             }
 
             if (physicsItemsSpawningDocuments.Count > 0)
@@ -343,6 +364,9 @@ namespace Product_Browser.ScatterItems
                 double y = Math.Sin(targetDirection);
 
                 item.Speed = new Vector(x, y) * 6d;
+                item.Deleting = false;
+
+                cancel = false;
             }
 
             if (physicsItemsSpawningVideos.Count > 0)
@@ -367,7 +391,10 @@ namespace Product_Browser.ScatterItems
                 double x = Math.Cos(targetDirection);
                 double y = Math.Sin(targetDirection);
 
-                item.Speed = new Vector(x, y) * 6d;
+                item.Speed = new Vector(x, y) * 7d;
+                item.Deleting = false;
+
+                cancel = false;
             }
             
             physicsTimerSpawned.Start();
@@ -438,11 +465,24 @@ namespace Product_Browser.ScatterItems
             if (physicsTimerLowPriority.IsEnabled)
                 physicsTimerLowPriority.Stop();
 
+            if (physicsTimerSpawn.IsEnabled)
+                physicsTimerSpawn.Stop();
+
+            if (physicsTimerSpawned.IsEnabled)
+                physicsTimerSpawned.Stop();
+
             physicsItemsActive.AddRange(physicsItemsActiveLowPriority);
             physicsItemsActive.AddRange(physicsItemsInactive);
+            physicsItemsActive.AddRange(physicsItemsSpawned);
+            physicsItemsActive.AddRange(physicsItemsSpawningDocuments);
+            physicsItemsActive.AddRange(physicsItemsSpawningImages);
+            physicsItemsActive.AddRange(physicsItemsSpawningVideos);
 
             physicsItemsInactive.Clear();
             physicsItemsActiveLowPriority.Clear();
+            physicsItemsSpawningDocuments.Clear();
+            physicsItemsSpawningImages.Clear();
+            physicsItemsSpawningVideos.Clear();
 
             this.Deleting = true;
 
@@ -643,12 +683,12 @@ namespace Product_Browser.ScatterItems
 
                 scatterItems[i].Center = this.ActualCenter;
                 scatterItems[i].Orientation = this.ActualOrientation;
+                scatterItems[i].Opacity = 0d;
 
                 if(scatterItems[i] is DocumentScatterItem)
                 {
                     physics.OriginalOrientationOffset = SCATTERITEM_DOCUMENT_STARTING_ROTATION;
                     physics.OriginalSize = SCATTERITEM_DOCUMENT_STARTING_SIZE;
-                    physics.PullOffset = new Point(0d, 0d);
 
                     physics.Width = SCATTERITEM_DOCUMENT_STARTING_SIZE.Width;
                     physics.Height = SCATTERITEM_DOCUMENT_STARTING_SIZE.Height;
@@ -657,11 +697,12 @@ namespace Product_Browser.ScatterItems
 
                     physicsItemsSpawningDocuments.Add(scatterItems[i]);
                     documentsTotal++;
+
+                    physics.Center = (Point)ABBScatterItem.GetConvertedPosition(ActualCenter, (Point)SCATTERITEM_DOCUMENT_STARTING_POSITION, Orientation);
                 }
                 else if (scatterItems[i] is ImageContainerScatterItem || scatterItems[i] is ImageScatterItem)
                 {
                     physics.OriginalOrientationOffset = SCATTERITEM_IMAGE_STARTING_ROTATION;
-                    physics.PullOffset = new Point(0d, 0d);
 
                     if (scatterItems[i] is ImageContainerScatterItem)
                     {
@@ -680,12 +721,13 @@ namespace Product_Browser.ScatterItems
 
                     physicsItemsSpawningImages.Add(scatterItems[i]);
                     imagesTotal++;
+
+                    physics.Center = (Point)ABBScatterItem.GetConvertedPosition(ActualCenter, (Point)SCATTERITEM_IMAGE_STARTING_POSITION, Orientation);
                 }
                 else
                 {
                     physics.OriginalOrientationOffset = SCATTERITEM_VIDEO_STARTING_ROTATION;
                     physics.OriginalSize = SCATTERITEM_VIDEO_STARTING_SIZE;
-                    physics.PullOffset = new Point(0d, 0d);
 
                     physics.Width = SCATTERITEM_VIDEO_STARTING_SIZE.Width;
                     physics.Height = SCATTERITEM_VIDEO_STARTING_SIZE.Height;
@@ -694,17 +736,14 @@ namespace Product_Browser.ScatterItems
 
                     physicsItemsSpawningVideos.Add(scatterItems[i]);
                     videosTotal++;
+
+                    physics.Center = (Point)ABBScatterItem.GetConvertedPosition(ActualCenter, (Point)SCATTERITEM_VIDEO_STARTING_POSITION, Orientation);
                 }
 
                 view.Add(scatterItems[i]);
-                //physicsItemsActive.Add(physics);
-
-                scatterItems[i].Visibility = Visibility.Hidden;
             }
 
-            //CalculateNewPositions(physicsItemsActive);
-            //physicsTimer.Start();
-            physicsTimerSpawn.Start();
+            physicsTimerSpawnDelay.Start();
         }
 
         #endregion
@@ -716,6 +755,9 @@ namespace Product_Browser.ScatterItems
             this.view = view;
             
             TagId = tagId;
+
+            Opacity = 0d;
+            Deleting = false;
 
             physicsTimer = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);
             physicsTimer.Interval = new TimeSpan(0, 0, 0, 0, 6);
@@ -732,6 +774,10 @@ namespace Product_Browser.ScatterItems
             physicsTimerSpawned = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);
             physicsTimerSpawned.Interval = new TimeSpan(0, 0, 0, 0, 6);
             physicsTimerSpawned.Tick += PhysicsSpawnedEventHandler;
+
+            physicsTimerSpawnDelay = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);
+            physicsTimerSpawnDelay.Interval = new TimeSpan(0, 0, 0, 0, 50);
+            physicsTimerSpawnDelay.Tick += PhysicsSpawnDelayEventHandler;
 
             animationPulseTimer = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);
             animationPulseTimer.Interval = new TimeSpan(0, 0, 0, 0, 25);

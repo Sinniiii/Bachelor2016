@@ -44,7 +44,7 @@ namespace Product_Browser.ScatterItems
         // Physics-related constants
         private const double
             ACCELERATION = 0.5d,
-            SPAWN_DECELERATION = 0.05d,
+            SPAWN_DECELERATION = 0.15d,
             SPEED_ANGULAR = 4d,
             SPEED_SIZE = 4d,
             DEGREES_TO_RADIANS = (2 * Math.PI) / 360d;
@@ -54,7 +54,7 @@ namespace Product_Browser.ScatterItems
         #region Properties
 
         // The offset, to smartcard position, where we should start pulling this card in
-        public Point PullOffset { get; set; }
+        public Point PullOffset { get; set; } = new Point();
 
         // The offset, to smartcard position, where this card is to be placed
         public Point OriginalPositionOffset { get; set; }
@@ -80,7 +80,7 @@ namespace Product_Browser.ScatterItems
             set { this.colorThemeBrush = value; NotifyPropertyChanged(); }
         }
 
-        private bool deleting = false;
+        private bool deleting = true;
         public bool Deleting
         {
             get { return deleting; }
@@ -342,7 +342,7 @@ namespace Product_Browser.ScatterItems
         /// <param name="Offset"></param>
         /// <param name="orientation"></param>
         /// <returns></returns>
-        private static Vector GetConvertedPosition(Point visualizerPos, Point Offset, double orientation)
+        public static Vector GetConvertedPosition(Point visualizerPos, Point Offset, double orientation)
         {
             double radians = orientation * DEGREES_TO_RADIANS;
             double cos = Math.Cos(radians);
