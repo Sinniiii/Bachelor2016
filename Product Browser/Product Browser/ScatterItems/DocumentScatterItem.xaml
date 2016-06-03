@@ -20,7 +20,7 @@
             <RowDefinition Height="0.9*" />
         </Grid.RowDefinitions>
 
-        <Border CornerRadius="4" BorderThickness="3" Grid.Row="1">
+        <Border CornerRadius="4" BorderThickness="3" Grid.Row="2">
             <Border.BorderBrush>
                 <LinearGradientBrush StartPoint="0.0, 0" EndPoint="1, 1" MappingMode="RelativeToBoundingBox">
                     <LinearGradientBrush.RelativeTransform>
@@ -56,6 +56,7 @@
         <Viewbox>
             <Label Name="documentName" IsEnabled="False" Content="15" HorizontalAlignment="Center" VerticalAlignment="Top" BorderBrush="Transparent" Background="{x:Null}"/>
         </Viewbox>
+        
         <controls:SurfaceSlider Grid.Row="1" Name="surfaceSlider" Orientation="Vertical" Grid.Column="2" Minimum="0" IsDirectionReversed="True" MinWidth="0" MinHeight="0"/>
 
     </Grid>
