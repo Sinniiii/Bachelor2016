@@ -505,6 +505,9 @@ namespace Product_Browser.ScatterItems
             animationPulseTimer.Stop();
             physicsTimer.Stop();
             physicsTimerLowPriority.Stop();
+            physicsTimerSpawn.Stop();
+            physicsTimerSpawnDelay.Stop();
+            physicsTimerSpawned.Stop();
         }
 
         private void ScatterViewItemLocked(ABBScatterItem e)
@@ -763,8 +766,8 @@ namespace Product_Browser.ScatterItems
             physicsTimer.Interval = new TimeSpan(0, 0, 0, 0, 6);
             physicsTimer.Tick += PhysicsEventHandler;
 
-            physicsTimerLowPriority = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);
-            physicsTimerLowPriority.Interval = new TimeSpan(0, 0, 0, 0, 400);
+            physicsTimerLowPriority = new DispatcherTimer(DispatcherPriority.Normal, this.Dispatcher);
+            physicsTimerLowPriority.Interval = new TimeSpan(0, 0, 0, 0, 300);
             physicsTimerLowPriority.Tick += PhysicsLowPriorityEventHandler;
 
             physicsTimerSpawn = new DispatcherTimer(DispatcherPriority.Normal, this.Dispatcher);
@@ -775,7 +778,7 @@ namespace Product_Browser.ScatterItems
             physicsTimerSpawned.Interval = new TimeSpan(0, 0, 0, 0, 6);
             physicsTimerSpawned.Tick += PhysicsSpawnedEventHandler;
 
-            physicsTimerSpawnDelay = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);
+            physicsTimerSpawnDelay = new DispatcherTimer(DispatcherPriority.Normal, this.Dispatcher);
             physicsTimerSpawnDelay.Interval = new TimeSpan(0, 0, 0, 0, 50);
             physicsTimerSpawnDelay.Tick += PhysicsSpawnDelayEventHandler;
 

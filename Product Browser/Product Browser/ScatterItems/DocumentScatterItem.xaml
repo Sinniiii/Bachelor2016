@@ -6,7 +6,7 @@
              xmlns:controls="http://schemas.microsoft.com/surface/2008"
              xmlns:local="clr-namespace:Product_Browser.ScatterItems"
              xmlns:TransitionEffects="clr-namespace:TransitionEffects;assembly=TransitionEffects" x:Class="Product_Browser.ScatterItems.DocumentScatterItem"
-             mc:Ignorable="d" Height="200" Width="100" BorderThickness="0" Background="Transparent">
+             mc:Ignorable="d" MinWidth="100" MinHeight="100" BorderBrush="{x:Null}" Background="{x:Null}">
 
     <Grid>
         <Grid.ColumnDefinitions>

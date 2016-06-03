@@ -231,7 +231,7 @@ namespace Product_Browser
             removeAreaAnimationTimer.Interval = new TimeSpan(0, 0, 0, 0, 30);
             removeAreaAnimationTimer.Tick += RemoveAreaAnimationHandler;
 
-            backgroundFadeTimer = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);
+            backgroundFadeTimer = new DispatcherTimer(DispatcherPriority.Normal, this.Dispatcher);
             backgroundFadeTimer.Interval = new TimeSpan(0, 0, 0, 0, 20);
 
             smartCardContainer.Loaded += OnSmartCardContainerLoaded;

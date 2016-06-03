@@ -209,6 +209,25 @@ namespace DatabaseModel.Model
             return image;
         }
 
+        public int GetDocumentPageCount()
+        {
+            if (Category != SmartCardDataItemCategory.Document || DataField == null || DataField.Data.Length == 0)
+                return 0;
+
+            int count = 0;
+
+            int current = 0;
+            while (current < DataField.Data.Length)
+            {
+                // Find size of next element
+                int elementSize = BitConverter.ToInt32(DataField.Data, current);
+                current += 4 + elementSize; // Skip 4 forward, since we read those already with ToInt32
+
+                count++;
+            }
+            return count;
+        }
+
         /// <summary>
         /// Retrieves the document from the Data array as a list of thumbnail images.
         /// Returns null if Data is null or if Category does not match "document".

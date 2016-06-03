@@ -126,6 +126,10 @@ namespace Product_Browser.ScatterItems
         {
             videoPlayer.Play(); // Avoid black screen by starting video and triggering media load
             videoPlayer.Stop();
+
+            // Remove shadow of this smartcard, or we get an ugly effect
+            var ssc = this.GetTemplateChild("shadow") as Microsoft.Surface.Presentation.Generic.SurfaceShadowChrome;
+            ssc.Visibility = Visibility.Hidden;
         }
 
         protected void VideoPlayerMediaLoadedHandler(object obj, EventArgs args)

@@ -41,31 +41,33 @@ namespace Product_Browser.ScatterItems
 
         private void OnStackPanelLoaded(object obj, EventArgs args)
         {
-            var pages = dataItem.GetDocumentAsThumbnailImageSources();
+            // Remove shadow of this smartcard, or we get an ugly effect
+            var ssc = this.GetTemplateChild("shadow") as Microsoft.Surface.Presentation.Generic.SurfaceShadowChrome;
+            ssc.Visibility = Visibility.Hidden;
 
-            Binding binding = new Binding("ActualHeight");
-            binding.BindsDirectlyToSource = true;
-            binding.Source = stackPanel;
+            var count = dataItem.GetDocumentPageCount();
+            
             surfaceSlider.Minimum = 0d;
             surfaceSlider.Maximum = 10000d;
             pageNumber.Content = "1";
 
             documentName.Content = dataItem.Name;
 
-            for (int i = 0; i < pages.Count; i++)
+            Binding actualWidthBinding = new Binding("ActualWidth");
+            actualWidthBinding.BindsDirectlyToSource = true;
+            actualWidthBinding.Source = scrollBar;
+
+            Binding actualHeightBinding = new Binding("ActualHeight");
+            actualHeightBinding.BindsDirectlyToSource = true;
+            actualHeightBinding.Source = scrollBar;
+
+            for (int i = 0; i < count; i++)
             {
                 UserControl control = new UserControl();
                 control.IsHitTestVisible = false;
-                
-                binding = new Binding("ActualWidth");
-                binding.BindsDirectlyToSource = true;
-                binding.Source = scrollBar;
-                control.SetBinding(UserControl.WidthProperty, binding);
 
-                binding = new Binding("ActualHeight");
-                binding.BindsDirectlyToSource = true;
-                binding.Source = scrollBar;
-                control.SetBinding(UserControl.HeightProperty, binding);
+                control.SetBinding(UserControl.WidthProperty, actualWidthBinding);
+                control.SetBinding(UserControl.HeightProperty, actualHeightBinding);
 
                 Image image = new Image();
                 image.IsHitTestVisible = false;
