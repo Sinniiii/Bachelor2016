@@ -196,12 +196,10 @@ namespace DatabaseModel.Model
                 mem.Position = 0;
                 image.BeginInit();
                 image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
-                image.CacheOption = BitmapCacheOption.OnLoad;
+                image.CacheOption = BitmapCacheOption.None;
                 image.UriSource = null;
                 image.StreamSource = mem;
                 image.EndInit();
-
-                mem.Close();mem.Dispose();
 
                 image.Freeze();
 

@@ -11,8 +11,8 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.80*"/>
-            <ColumnDefinition Width="0.01*"/>
-            <ColumnDefinition Width="0.19*"/>
+            <ColumnDefinition Width="0.05*"/>
+            <ColumnDefinition Width="0.15*"/>
         </Grid.ColumnDefinitions>
 
         <Border CornerRadius="4" BorderThickness="3">
@@ -32,14 +32,23 @@
                 </LinearGradientBrush>
             </Border.BorderBrush>
 
-            <UserControl Background="Black">
-                <ScrollViewer Grid.Row="0" Grid.Column="0" Name="scrollBar" Background="Black" VerticalScrollBarVisibility="Hidden" IsHitTestVisible="False">
-                    <StackPanel Name="stackPanel" Orientation="Vertical" VirtualizingStackPanel.VirtualizationMode="Recycling" IsHitTestVisible="False"/>
-                </ScrollViewer>
-            </UserControl>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.9*" />
+                    <RowDefinition Height="0.15*" MaxHeight="30" />
+                </Grid.RowDefinitions>
+                
+                <UserControl Background="Black" Grid.RowSpan="2">
+                    <ScrollViewer Name="scrollBar" Background="Black" VerticalScrollBarVisibility="Hidden" IsHitTestVisible="False">
+                        <StackPanel Name="stackPanel" Orientation="Vertical" VirtualizingStackPanel.VirtualizationMode="Recycling" IsHitTestVisible="False"/>
+                    </ScrollViewer>
+                </UserControl>
+
+                <TextBox Name="pageNumber" Grid.Row="1" Grid.Column="0" Text="25" Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Top" BorderBrush="Transparent"/>
+            </Grid>
         </Border>
 
-        <controls:SurfaceSlider Orientation="Vertical" Name="slider" Grid.Column="2" Minimum="0" IsDirectionReversed="True" MinWidth="10"/>
+        <controls:SurfaceSlider Name="surfaceSlider" Orientation="Vertical" Grid.Column="2" Minimum="0" IsDirectionReversed="True" MinWidth="0" MinHeight="0"/>
 
     </Grid>
 </local:ABBScatterItem>

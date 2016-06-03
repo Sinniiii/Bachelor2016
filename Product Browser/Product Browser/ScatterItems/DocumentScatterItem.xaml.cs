@@ -28,7 +28,7 @@ namespace Product_Browser.ScatterItems
 
         SmartCardDataItem dataItem;
 
-        int previousActive = -1;
+        int previousActivePage = -1;
 
         #endregion
 
@@ -46,8 +46,9 @@ namespace Product_Browser.ScatterItems
             Binding binding = new Binding("ActualHeight");
             binding.BindsDirectlyToSource = true;
             binding.Source = stackPanel;
-            slider.SetBinding(SurfaceSlider.MaximumProperty, binding);
-            slider.Minimum = 0d;
+            surfaceSlider.Minimum = 0d;
+            surfaceSlider.Maximum = 10000d;
+            pageNumber.Text = "1";
 
             for (int i = 0; i < pages.Count; i++)
             {
@@ -80,33 +81,40 @@ namespace Product_Browser.ScatterItems
 
         private void OnSlider(object obj, RoutedPropertyChangedEventArgs<double> args)
         {
-            scrollBar.ScrollToVerticalOffset(args.NewValue);
+            scrollBar.ScrollToVerticalOffset(args.NewValue / surfaceSlider.Maximum * stackPanel.ActualHeight);
 
             int count = stackPanel.Children.Count;
-            int activeImage = (int)(args.NewValue / (stackPanel.ActualHeight / count));
+            int activeImage = (int)Math.Round((args.NewValue / surfaceSlider.Maximum * count));
 
-            if (activeImage == previousActive)
+            if (activeImage == previousActivePage)
                 return;
 
-            previousActive = activeImage;
+            previousActivePage = activeImage;
 
             for(int i = 0; i < count; i++)
             {
                 if (i > activeImage - 2 && i < activeImage + 2)
                     ((Image)((UserControl)stackPanel.Children[i]).Content).Source = dataItem.GetPageFromDocumentAsImageSource(i);
-                else
+                else if(((Image)((UserControl)stackPanel.Children[i]).Content).Source != null)
                     ((Image)((UserControl)stackPanel.Children[i]).Content).Source = null;
             }
+
+            previousActivePage = activeImage;
+
+            if(activeImage == count)
+                pageNumber.Text = (activeImage).ToString();
+            else
+                pageNumber.Text = (activeImage + 1).ToString();
         }
 
-        private void OnScrollBarSizeChanged(object o, SizeChangedEventArgs args)
+        private void OnSizeChanged(object o, SizeChangedEventArgs args)
         {
-            if (args.PreviousSize.Height == 0) 
+            if (args.PreviousSize.Height == 0)
                 return;
 
             double ratio = args.NewSize.Height / args.PreviousSize.Height;
 
-            slider.Value *= ratio;
+            scrollBar.ScrollToVerticalOffset(scrollBar.VerticalOffset * ratio);
         }
 
         #endregion
@@ -119,9 +127,9 @@ namespace Product_Browser.ScatterItems
             dataItem = document;
 
             stackPanel.Loaded += OnStackPanelLoaded;
-            slider.ValueChanged += OnSlider;
+            surfaceSlider.ValueChanged += OnSlider;
 
-            scrollBar.SizeChanged += OnScrollBarSizeChanged;
+            scrollBar.SizeChanged += OnSizeChanged;
         }
     }
 }

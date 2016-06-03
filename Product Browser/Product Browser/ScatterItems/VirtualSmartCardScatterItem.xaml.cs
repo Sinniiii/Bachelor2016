@@ -323,10 +323,10 @@ namespace Product_Browser.ScatterItems
 
                 int thisCard = imagesSpawned++ + 1;
 
-                double anglePerCard = 45d / (imagesTotal + 1);
+                double anglePerCard = 75d / (imagesTotal + 1);
                 double offsetAngleThisCard = thisCard * anglePerCard;
 
-                double targetDirection = Orientation - 22.5d + offsetAngleThisCard;
+                double targetDirection = Orientation - 37.5d + offsetAngleThisCard;
 
                 item.Orientation = targetDirection;
 
@@ -351,10 +351,10 @@ namespace Product_Browser.ScatterItems
 
                 int thisCard = documentsSpawned++ + 1;
 
-                double anglePerCard = 45d / (documentsTotal + 1);
+                double anglePerCard = 75d / (documentsTotal + 1);
                 double offsetAngleThisCard = thisCard * anglePerCard;
 
-                double targetDirection = Orientation - 90d - 22.5d + offsetAngleThisCard;
+                double targetDirection = Orientation - 90d - 37.5d + offsetAngleThisCard;
 
                 item.Orientation = targetDirection + 90d;
 
@@ -379,10 +379,10 @@ namespace Product_Browser.ScatterItems
 
                 int thisCard = videosSpawned++ + 1;
 
-                double anglePerCard = 45d / (videosTotal + 1);
+                double anglePerCard = 75d / (videosTotal + 1);
                 double offsetAngleThisCard = thisCard * anglePerCard;
 
-                double targetDirection = Orientation - 180 - 22.5d + offsetAngleThisCard;
+                double targetDirection = Orientation - 180 - 37.5d + offsetAngleThisCard;
 
                 item.Orientation = targetDirection + 180d;
 
