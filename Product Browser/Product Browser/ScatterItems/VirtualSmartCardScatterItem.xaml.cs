@@ -36,13 +36,13 @@ namespace Product_Browser.ScatterItems
 
         readonly Size
             SCATTERITEM_DOCUMENT_STARTING_SIZE = new Size(166.66, 183),
-            SCATTERITEM_VIDEO_STARTING_SIZE = new Size(200, 125),
+            SCATTERITEM_VIDEO_STARTING_SIZE = new Size(222, 125),
             SCATTERITEM_IMAGE_STARTING_SIZE = new Size(200, 125),
             SCATTERITEM_IMAGE_CONTAINER_STARTING_SIZE = new Size(200, 166.66);
 
         readonly Vector
-            SCATTERITEM_DOCUMENT_STARTING_POSITION = new Vector(20, -190),
-            SCATTERITEM_VIDEO_STARTING_POSITION = new Vector(-235, 0),
+            SCATTERITEM_DOCUMENT_STARTING_POSITION = new Vector(20, -195),
+            SCATTERITEM_VIDEO_STARTING_POSITION = new Vector(-246, 0),
             SCATTERITEM_IMAGE_STARTING_POSITION = new Vector(235, 0),
             SCATTERITEM_IMAGE_CONTAINER_STARTING_POSITION = new Vector(235, 20),
 

@@ -242,6 +242,8 @@ namespace Product_Browser.ScatterItems
 
             this.video = video;
 
+            videoName.Content = video.Name;
+
             videoPlayer.LoadedBehavior = MediaState.Manual;
             videoPlayer.UnloadedBehavior = MediaState.Manual;
             videoPlayer.Source = video.GetVideo();

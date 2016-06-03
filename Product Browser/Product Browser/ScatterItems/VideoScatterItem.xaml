@@ -11,48 +11,69 @@
         <Image x:Key="playButtonImage" Source="/Resources/btnPlay.png" />
         <Image x:Key="pauseButtonImage" Source="/Resources/btnPause.png" />
     </controls:ScatterViewItem.Resources>
- 
-    <Border CornerRadius="4" BorderThickness="3">
-        <Border.BorderBrush>
-            <LinearGradientBrush StartPoint="0.0, 0" EndPoint="1, 1" MappingMode="RelativeToBoundingBox">
-                <LinearGradientBrush.RelativeTransform>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.1*" MaxWidth="30"/>
+            <ColumnDefinition Width="0.9*" />
+        </Grid.ColumnDefinitions>
+
+        <Viewbox>
+            <Label Name="videoName" IsEnabled="False" Content="15" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Transparent" Background="{x:Null}" RenderTransformOrigin="0.5,0.5">
+                <Label.LayoutTransform>
                     <TransformGroup>
-                        <RotateTransform x:Name="grad" CenterY="0.5" CenterX="0.5"/>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="270"/>
                         <TranslateTransform/>
                     </TransformGroup>
-                </LinearGradientBrush.RelativeTransform>
-                <GradientStop Color="Black"/>
-                <GradientStop Color="{Binding Path=GradientColor, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:ScatterViewItem}}" Offset="0.25"/>
-                <GradientStop Color="Black" Offset="0.5" />
-                <GradientStop Color="{Binding Path=GradientColor, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:ScatterViewItem}}" Offset="0.75"/>
-                <GradientStop Color="Black" Offset="1" />
-            </LinearGradientBrush>
-        </Border.BorderBrush>
+                </Label.LayoutTransform>
+            </Label>
+        </Viewbox>
 
-        <Grid Background="Black">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="0.8*"/>
-                <RowDefinition Height="0.2*" MaxHeight="50"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.2*" MaxWidth="50"/>
-                <ColumnDefinition Width="0.1*"/>
-                <ColumnDefinition Width="0.6*"/>
-                <ColumnDefinition Width="0.1*"/>
-            </Grid.ColumnDefinitions>
+        <Border CornerRadius="4" BorderThickness="3" Grid.Column="1">
+            <Border.BorderBrush>
+                <LinearGradientBrush StartPoint="0.0, 0" EndPoint="1, 1" MappingMode="RelativeToBoundingBox">
+                    <LinearGradientBrush.RelativeTransform>
+                        <TransformGroup>
+                            <RotateTransform x:Name="grad" CenterY="0.5" CenterX="0.5"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </LinearGradientBrush.RelativeTransform>
+                    <GradientStop Color="Black"/>
+                    <GradientStop Color="{Binding Path=GradientColor, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:ScatterViewItem}}" Offset="0.25"/>
+                    <GradientStop Color="Black" Offset="0.5" />
+                    <GradientStop Color="{Binding Path=GradientColor, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:ScatterViewItem}}" Offset="0.75"/>
+                    <GradientStop Color="Black" Offset="1" />
+                </LinearGradientBrush>
+            </Border.BorderBrush>
 
-            <MediaElement x:Name="videoPlayer" HorizontalAlignment="Center" VerticalAlignment="Center" Height="Auto" Width="Auto"
+            <Grid Background="Black">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.8*"/>
+                    <RowDefinition Height="0.2*" MaxHeight="50"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.2*" MaxWidth="50"/>
+                    <ColumnDefinition Width="0.1*"/>
+                    <ColumnDefinition Width="0.6*"/>
+                    <ColumnDefinition Width="0.1*"/>
+                </Grid.ColumnDefinitions>
+
+                <MediaElement x:Name="videoPlayer" HorizontalAlignment="Center" VerticalAlignment="Center" Height="Auto" Width="Auto"
                           ScrubbingEnabled="True" Stretch="Uniform" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Grid.ColumnSpan="4"/>
 
-            <controls:SurfaceButton Grid.Row="1" Content="{StaticResource playButtonImage}" Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ScatterViewItem}}, Path=IsPaused, Converter={StaticResource BoolToVisCon}}"
+                <controls:SurfaceButton Grid.Row="1" Content="{StaticResource playButtonImage}" Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ScatterViewItem}}, Path=IsPaused, Converter={StaticResource BoolToVisCon}}"
                                     Margin="0, 0, 0, 0" MinHeight="0" MinWidth="0" Width="Auto" Height="Auto" Padding="0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Click="PlayButtonClicked" Background="Transparent" />
-            <controls:SurfaceButton Grid.Row="1" Content="{StaticResource pauseButtonImage}" Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ScatterViewItem}}, Path=IsPlaying, Converter={StaticResource BoolToVisCon}}"
+                <controls:SurfaceButton Grid.Row="1" Content="{StaticResource pauseButtonImage}" Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ScatterViewItem}}, Path=IsPlaying, Converter={StaticResource BoolToVisCon}}"
                                     Margin="0, 0, 0, 0" MinHeight="0" MinWidth="0" Width="Auto" Height="Auto" Padding="0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Click="PauseButtonClicked" Background="Transparent" />
-            <ProgressBar Name="progressBar" Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ScatterViewItem}}, Path=ControlsVisible, Converter={StaticResource BoolToVisCon}}"
+                <ProgressBar Name="progressBar" Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ScatterViewItem}}, Path=ControlsVisible, Converter={StaticResource BoolToVisCon}}"
                 Minimum="0" Maximum="100" Value="0" Grid.Column="2" Width="Auto" HorizontalAlignment="Stretch" Height="5" Grid.Row="1" VerticalAlignment="Center" Foreground="Blue" />
 
-            <Image Name="overlay" Width="50" Height="50" Source="/Resources/btnPlay.png" Grid.ColumnSpan="4" Grid.RowSpan="2" />
+                <Image Name="overlay" Width="50" Height="50" Source="/Resources/btnPlay.png" Grid.ColumnSpan="4" Grid.RowSpan="2" />
 
-        </Grid>
-    </Border>
+            </Grid>
+        </Border>
+
+    </Grid>
 </local:ABBScatterItem>
