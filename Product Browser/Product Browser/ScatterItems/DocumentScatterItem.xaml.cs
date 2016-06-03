@@ -48,7 +48,9 @@ namespace Product_Browser.ScatterItems
             binding.Source = stackPanel;
             surfaceSlider.Minimum = 0d;
             surfaceSlider.Maximum = 10000d;
-            pageNumber.Text = "1";
+            pageNumber.Content = "1";
+
+            documentName.Content = dataItem.Name;
 
             for (int i = 0; i < pages.Count; i++)
             {
@@ -102,9 +104,9 @@ namespace Product_Browser.ScatterItems
             previousActivePage = activeImage;
 
             if(activeImage == count)
-                pageNumber.Text = (activeImage).ToString();
+                pageNumber.Content = (activeImage).ToString();
             else
-                pageNumber.Text = (activeImage + 1).ToString();
+                pageNumber.Content = (activeImage + 1).ToString();
         }
 
         private void OnSizeChanged(object o, SizeChangedEventArgs args)

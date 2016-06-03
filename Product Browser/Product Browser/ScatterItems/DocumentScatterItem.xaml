@@ -15,7 +15,12 @@
             <ColumnDefinition Width="0.15*"/>
         </Grid.ColumnDefinitions>
 
-        <Border CornerRadius="4" BorderThickness="3">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.1*" MaxHeight="50" />
+            <RowDefinition Height="0.9*" />
+        </Grid.RowDefinitions>
+
+        <Border CornerRadius="4" BorderThickness="3" Grid.Row="1">
             <Border.BorderBrush>
                 <LinearGradientBrush StartPoint="0.0, 0" EndPoint="1, 1" MappingMode="RelativeToBoundingBox">
                     <LinearGradientBrush.RelativeTransform>
@@ -34,21 +39,24 @@
 
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="0.9*" />
+                    <RowDefinition Height="0.15*" MaxHeight="30" />
+                    <RowDefinition Height="0.7*" />
                     <RowDefinition Height="0.15*" MaxHeight="30" />
                 </Grid.RowDefinitions>
-                
-                <UserControl Background="Black" Grid.RowSpan="2">
+
+                <UserControl Background="Black" Grid.RowSpan="3">
                     <ScrollViewer Name="scrollBar" Background="Black" VerticalScrollBarVisibility="Hidden" IsHitTestVisible="False">
                         <StackPanel Name="stackPanel" Orientation="Vertical" VirtualizingStackPanel.VirtualizationMode="Recycling" IsHitTestVisible="False"/>
                     </ScrollViewer>
                 </UserControl>
-
-                <TextBox Name="pageNumber" Grid.Row="1" Grid.Column="0" Text="25" Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Top" BorderBrush="Transparent"/>
+                <Label Name="pageNumber" IsEnabled="False" Grid.Row="2" Grid.Column="0" Content="25" Background="{x:Null}" HorizontalAlignment="Center" VerticalAlignment="Top" BorderBrush="Transparent"/>
             </Grid>
         </Border>
 
-        <controls:SurfaceSlider Name="surfaceSlider" Orientation="Vertical" Grid.Column="2" Minimum="0" IsDirectionReversed="True" MinWidth="0" MinHeight="0"/>
+        <UserControl VerticalContentAlignment="Top" HorizontalContentAlignment="Center">
+        <Label Name="documentName" IsEnabled="False" FontSize="6" Opacity="0.8" Content="15" HorizontalAlignment="Center" VerticalAlignment="Top" BorderBrush="Transparent" Background="{x:Null}"/>
+        </UserControl>
+        <controls:SurfaceSlider Grid.Row="1" Name="surfaceSlider" Orientation="Vertical" Grid.Column="2" Minimum="0" IsDirectionReversed="True" MinWidth="0" MinHeight="0"/>
 
     </Grid>
 </local:ABBScatterItem>

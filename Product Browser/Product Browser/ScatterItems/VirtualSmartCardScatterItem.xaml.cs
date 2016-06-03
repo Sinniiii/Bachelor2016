@@ -35,7 +35,7 @@ namespace Product_Browser.ScatterItems
         readonly double DEGREES_TO_RADIANS = (2 * Math.PI) / 360d;
 
         readonly Size
-            SCATTERITEM_DOCUMENT_STARTING_SIZE = new Size(166.66, 165),
+            SCATTERITEM_DOCUMENT_STARTING_SIZE = new Size(166.66, 183),
             SCATTERITEM_VIDEO_STARTING_SIZE = new Size(200, 125),
             SCATTERITEM_IMAGE_STARTING_SIZE = new Size(200, 125),
             SCATTERITEM_IMAGE_CONTAINER_STARTING_SIZE = new Size(200, 166.66);
