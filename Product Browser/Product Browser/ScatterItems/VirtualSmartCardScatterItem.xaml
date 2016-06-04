@@ -8,6 +8,26 @@
         xmlns:ShaderEffectLibrary="clr-namespace:ShaderEffectLibrary;assembly=ShaderEffectLibrary" xmlns:TransitionEffects="clr-namespace:TransitionEffects;assembly=TransitionEffects" x:Class="Product_Browser.ScatterItems.VirtualSmartCardScatterItem"
         mc:Ignorable="d" Background="{x:Null}" CanScale="False" ShowsActivationEffects="False" IsTopmostOnActivation="False">
 
+    <local:ABBScatterItem.Resources>
+        <Storyboard x:Key="sb1">
+            <DoubleAnimation
+                        Storyboard.TargetName="animationPulse1"
+                        Storyboard.TargetProperty="Opacity"
+                        From="0.3" To="0.8" Duration="0:0:2"
+                        BeginTime="0:0:0" AutoReverse="True" RepeatBehavior="Forever"/>
+            <DoubleAnimation
+                        Storyboard.TargetName="animationPulse1Rotation"
+                        Storyboard.TargetProperty="Angle"
+                        From="0" To="360" Duration="0:2:0"
+                        BeginTime="0:0:0" RepeatBehavior="Forever"/>
+            <DoubleAnimation
+                        Storyboard.TargetName="grad"
+                        Storyboard.TargetProperty="Angle"
+                        From="0" To="360" Duration="0:0:30"
+                        BeginTime="0:0:0" RepeatBehavior="Forever"/>
+        </Storyboard>
+    </local:ABBScatterItem.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="59"/>
@@ -33,11 +53,10 @@
                 <TransformGroup>
                     <ScaleTransform/>
                     <SkewTransform/>
-                    <RotateTransform x:Name="imagetest" Angle="1"/>
+                    <RotateTransform x:Name="animationPulse1Rotation"/>
                     <TranslateTransform/>
                 </TransformGroup>
             </Image.RenderTransform>
-
         </Image>
 
         <Border BorderThickness="5" CornerRadius="4" Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="3">
@@ -46,7 +65,6 @@
                     <LinearGradientBrush.RelativeTransform>
                         <TransformGroup>
                             <RotateTransform x:Name="grad" CenterY="0.5" CenterX="0.5"/>
-                            <TranslateTransform/>
                         </TransformGroup>
                     </LinearGradientBrush.RelativeTransform>
                     <GradientStop Color="Black"/>
@@ -58,15 +76,15 @@
             </Border.BorderBrush>
             <UserControl x:Name="centerObject"   VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Black"/>
         </Border>
-        
+
         <UserControl x:Name="imagePlaceholder" Visibility="Hidden" Grid.Column="6" Grid.Row="3" BorderBrush="Gray" BorderThickness="1, 0, 0, 0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent" IsHitTestVisible="False">
             <Image Source="/Resources/iconCamera.png" Width="20" Height="20" HorizontalAlignment="Left" Margin="-25, 0, 0, 0"/>
         </UserControl>
-        
+
         <UserControl x:Name="videoPlaceholder" Visibility="Hidden" Grid.Column="0" Grid.Row="3" BorderBrush="Gray" BorderThickness="0, 0, 1, 0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent" IsHitTestVisible="False">
             <Image Source="/Resources/iconVideo.png" Width="20" Height="20" HorizontalAlignment="Right" Margin="0, 0, -25, 0"/>
         </UserControl>
-        
+
         <UserControl x:Name="documentPlaceholder" Visibility="Hidden" Grid.Column="3" Grid.Row="1" BorderBrush="Gray" BorderThickness="0, 0, 0, 1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent" IsHitTestVisible="False">
             <Image Source="/Resources/iconDocument.png" Width="20" Height="20" VerticalAlignment="Bottom" Margin="0, 0, 0, -25"/>
         </UserControl>

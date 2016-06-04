@@ -8,6 +8,16 @@
              xmlns:TransitionEffects="clr-namespace:TransitionEffects;assembly=TransitionEffects" x:Class="Product_Browser.ScatterItems.DocumentScatterItem"
              mc:Ignorable="d" MinWidth="100" MinHeight="100" BorderBrush="{x:Null}" Background="{x:Null}">
 
+    <local:ABBScatterItem.Resources>
+        <Storyboard x:Key="sb1">
+            <DoubleAnimation
+                        Storyboard.TargetName="grad"
+                        Storyboard.TargetProperty="Angle"
+                        From="0" To="360" Duration="0:0:30"
+                        BeginTime="0:0:0" RepeatBehavior="Forever"/>
+        </Storyboard>
+    </local:ABBScatterItem.Resources>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.80*"/>
@@ -26,7 +36,6 @@
                     <LinearGradientBrush.RelativeTransform>
                         <TransformGroup>
                             <RotateTransform x:Name="grad" CenterY="0.5" CenterX="0.5"/>
-                            <TranslateTransform/>
                         </TransformGroup>
                     </LinearGradientBrush.RelativeTransform>
                     <GradientStop Color="Black"/>

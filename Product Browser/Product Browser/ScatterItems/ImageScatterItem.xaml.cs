@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Surface.Presentation.Controls;
 using DatabaseModel.Model;
+using System.Windows.Media.Animation;
 
 namespace Product_Browser.ScatterItems
 {
@@ -22,16 +23,13 @@ namespace Product_Browser.ScatterItems
     /// </summary>
     public partial class ImageScatterItem : ABBScatterItem
     {
-        public override void AnimationPulseHandler(object sender, EventArgs args)
-        {
-            grad.Angle = (grad.Angle + 0.5d) % 360d;
-        }
-
         public ImageScatterItem(SmartCardDataItem image)
         {
             InitializeComponent();
             
             mainImage.Source = image.GetImageSource();
+
+            ((Storyboard)TryFindResource("sb1")).Begin();
         }
     }
 }

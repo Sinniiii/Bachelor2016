@@ -16,6 +16,7 @@ using Microsoft.Surface.Presentation.Controls;
 using DatabaseModel.Model;
 using Microsoft.Surface.Presentation.Input;
 using System.Windows.Threading;
+using System.Windows.Media.Animation;
 
 namespace Product_Browser.ScatterItems
 {
@@ -33,11 +34,6 @@ namespace Product_Browser.ScatterItems
         #endregion
 
         #region EventHandlers
-
-        public override void AnimationPulseHandler(object sender, EventArgs args)
-        {
-            grad.Angle = (grad.Angle + 0.5d) % 360d;
-        }
 
         private void OnStackPanelLoaded(object obj, EventArgs args)
         {
@@ -129,6 +125,8 @@ namespace Product_Browser.ScatterItems
             InitializeComponent();
 
             dataItem = document;
+
+            ((Storyboard)TryFindResource("sb1")).Begin();
 
             stackPanel.Loaded += OnStackPanelLoaded;
             surfaceSlider.ValueChanged += OnSlider;
