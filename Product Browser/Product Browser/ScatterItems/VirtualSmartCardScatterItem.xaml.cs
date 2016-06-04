@@ -763,7 +763,7 @@ namespace Product_Browser.ScatterItems
             Deleting = false;
 
             physicsTimer = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);
-            physicsTimer.Interval = new TimeSpan(0, 0, 0, 0, 6);
+            physicsTimer.Interval = new TimeSpan(0, 0, 0, 0, 15);
             physicsTimer.Tick += PhysicsEventHandler;
 
             physicsTimerLowPriority = new DispatcherTimer(DispatcherPriority.Normal, this.Dispatcher);
@@ -775,11 +775,11 @@ namespace Product_Browser.ScatterItems
             physicsTimerSpawn.Tick += PhysicsSpawnEventHandler;
 
             physicsTimerSpawned = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);
-            physicsTimerSpawned.Interval = new TimeSpan(0, 0, 0, 0, 6);
+            physicsTimerSpawned.Interval = new TimeSpan(0, 0, 0, 0, 15);
             physicsTimerSpawned.Tick += PhysicsSpawnedEventHandler;
 
             physicsTimerSpawnDelay = new DispatcherTimer(DispatcherPriority.Normal, this.Dispatcher);
-            physicsTimerSpawnDelay.Interval = new TimeSpan(0, 0, 0, 0, 50);
+            physicsTimerSpawnDelay.Interval = new TimeSpan(0, 0, 0, 0, 100);
             physicsTimerSpawnDelay.Tick += PhysicsSpawnDelayEventHandler;
 
             animationPulseTimer = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);

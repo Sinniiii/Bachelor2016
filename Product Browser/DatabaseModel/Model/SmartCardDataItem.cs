@@ -225,7 +225,7 @@ namespace DatabaseModel.Model
 
                 count++;
             }
-            return count;
+            return count - 1;
         }
 
         /// <summary>
