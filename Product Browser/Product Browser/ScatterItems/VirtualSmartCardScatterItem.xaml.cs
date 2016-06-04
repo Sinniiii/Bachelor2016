@@ -15,7 +15,6 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using System.Windows.Media.Animation;
 
 namespace Product_Browser.ScatterItems
 {
@@ -87,7 +86,8 @@ namespace Product_Browser.ScatterItems
             physicsTimerLowPriority,
             physicsTimerSpawn,
             physicsTimerSpawned,
-            physicsTimerSpawnDelay;
+            physicsTimerSpawnDelay,
+            animationPulseTimer;
 
         int
             imagesSpawned,
@@ -420,6 +420,29 @@ namespace Product_Browser.ScatterItems
             }
         }
 
+        public override void AnimationPulseHandler(object sender, EventArgs args)
+        {
+            grad.Angle = (grad.Angle + 0.5d) % 360d;
+
+            imagetest.Angle += 0.1d;
+            //ripple.Progress += 0.1d;
+
+            if (pulseUp1)
+            {
+                animationPulse1.Opacity += ANIMATION_PULSE_1_OPACITY_CHANGE;
+
+                if (animationPulse1.Opacity >= ANIMATION_PULSE_1_MAX_OPACITY)
+                    pulseUp1 = false;
+            }
+            else
+            {
+                animationPulse1.Opacity -= ANIMATION_PULSE_1_OPACITY_CHANGE;
+
+                if (animationPulse1.Opacity <= ANIMATION_PULSE_1_MIN_OPACITY)
+                    pulseUp1 = true;
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -479,6 +502,7 @@ namespace Product_Browser.ScatterItems
             foreach (ABBScatterItem item in physicsItemsActive)
                 view.Remove(item);
 
+            animationPulseTimer.Stop();
             physicsTimer.Stop();
             physicsTimerLowPriority.Stop();
             physicsTimerSpawn.Stop();
@@ -654,6 +678,9 @@ namespace Product_Browser.ScatterItems
                 // Set color theme
                 physics.GradientColor = colorTheme;
 
+                // Register for animation ticks
+                animationPulseTimer.Tick += physics.AnimationPulseHandler;
+
                 scatterItems[i].TouchDown += ScatterViewItemMovedHandler;
                 scatterItems[i].MouseDown += ScatterViewItemMovedHandler;
 
@@ -727,7 +754,7 @@ namespace Product_Browser.ScatterItems
         public VirtualSmartCardScatterItem(ObservableCollection<ABBScatterItem> view, long tagId)
         {
             InitializeComponent();
-            
+
             this.view = view;
             
             TagId = tagId;
@@ -735,10 +762,8 @@ namespace Product_Browser.ScatterItems
             Opacity = 0d;
             Deleting = false;
 
-            ((Storyboard)TryFindResource("sb1")).Begin();
-
             physicsTimer = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);
-            physicsTimer.Interval = new TimeSpan(0, 0, 0, 0, 15);
+            physicsTimer.Interval = new TimeSpan(0, 0, 0, 0, 6);
             physicsTimer.Tick += PhysicsEventHandler;
 
             physicsTimerLowPriority = new DispatcherTimer(DispatcherPriority.Normal, this.Dispatcher);
@@ -750,12 +775,19 @@ namespace Product_Browser.ScatterItems
             physicsTimerSpawn.Tick += PhysicsSpawnEventHandler;
 
             physicsTimerSpawned = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);
-            physicsTimerSpawned.Interval = new TimeSpan(0, 0, 0, 0, 15);
+            physicsTimerSpawned.Interval = new TimeSpan(0, 0, 0, 0, 6);
             physicsTimerSpawned.Tick += PhysicsSpawnedEventHandler;
 
             physicsTimerSpawnDelay = new DispatcherTimer(DispatcherPriority.Normal, this.Dispatcher);
-            physicsTimerSpawnDelay.Interval = new TimeSpan(0, 0, 0, 0, 100);
+            physicsTimerSpawnDelay.Interval = new TimeSpan(0, 0, 0, 0, 50);
             physicsTimerSpawnDelay.Tick += PhysicsSpawnDelayEventHandler;
+
+            animationPulseTimer = new DispatcherTimer(DispatcherPriority.Render, this.Dispatcher);
+            animationPulseTimer.Interval = new TimeSpan(0, 0, 0, 0, 25);
+            animationPulseTimer.Tick += AnimationPulseHandler;
+            animationPulseTimer.Start();
+
+            animationPulse1.Opacity = ANIMATION_PULSE_1_STARTING_OPACITY;
         }
     }
 }

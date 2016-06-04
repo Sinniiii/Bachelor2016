@@ -7,7 +7,6 @@ using DatabaseModel.Model;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Threading;
-using System.Windows.Media.Animation;
 
 namespace Product_Browser.ScatterItems
 {
@@ -107,6 +106,11 @@ namespace Product_Browser.ScatterItems
         #endregion
 
         #region EventHandlers
+
+        public override void AnimationPulseHandler(object sender, EventArgs args)
+        {
+            grad.Angle = (grad.Angle + 0.5d) % 360d;
+        }
 
         protected void OnOverlayManipulated(object sender, RoutedEventArgs e)
         {
@@ -243,8 +247,6 @@ namespace Product_Browser.ScatterItems
             this.video = video;
 
             videoName.Content = video.Name;
-
-            ((Storyboard)TryFindResource("sb1")).Begin();
 
             videoPlayer.LoadedBehavior = MediaState.Manual;
             videoPlayer.UnloadedBehavior = MediaState.Manual;

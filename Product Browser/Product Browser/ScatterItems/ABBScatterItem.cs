@@ -139,6 +139,9 @@ namespace Product_Browser.ScatterItems
                 e.Handled = true;
         }
 
+        virtual public void AnimationPulseHandler(object sender, EventArgs args)
+        { }
+
         #endregion
 
         #region Methods

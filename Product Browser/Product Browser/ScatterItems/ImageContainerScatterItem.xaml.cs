@@ -8,7 +8,6 @@ using Microsoft.Surface.Presentation.Controls;
 using DatabaseModel.Model;
 using System.Windows.Threading;
 using System.Windows;
-using System.Windows.Media.Animation;
 
 namespace Product_Browser.ScatterItems
 {
@@ -28,7 +27,12 @@ namespace Product_Browser.ScatterItems
         #endregion
 
         #region EventHandlers
-        
+
+        public override void AnimationPulseHandler(object sender, EventArgs args)
+        {
+            grad.Angle = (grad.Angle + 0.5d) % 360d;
+        }
+
         public void BarLoadedHandler(object obj, EventArgs args)
         {
             List<BitmapImage> thumbnails = new List<BitmapImage>(images.Count);
@@ -117,8 +121,6 @@ namespace Product_Browser.ScatterItems
             images = imageItems;
 
             mainImage.Source = images[0].GetImageSource();
-
-            ((Storyboard)TryFindResource("sb1")).Begin();
 
             container.Loaded += BarLoadedHandler;
             container.NewMainImage += OnNewMainImage;

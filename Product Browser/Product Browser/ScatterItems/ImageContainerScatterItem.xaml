@@ -8,16 +8,6 @@
              xmlns:TransitionEffects="clr-namespace:TransitionEffects;assembly=TransitionEffects"
              mc:Ignorable="d" MinWidth="100" MinHeight="100" Background="{x:Null}">
 
-    <local:ABBScatterItem.Resources>
-        <Storyboard x:Key="sb1">
-            <DoubleAnimation
-                        Storyboard.TargetName="grad"
-                        Storyboard.TargetProperty="Angle"
-                        From="0" To="360" Duration="0:0:30"
-                        BeginTime="0:0:0" RepeatBehavior="Forever"/>
-        </Storyboard>
-    </local:ABBScatterItem.Resources>
-    
     <Grid Name="grid">
         <Grid.RowDefinitions>
             <RowDefinition Height="0.75*"/>

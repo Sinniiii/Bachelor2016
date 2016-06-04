@@ -7,18 +7,10 @@
              xmlns:local="clr-namespace:Product_Browser.ScatterItems"
              mc:Ignorable="d" MinWidth="100" MinHeight="100" Background="{x:Null}">
 
-    <local:ABBScatterItem.Resources>
+    <controls:ScatterViewItem.Resources>
         <Image x:Key="playButtonImage" Source="/Resources/btnPlay.png" />
         <Image x:Key="pauseButtonImage" Source="/Resources/btnPause.png" />
-        
-        <Storyboard x:Key="sb1">
-            <DoubleAnimation
-                        Storyboard.TargetName="grad"
-                        Storyboard.TargetProperty="Angle"
-                        From="0" To="360" Duration="0:0:30"
-                        BeginTime="0:0:0" RepeatBehavior="Forever"/>
-        </Storyboard>
-    </local:ABBScatterItem.Resources>
+    </controls:ScatterViewItem.Resources>
 
     <Grid>
         <Grid.ColumnDefinitions>
