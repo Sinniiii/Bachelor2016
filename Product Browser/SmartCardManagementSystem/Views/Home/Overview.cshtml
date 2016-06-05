@@ -56,7 +56,7 @@
 
 
         Dropzone.options.DZcardimage = {
-            maxFilesize: 100,
+            maxFilesize: 10,
             acceptedFiles: ".bmp, .gif, .png, .jpg, .tiff, .ico",
             parallelUploads: 1,
             init: function () {
@@ -217,7 +217,7 @@
                                 <form class="form-inline" role="form" method="post" action="OverviewDeleteCardimage">
                                     
                                     <div class="form-group">
-                                        <img src="@imgSrc" width="180px" height="111px" style="border:1px solid black" data-toggle="tooltip" title="Cardimage" STYLE="display:inline-block; width:180px"/>
+                                        <img src="@imgSrc" width="180px" height="111px" style="border:1px solid black" data-toggle="tooltip" title="Cardimage" />
                                         <button type="submit" class="btn btn-danger btn-sm glyphicon glyphicon-remove" data-toggle="tooltip" title="Delete this cardimage" ></button>
                                         <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">
                                         &emsp;&emsp;
@@ -402,7 +402,7 @@
                                                     </div>*@
 
                                                 <form class="form-inline" role="form" method="post" action="OverviewDeleteCardimage">
-                                                    <img src="@imgSrc" width="180px" height="111px" style="border:1px solid black" data-toggle="tooltip" title="Cardimage" />
+                                                    <img src="@imgSrc" width="182px" height="113px" style="border:1px solid black" data-toggle="tooltip" title="Cardimage" />
                                                     <div class="form-group">
                                                         <button type="submit" class="btn btn-danger btn-sm glyphicon glyphicon-remove" data-toggle="tooltip" title="Delete this cardimage"></button>
                                                         <input type="hidden" class="form-control" id="tagID" name="tagID" value="@Model[i - 1].TagId">

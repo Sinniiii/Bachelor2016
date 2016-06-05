@@ -13,23 +13,14 @@ namespace SmartCardManagementSystem.Controllers
 {
     public class HomeController : Controller
     {
-
-        /// <summary>
-        /// Resize the image to the specified width and height.
-        /// </summary>
-        /// <param name="image">The image to resize.</param>
-        /// <param name="width">The width to resize to.</param>
-        /// <param name="height">The height to resize to.</param>
-        /// <returns>The resized image.</returns>
-        /// RESIZE IMAGE
-        public static Bitmap ResizeImage(Image image, int width, int height)
+        //IMAGE RESIZE
+        public static Bitmap ImageResize(Image originalImage, int width, int height)
         {
-            var destRect = new Rectangle(0, 0, width, height);
-            var destImage = new Bitmap(width, height);
+            var outputRectangle = new Rectangle(0, 0, width, height);
+            var outputImage = new Bitmap(width, height);
+            outputImage.SetResolution(originalImage.HorizontalResolution, originalImage.VerticalResolution);
 
-            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
-
-            using (var graphics = Graphics.FromImage(destImage))
+            using (var graphics = Graphics.FromImage(outputImage))
             {
                 graphics.CompositingMode = CompositingMode.SourceCopy;
                 graphics.CompositingQuality = CompositingQuality.HighQuality;
@@ -37,14 +28,13 @@ namespace SmartCardManagementSystem.Controllers
                 graphics.SmoothingMode = SmoothingMode.HighQuality;
                 graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-                using (var wrapMode = new ImageAttributes())
+                using (var wrap = new ImageAttributes())
                 {
-                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
-                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
+                    wrap.SetWrapMode(WrapMode.TileFlipXY);
+                    graphics.DrawImage(originalImage, outputRectangle, 0, 0, originalImage.Width, originalImage.Height, GraphicsUnit.Pixel, wrap);
                 }
             }
-
-            return destImage;
+            return outputImage;
         }
 
         // CRATE IMAGE FROM BYTE ARRAY
@@ -403,7 +393,7 @@ namespace SmartCardManagementSystem.Controllers
                     System.Diagnostics.Debug.WriteLine("-------Creating RESIZED front-image (more than 100KB)----------");
 
                     var tempImageToResize = byteArrayToImage(bytes);
-                    var tempResizedImage = ResizeImage(tempImageToResize, 180, 111);
+                    var tempResizedImage = ImageResize(tempImageToResize, 180, 111);
                     var resizedByteArray = imageToByteArray(tempResizedImage);
                     var item1 = new SmartCardImage(fileName, resizedByteArray);
 
