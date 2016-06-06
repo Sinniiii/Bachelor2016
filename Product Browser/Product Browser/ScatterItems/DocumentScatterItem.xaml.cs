@@ -51,6 +51,8 @@ namespace Product_Browser.ScatterItems
             surfaceSlider.Maximum = 10000d;
             pageNumber.Content = "1";
 
+            previousActivePage = 0;
+
             documentName.Content = dataItem.Name;
 
             Binding actualWidthBinding = new Binding("ActualWidth");
@@ -88,27 +90,29 @@ namespace Product_Browser.ScatterItems
             scrollBar.ScrollToVerticalOffset(args.NewValue / surfaceSlider.Maximum * stackPanel.ActualHeight);
 
             int count = stackPanel.Children.Count;
-            int activeImage = (int)Math.Round((args.NewValue / surfaceSlider.Maximum * count));
+            int activePage = (int)Math.Round((args.NewValue / surfaceSlider.Maximum * count));
 
-            if (activeImage == previousActivePage)
+            if (activePage == previousActivePage)
                 return;
-
-            previousActivePage = activeImage;
-
-            for(int i = 0; i < count; i++)
+            
+            for(int i = Math.Max(0, previousActivePage - 2); (i < previousActivePage + 2 && i < count); i++)
             {
-                if (i > activeImage - 2 && i < activeImage + 2)
-                    ((Image)((UserControl)stackPanel.Children[i]).Content).Source = dataItem.GetPageFromDocumentAsImageSource(i);
-                else if(((Image)((UserControl)stackPanel.Children[i]).Content).Source != null)
+                if (i <= activePage - 2 || i >= activePage + 2)
                     ((Image)((UserControl)stackPanel.Children[i]).Content).Source = null;
             }
 
-            previousActivePage = activeImage;
+            for(int i = Math.Max(0, activePage - 2); (i < activePage + 2 && i < count); i++)
+            {
+                if(((Image)((UserControl)stackPanel.Children[i]).Content).Source == null)
+                    ((Image)((UserControl)stackPanel.Children[i]).Content).Source = dataItem.GetPageFromDocumentAsImageSource(i);
+            }
 
-            if(activeImage == count)
-                pageNumber.Content = (activeImage).ToString();
+            previousActivePage = activePage;
+
+            if (activePage == count)
+                pageNumber.Content = (activePage).ToString();
             else
-                pageNumber.Content = (activeImage + 1).ToString();
+                pageNumber.Content = (activePage + 1).ToString();
         }
 
         private void OnSizeChanged(object o, SizeChangedEventArgs args)

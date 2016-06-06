@@ -222,7 +222,7 @@ namespace DatabaseModel.Model
                 // Find size of next element
                 int elementSize = BitConverter.ToInt32(DataField.Data, current);
                 current += 4 + elementSize; // Skip 4 forward, since we read those already with ToInt32
-
+                
                 count++;
             }
             return count - 1;
@@ -329,7 +329,7 @@ namespace DatabaseModel.Model
             long numbPages = pdf.GetPageCount();
 
             byte[][] tempImageArr = new byte[numbPages + 1][];
-
+            
             int totalSize = 0;
             for (int i = 0; i < numbPages; i++)
             {
