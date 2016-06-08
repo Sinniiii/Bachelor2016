@@ -29,15 +29,11 @@
         </Grid.ColumnDefinitions>
 
         <Image Name="animationPulse1" Grid.ColumnSpan="7" Grid.RowSpan="7" IsHitTestVisible="False" RenderTransformOrigin="0.5,0.5" Source="/resources/Starburst1.png">
-            <Image.RenderTransform>
+            <Image.LayoutTransform>
                 <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
                     <RotateTransform x:Name="imagetest" Angle="1"/>
-                    <TranslateTransform/>
                 </TransformGroup>
-            </Image.RenderTransform>
-
+            </Image.LayoutTransform>
         </Image>
 
         <Border BorderThickness="5" CornerRadius="4" Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="3">
@@ -46,7 +42,6 @@
                     <LinearGradientBrush.RelativeTransform>
                         <TransformGroup>
                             <RotateTransform x:Name="grad" CenterY="0.5" CenterX="0.5"/>
-                            <TranslateTransform/>
                         </TransformGroup>
                     </LinearGradientBrush.RelativeTransform>
                     <GradientStop Color="Black"/>
