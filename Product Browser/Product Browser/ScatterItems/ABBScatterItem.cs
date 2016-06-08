@@ -46,7 +46,7 @@ namespace Product_Browser.ScatterItems
             ACCELERATION = 0.5d,
             SPAWN_DECELERATION = 0.15d,
             SPEED_ANGULAR = 4d,
-            SPEED_SIZE = 4d,
+            SPEED_SIZE = 6d,
             DEGREES_TO_RADIANS = (2 * Math.PI) / 360d;
 
         #endregion

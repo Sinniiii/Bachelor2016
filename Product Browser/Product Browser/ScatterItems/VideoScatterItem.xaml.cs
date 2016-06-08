@@ -234,6 +234,7 @@ namespace Product_Browser.ScatterItems
         {
             PauseVideo();
 
+            videoPlayer.Stop();
             videoPlayer.Close();
             videoPlayer.Source = null;
         }

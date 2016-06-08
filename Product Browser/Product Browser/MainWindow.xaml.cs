@@ -85,7 +85,7 @@ namespace Product_Browser
             scatterItemCollection.Add(x);
             
             scatterView.UpdateLayout();
-            x.InitializeVirtualSmartCard(GetNextColorTheme());
+            x.InitializeVirtualSmartCard(GetNextColorTheme(), scatterView);
 
             x.ContainerManipulationStarted += SmartCardManipulationStarted;
             x.ContainerManipulationCompleted += SmartCardManipulationEnded;
@@ -125,7 +125,7 @@ namespace Product_Browser
                 scatterItemCollection.Add(item);
                 scatterView.UpdateLayout(); // Force an immediate update
 
-                item.InitializeVirtualSmartCard(GetNextColorTheme());
+                item.InitializeVirtualSmartCard(GetNextColorTheme(), scatterView);
 
                 // Assign our event handlers to input, so we can show the removal area
                 item.ContainerManipulationStarted += SmartCardManipulationStarted;

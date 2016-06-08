@@ -590,7 +590,7 @@ namespace Product_Browser.ScatterItems
         /// after this SmartCardScatterViewItem has been added to the ScattterView visual tree(use UpdateLayout on scatterview)
         /// </summary>
         /// <param name="view"></param>
-        public async void InitializeVirtualSmartCard(Color colorTheme)
+        public async void InitializeVirtualSmartCard(Color colorTheme, ScatterViewMod scatterView)
         {
             // Remove shadow of this smartcard, or we get an ugly effect
             var ssc = this.GetTemplateChild("shadow") as Microsoft.Surface.Presentation.Generic.SurfaceShadowChrome;
@@ -745,6 +745,8 @@ namespace Product_Browser.ScatterItems
 
                 view.Add(scatterItems[i]);
             }
+
+            scatterView.UpdateLayout();
 
             physicsTimerSpawnDelay.Start();
         }
