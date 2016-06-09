@@ -80,7 +80,7 @@ namespace Product_Browser.ScatterItems
             set { this.colorThemeBrush = value; NotifyPropertyChanged(); }
         }
 
-        private SolidColorBrush colorBackgroundThemeBrush = new SolidColorBrush(new Color() { R = 50, G = 50, B = 50, A = 100 });
+        private SolidColorBrush colorBackgroundThemeBrush = new SolidColorBrush(new Color() { R = 50, G = 50, B = 50, A = 255 });
         public SolidColorBrush ColorBackgroundThemeBrush
         {
             get { return colorBackgroundThemeBrush; }
@@ -439,20 +439,17 @@ namespace Product_Browser.ScatterItems
             // Add half the placeholders
             for(int i = 0; i < placeholderImages / 2; i++)
                 stackPanel.Children.Add(placeholders[i]);
-            
+
             // Add all images
             for (int i = 0; i < images.Count; i++)
             {
                 Image child = new Image();
                 
                 child.Source = images[i];
-                child.Stretch = Stretch.Uniform;
+                child.Stretch = Stretch.UniformToFill;
 
                 UserControl u = new UserControl();
-
-                Binding binding = new Binding("ColorBackgroundThemeBrush");
-                binding.RelativeSource = new RelativeSource(RelativeSourceMode.FindAncestor, typeof(ImageContainer), 1);
-                u.SetBinding(UserControl.BackgroundProperty, binding);
+                u.Margin = new Thickness(2, 0, 2, 0);
                 
                 u.Tag = i;
 

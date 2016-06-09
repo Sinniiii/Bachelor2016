@@ -7,7 +7,6 @@
              xmlns:local="clr-namespace:Product_Browser.ScatterItems"
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="400" BorderThickness="0" VerticalAlignment="Center" HorizontalAlignment="Center">
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition x:Name="row0" Height="0.1*" MaxHeight="30"/>

@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:s="http://schemas.microsoft.com/surface/2008"
         xmlns:local="clr-namespace:Product_Browser"
-        Title="Product Browser" Width="1920" Height="1080">
+        Title="Product Browser" Width="1920" Height="1080" WindowState="Maximized" ResizeMode="NoResize" WindowStyle="None">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition x:Name="removeArea1" Height="0"/>
@@ -19,14 +19,11 @@
 
         <TextBox Background="White" Opacity="0.2" Text="Remove" RenderTransformOrigin="0.5,0.5" TextAlignment="Center" FontSize="30" FontWeight="Bold" 
                           HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsEnabled="False" >
-            <TextBox.RenderTransform>
+            <TextBox.LayoutTransform>
                 <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
                     <RotateTransform Angle="180"/>
-                    <TranslateTransform/>
                 </TransformGroup>
-            </TextBox.RenderTransform>
+            </TextBox.LayoutTransform>
         </TextBox>
 
         <TextBox Grid.Row="2" Background="White" Opacity="0.20" Text="Remove" TextAlignment="Center" FontSize="30" FontWeight="Bold"

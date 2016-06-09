@@ -30,7 +30,7 @@ namespace Product_Browser.ScatterItems
         readonly double
             CIRCLE_SIZE = 100d;
 
-        readonly int MAX_IMAGES_BEFORE_CONTAINER = 8;
+        readonly int MAX_IMAGES_BEFORE_CONTAINER = 1;
 
         readonly double DEGREES_TO_RADIANS = (2 * Math.PI) / 360d;
 
@@ -414,10 +414,7 @@ namespace Product_Browser.ScatterItems
             }
 
             if(Opacity <= 0)
-            {
-                physicsTimer.Stop();
                 Dead();
-            }
         }
 
         public override void AnimationPulseHandler(object sender, EventArgs args)
@@ -501,6 +498,8 @@ namespace Product_Browser.ScatterItems
 
             foreach (ABBScatterItem item in physicsItemsActive)
                 view.Remove(item);
+
+            physicsItemsActive.Clear();
 
             animationPulseTimer.Stop();
             physicsTimer.Stop();
@@ -725,7 +724,10 @@ namespace Product_Browser.ScatterItems
                     physicsItemsSpawningImages.Add(scatterItems[i]);
                     imagesTotal++;
 
-                    physics.Center = (Point)ABBScatterItem.GetConvertedPosition(ActualCenter, (Point)SCATTERITEM_IMAGE_STARTING_POSITION, Orientation);
+                    if(scatterItems[i] is ImageScatterItem)
+                        physics.Center = (Point)ABBScatterItem.GetConvertedPosition(ActualCenter, (Point)SCATTERITEM_IMAGE_STARTING_POSITION, Orientation);
+                    else
+                        physics.Center = (Point)ABBScatterItem.GetConvertedPosition(ActualCenter, (Point)SCATTERITEM_IMAGE_CONTAINER_STARTING_POSITION, Orientation);
                 }
                 else
                 {
