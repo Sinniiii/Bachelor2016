@@ -30,18 +30,18 @@ namespace Product_Browser.ScatterItems
         readonly double
             CIRCLE_SIZE = 100d;
 
-        readonly int MAX_IMAGES_BEFORE_CONTAINER = 1;
+        readonly int MAX_IMAGES_BEFORE_CONTAINER = 6;
 
         readonly double DEGREES_TO_RADIANS = (2 * Math.PI) / 360d;
 
         readonly Size
-            SCATTERITEM_DOCUMENT_STARTING_SIZE = new Size(166.66, 183),
+            SCATTERITEM_DOCUMENT_STARTING_SIZE = new Size(147, 183),
             SCATTERITEM_VIDEO_STARTING_SIZE = new Size(222, 125),
             SCATTERITEM_IMAGE_STARTING_SIZE = new Size(200, 125),
             SCATTERITEM_IMAGE_CONTAINER_STARTING_SIZE = new Size(200, 166.66);
 
         readonly Vector
-            SCATTERITEM_DOCUMENT_STARTING_POSITION = new Vector(20, -195),
+            SCATTERITEM_DOCUMENT_STARTING_POSITION = new Vector(12, -195),
             SCATTERITEM_VIDEO_STARTING_POSITION = new Vector(-246, 0),
             SCATTERITEM_IMAGE_STARTING_POSITION = new Vector(235, 0),
             SCATTERITEM_IMAGE_CONTAINER_STARTING_POSITION = new Vector(235, 20),

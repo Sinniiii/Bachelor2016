@@ -29,7 +29,7 @@ namespace DatabaseModel.Model
     public class SmartCardDataItem
     {
         [NotMapped]
-        public const string VIDEO_FOLDER = @"c:\ABBProductBrowser\Videos\Tag\";
+        public const string VIDEO_FOLDER = @"C:\Users\Public\Public Application\ABB Product Browser 2016\Videos\Tag\";
 
         public int Id { get; private set; }
         
