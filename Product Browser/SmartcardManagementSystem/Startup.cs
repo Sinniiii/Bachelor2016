@@ -11,10 +11,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SmartCardManagementSystem.Models;
 using SmartCardManagementSystem.Services;
+using System.ServiceProcess;
 
 namespace SmartCardManagementSystem
 {
-    public class Startup
+    public class Startup : ServiceBase
     {
         public Startup(IHostingEnvironment env)
         {
