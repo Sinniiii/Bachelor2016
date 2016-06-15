@@ -615,6 +615,7 @@ namespace Product_Browser.ScatterItems
             if (smartCard == null || (dataItems = smartCard.DataItems.ToList()) == null || dataItems.Count == 0)
             {
                 NotFoundSmartCard = true;
+                physicsTimerSpawnDelay.Start();
                 return;
             }
 
