@@ -124,23 +124,20 @@ namespace Product_Browser.ScatterItems
 
         protected void VideoPlayerLoadedHandler(object obj, EventArgs args)
         {
-            videoPlayer.Play(); // Avoid black screen by starting video and triggering media load
-            videoPlayer.Stop();
-
             // Remove shadow of this smartcard, or we get an ugly effect
             var ssc = this.GetTemplateChild("shadow") as Microsoft.Surface.Presentation.Generic.SurfaceShadowChrome;
             ssc.Visibility = Visibility.Hidden;
         }
 
         protected void VideoPlayerMediaLoadedHandler(object obj, EventArgs args)
-        {            
+        {
             if (videoPlayer.NaturalDuration.HasTimeSpan)
             {
                 progressBar.Maximum = videoPlayer.NaturalDuration.TimeSpan.TotalSeconds;
 
                 progressBar.PreviewMouseDown += ProgressBarMouseDownHandler;
                 progressBar.PreviewTouchDown += ProgressBarTouchDownHandler;
-            }            
+            }
         }
 
         private void ProgressBarTouchDownHandler(object sender, System.Windows.Input.TouchEventArgs e)
@@ -223,11 +220,8 @@ namespace Product_Browser.ScatterItems
 
         public void PauseVideo()
         {
-            if (videoPlayer.CanPause)
-            {
-                IsPaused = true;
-                videoPlayer.Pause();
-            }
+            IsPaused = true;
+            videoPlayer.Pause();
         }
 
         public void KillVideo()
@@ -248,7 +242,7 @@ namespace Product_Browser.ScatterItems
             videoName.Content = video.Name;
 
             videoPlayer.LoadedBehavior = MediaState.Manual;
-            videoPlayer.UnloadedBehavior = MediaState.Manual;
+            videoPlayer.UnloadedBehavior = MediaState.Close;
             videoPlayer.Source = video.GetVideo();
 
             videoPlayer.MediaEnded += VideoEndedHandler;
@@ -266,6 +260,5 @@ namespace Product_Browser.ScatterItems
             overlay.MouseDown += OnOverlayManipulated;
             overlay.TouchDown += OnOverlayManipulated;
         }
-        
     }
 }
