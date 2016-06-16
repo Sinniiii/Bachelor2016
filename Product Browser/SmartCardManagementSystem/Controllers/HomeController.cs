@@ -269,7 +269,7 @@ namespace SmartCardManagementSystem.Controllers
 
             var fileName = ContentDispositionHeaderValue.Parse(uploadfile.ContentDisposition).FileName.Trim('"');
             int lastPeriod = fileName.LastIndexOf('.');
-            string extension = fileName.Substring(lastPeriod + 1);
+            string extension = fileName.Substring(lastPeriod + 1).ToLower();
 
             System.Diagnostics.Debug.WriteLine("-------Extension was----------");
             System.Diagnostics.Debug.WriteLine(extension);
@@ -366,7 +366,7 @@ namespace SmartCardManagementSystem.Controllers
 
             var fileName = ContentDispositionHeaderValue.Parse(uploadfile.ContentDisposition).FileName.Trim('"');
             int lastPeriod = fileName.LastIndexOf('.');
-            string extension = fileName.Substring(lastPeriod + 1);
+            string extension = fileName.Substring(lastPeriod + 1).ToLower();
 
             System.Diagnostics.Debug.WriteLine("-------Extension was----------");
             System.Diagnostics.Debug.WriteLine(extension);

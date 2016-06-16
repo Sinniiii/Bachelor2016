@@ -30,7 +30,7 @@ namespace Product_Browser
 
         Random randomGenerator = new Random();
 
-        DispatcherTimer removeAreaAnimationTimer, backgroundFadeTimer;
+        DispatcherTimer removeAreaAnimationTimer, backgroundFadeTimer, smartcardContainerUpdateTimer;
 
         int manipulatedSmartCards = 0;
         byte colorsUsed = 0;
@@ -96,9 +96,9 @@ namespace Product_Browser
 
         private void OnSmartCardContainerLoaded(object sender, EventArgs args)
         {
-            ABBDataContext con = new ABBDataContext();
-            List<SmartCard> activeList = con.SmartCards.Where(d => d.DataItems.Count > 0).ToList();
-            smartCardContainer.Populate(activeList);
+            UpdateSmartcardContainer(this, args);
+
+            smartcardContainerUpdateTimer.Start();
         }
 
         private void OnVisualizationAdded(object sender, TagVisualizerEventArgs args)
@@ -217,6 +217,13 @@ namespace Product_Browser
             return newColor;
         }
 
+        private void UpdateSmartcardContainer(object obj, EventArgs args)
+        {
+            ABBDataContext con = new ABBDataContext();
+            List<SmartCard> activeList = con.SmartCards.Where(d => d.DataItems.Count > 0).ToList();
+            smartCardContainer.Populate(activeList);
+        }
+
         #endregion
         
         public MainWindow()
@@ -231,6 +238,10 @@ namespace Product_Browser
 
             backgroundFadeTimer = new DispatcherTimer(DispatcherPriority.Normal, this.Dispatcher);
             backgroundFadeTimer.Interval = new TimeSpan(0, 0, 0, 0, 20);
+
+            smartcardContainerUpdateTimer = new DispatcherTimer(DispatcherPriority.Normal, this.Dispatcher);
+            smartcardContainerUpdateTimer.Interval = new TimeSpan(0, 0, 0, 3);
+            smartcardContainerUpdateTimer.Tick += UpdateSmartcardContainer;
 
             smartCardContainer.Loaded += OnSmartCardContainerLoaded;
             smartCardContainer.SmartCardSelected += OnSmartCardSelected;

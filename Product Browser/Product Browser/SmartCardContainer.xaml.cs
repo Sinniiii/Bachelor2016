@@ -129,14 +129,18 @@ namespace Product_Browser
 
         public void Populate(List<DatabaseModel.Model.SmartCard> smartcards)
         {
+            stackPanel.Children.Clear();
+
+            SolidColorBrush fgbg = new SolidColorBrush(new Color() { R = 42, G = 95, B = 111, A = 255 });
+
             foreach (var item in smartcards) {
 
                 Label label = new Label();
 
                 label.Tag = item;
                 label.Content = item.Name;
-                label.Foreground = new SolidColorBrush(new Color() { R = 42, G = 95, B = 111, A = 255 });
-                label.BorderBrush = new SolidColorBrush(new Color() { R = 42, G = 95, B = 111, A = 255 });
+                label.Foreground = fgbg;
+                label.BorderBrush = fgbg;
                 label.Background = new SolidColorBrush(Colors.Black);
                 label.BorderThickness = new Thickness(1d);
                 label.VerticalContentAlignment = VerticalAlignment.Center;
